@@ -1,8 +1,13 @@
+@font-face {
+	font-family: "San Francisco";
+	font-weight: 400;
+	src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
 
 :root{
 	--color-background: black;
-	--color-h1: #7353BA;
-	--color-h2: #523c80;
+	--color-h1: rgb(225, 225, 225);
+	--color-h2: #614898;
 	--color-p: #ab7bae;
 	background-color: var(--color-background);
 }
@@ -12,7 +17,7 @@ body{
 }
 
 * {
-	font-family: 'San';
+	font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
@@ -23,20 +28,46 @@ a {
 	text-decoration: none;
 }
 
+.b {
+	color: #8568c0;
+}
+
+.b:hover {
+	color: var(--color-h1);
+}
+
+.spacing {
+	margin-top: 5rem;
+	background-color: var(--color-h1);
+	height: 5px;
+	margin-bottom: 2.5rem;
+}
+
 h1 {
 	min-width: max-content;
+	max-width: fit-content;
 	padding: 0.5rem;
 	color: var(--color-h1);
-	font-size: 3rem;
+	font-size: 3.5rem;
 	font-weight: 900;
 }
 
 h2 {
-	min-width: 50vw;
+	min-width: max-content;
+	margin-left: 4rem;
 	padding: 0.25rem;
 	color: var(--color-h2);
 	font-size: 2rem;
 	font-weight: 900;
+}
+
+h3 {
+	min-width: max-content;
+	max-width: fit-content;
+	padding: 2rem;
+	font-size: 2rem;
+	margin-left: 25%;
+	color:  var(--color-h1);
 }
 
 p {
@@ -48,4 +79,30 @@ p {
 	color: var(--color-p);
 	font-size: 1rem;
 	font-weight: 500;
+}
+
+.cards_container {
+
+	width: 500px;
+	height: 90vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	transform: rotate(-90deg);
+	/* transform-origin: right top; */
+	transform:rotate(-90deg) translateY(-100px);
+}
+
+.cards_container::-webkit-scrollbar {
+	display: none;
+}
+
+.container > img {
+	border-radius: 25px;
+	width: 100px;
+	height: 100px;
+	/* transform-origin: right top; */
+  }
+
+.card:hover {
+	opacity: 0.5;`
 }
