@@ -1,0 +1,51 @@
+
+:root{
+	--color-background: black;
+	--color-h1: #7353BA;
+	--color-h2: #523c80;
+	--color-p: #ab7bae;
+	background-color: var(--color-background);
+}
+
+body{
+	padding: 2.5rem;
+}
+
+* {
+	font-family: 'San';
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: unset;
+	text-decoration: none;
+}
+
+h1 {
+	min-width: max-content;
+	padding: 0.5rem;
+	color: var(--color-h1);
+	font-size: 3rem;
+	font-weight: 900;
+}
+
+h2 {
+	min-width: 50vw;
+	padding: 0.25rem;
+	color: var(--color-h2);
+	font-size: 2rem;
+	font-weight: 900;
+}
+
+p {
+	margin-left: 25%;
+	min-width: 50vw;
+	max-width: 50vh;
+	padding: 0.25rem;
+	padding: 1rem;
+	color: var(--color-p);
+	font-size: 1rem;
+	font-weight: 500;
+}
