@@ -70,10 +70,12 @@ button:hover {
 a {
 	color: unset;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .b {
 	color: #8568c0;
+	cursor: pointer;
 }
 
 .b:hover {
