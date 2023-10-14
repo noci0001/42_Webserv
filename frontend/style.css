@@ -4,7 +4,26 @@
 	src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
 }
 
-:root{
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	padding-left: 15rem;
+	color: white;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+:root {
 	--color-background: black;
 	--color-h1: rgb(225, 225, 225);
 	--color-h2: #614898;
@@ -12,7 +31,14 @@
 	background-color: var(--color-background);
 }
 
-body{
+html {
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+}
+
+body {
+	width: 50vw;
+	margin: 0;
 	padding: 2.5rem;
 }
 
@@ -21,6 +47,24 @@ body{
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
+}
+
+button {
+	line-height: 0px;
+	background-color: white;
+	align-items: center;
+	text-align: center;
+	width: 150px;
+	height: 50px;
+	padding: 1.5rem;
+	border-width: 0;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+button:hover {
+	color: white;
+	background-color: var(--color-h2);
 }
 
 a {
@@ -37,7 +81,8 @@ a {
 }
 
 .spacing {
-	margin-top: 5rem;
+	width:80vw;
+	margin-top: 2.5rem;
 	background-color: var(--color-h1);
 	height: 5px;
 	margin-bottom: 2.5rem;
@@ -59,6 +104,7 @@ h2 {
 	color: var(--color-h2);
 	font-size: 2rem;
 	font-weight: 900;
+	margin-top: 2rem;
 }
 
 h3 {
@@ -67,7 +113,7 @@ h3 {
 	padding: 2rem;
 	font-size: 2rem;
 	margin-left: 25%;
-	color:  var(--color-h1);
+	color: var(--color-h1);
 }
 
 p {
@@ -82,27 +128,34 @@ p {
 }
 
 .cards_container {
-
-	width: 500px;
-	height: 90vh;
+	padding-top: 15rem;
+	/* margin-top: 50px; */
+	max-width: 500px;
+	min-height: 800px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	transform: rotate(-90deg);
 	/* transform-origin: right top; */
-	transform:rotate(-90deg) translateY(-100px);
+	/* transform: rotate(-90deg) translateY(-100px); */
 }
 
 .cards_container::-webkit-scrollbar {
 	display: none;
 }
 
-.container > img {
+.container>img {
 	border-radius: 25px;
 	width: 100px;
 	height: 100px;
-	/* transform-origin: right top; */
-  }
+	transform-origin: right top;
+}
+
+.card {
+	width: 500px;
+	padding-top: 60px;
+	border-radius: 25px;
+}
 
 .card:hover {
-	opacity: 0.5;`
+	opacity: 0.5;
 }

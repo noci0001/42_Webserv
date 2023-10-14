@@ -1,35 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
 	<title>Webserv</title>
 </head>
+
 <body>
 	<div>
-		<h1>42 WEBSERV: STREAMING PLATFORM</h1>
-		<h2>Welcome to <bold class="b">42 WEBSERV</bold>, our favorite movies platform.</h2>
-	</div>
-	<h3>DISCOVER OUR MOVIE SELECTION</h3>
-	<h2>Discover our favorite <bold class="b">HORROR</bold> movie selection:</h2>
-	<div class="cards_container">
-		<img class="card" width="500px" src="./assets/card_horror1.jpg"></img>
-		<img class="card" width="500px" src="./assets/card_horror2.jpg"></img>
-		<img class="card" width="500px" src="./assets/card_horror3.jpg"></img>
-		<img class="card" width="500px" src="./assets/card_horror4.jpg"></img>
-		<img class="card" width="500px" src="./assets/card_horror5.jpg"></img>
-		<img class="card" width="500px" src="./assets/card_horror6.jpg"></img>
+		<div style="min-width: 90vw;">
+			<h1>42 WEBSERV: STREAMING PLATFORM</h1>
+			<h2>Welcome to <bold class="b">42 WEBSERV</bold>, our favorite movies platform.</h2>
+			<h3>DISCOVER OUR MOVIES SELECTION</h3>
+			<ul>
+				<li><a href="#horror">SEE THE HORROR</li>
+				<li><a href="#WES">ENTER WES ANDERSON</li>
+				<li><a href="#AI">LIVE THE FUTURE WITH OUR AI MOST ACCLAIMED MOVIES</li>
+		</div>
+		<h2><bold class="b" style="font-size: 250px;">HORROR</bold>
+		<br> MOVIES SECTION</h2>
+		<div style="display:inline-flex;">
+			<section style="display:flex; width:95vw; height:500px;background-color:black;">
+				<div id="horror"class="cards_container">
+					<img class="card" src="./assets/horror/card_horror1.jpg">
+					<img class="card" src="./assets/horror/card_horror2.jpg">
+					<img class="card" src="./assets/horror/card_horror3.jpg">
+					<img class="card" src="./assets/horror/card_horror4.jpg">
+					<img class="card" src="./assets/horror/card_horror5.jpg">
+					<img class="card" src="./assets/horror/card_horror6.jpg">
+				</div>
+			<section>
+			<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
+				<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM A24'S <bold class="b">TALK TO ME</bold> <br>TO <bold class="b">EVIL DEAD RISE</bold></p>
+				<p></p>
+				<button style="margin-left: 2rem;">BE SPOOKED</button>
+			</section>
+		</div>
 	</div>
 	<div class="spacing"></div>
 	<div>
-		<h2>Discover our favorite <bold class="b">FANTASY</bold> movie selection:</h2>
+		<h2>ENTER <br>
+		<bold class="b" style="font-size: 125px;">WES ANDERSON</bold></h2>
+	</div>
+	<div style="display:inline-flex;">
+		<section style="display:flex; width:95vw; height:500px;background-color:black;">
+			<div id="WES" class="cards_container">
+				<img class="card" src="./assets/wes/wes1.jpg">
+				<img class="card" src="./assets/wes/wes2.jpg">
+				<img class="card" src="./assets/wes/wes3.jpg">
+				<img class="card" src="./assets/wes/wes4.jpg">
+				<img class="card" src="./assets/wes/wes5.jpg">
+				<img class="card" src="./assets/wes/wes6.jpg">
+			</div>
+		<section>
+		<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
+			<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM <bold class="b">THE GRAND BUDAPEST HOTEL</bold> <br>TO <bold class="b"> FANTASTIC MR. FOX</bold></p>
+			<p></p>
+			<button style="margin-left: 2rem; width:max-content;"> ENTER WES ANDERSON </button>
+		</section>
 	</div>
 	<div class="spacing"></div>
 	<div>
-		<h2>Discover our favorite <bold class="b">ANIME</bold> movie selection:</h2>
+		<h2 id="AI">LIVE THE FUTURE WITH OUR <br>
+		<bold class="b" style="font-size: 115px;">AI MOST ACCLAIMED</bold> <br>MOVIES</h2>
+	</div>
+	<div style="display:inline-flex;">
+		<section style="bottom:0;display:flex; width:95vw; height:500px;background-color:black;">
+			<div class="cards_container">
+				<img class="card" src="./assets/AI/ai1.jpg">
+				<img class="card" src="./assets/AI/ai2.jpg">
+				<img class="card" src="./assets/AI/ai3.jpg">
+				<img class="card" src="./assets/AI/ai4.jpg">
+				<img class="card" src="./assets/AI/ai5.jpg">
+				<img class="card" src="./assets/AI/ai6.jpg">
+			</div>
+		<section>
+		<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
+			<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM <bold class="b">TEENAGE MUTANT NINJA TURTLES</bold> <br>TO <bold class="b"> VADER: A STAR WARS ILIAD</bold></p>
+			<p></p>
+			<button style="margin-left: 2rem; width:max-content;"> I AM NOT A ROBOT ? </button>
+		</section>
 	</div>
 </body>
-<script src="index.js"></script>
 </html>
