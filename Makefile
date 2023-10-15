@@ -1,6 +1,8 @@
 NAME	=	webserv
 
-SRCS	=	backend/src/Webserv.cpp
+SRCS	=	backend/src/Webserv.cpp \
+			backend/src/Parsing.cpp \
+
 HEADER	=	backend/include/Webserv.hpp
 
 OBJS	=	$(SRCS:.cpp=.o)
@@ -17,10 +19,10 @@ $(NAME): $(OBJS) $(HEADERS)
 	@echo Webserv has been successfully compiled
 
 clean:
-	@(RM) $(OBJ)
+	@$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re:	fclean all
 
