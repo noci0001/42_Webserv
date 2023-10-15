@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,23 +7,42 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
 	<title>WEBSERV</title>
 </head>
-
 <body>
 	<div>
-		<div style="min-width: 90vw;">
+		<div style="min-width: 90vw; min-height: 90vh;">
 			<h1>42 WEBSERV: STREAMING PLATFORM</h1>
 			<h2>Welcome to <bold class="b">42 WEBSERV</bold>, our favorite movies platform.</h2>
 			<h3>DISCOVER OUR MOVIES SELECTION</h3>
-			<ul>
-				<li><a href="#horror">SEE THE HORROR</li>
-				<li><a href="#wes">ENTER WES ANDERSON</li>
-				<li><a href="#ai">LIVE THE FUTURE WITH OUR AI MOST ACCLAIMED MOVIES</li>
+			<div class="parent">
+				<div class="div1">
+					<div>
+						<img id="card_img" src="./assets/horror/horror_card.png" width="90%" height="100%" alt="horror_card">
+						<br>
+						<div style="display: flex;">
+							<a class="title_card" style="font-size: 50px; max-width: 100px;" href="#horror">SEE THE HORROR </a>
+						</div>
+					</div>
+				</div>
+				<div class="div2">
+					<img id="card_img" src="./assets/wes/wes_card.png" width="90%" alt="wes_card">
+					<div style="display: flex;">
+						<a class="title_card" style="font-size: 50px; max-width: 100px;" href="#wes">ENTER<br>WES ANDERSON</a>
+					</div>
+				</div>
+				<div class="div3">
+					<img id="card_img" src="./assets/AI/ai_card.png" width="90%" alt="ai_card">
+					<div style="display: flex;">
+						<a class="title_card" style="font-size:50px; max-width: 100px;" href="#ai">LIVE THE<br>FUTURE</a>
+					</div>
+				</div>
+			</div>
 		</div>
+		<div id="horror" class="spacing"></div>
 		<h2><bold class="b" style="font-size: 250px;">HORROR</bold>
 		<br> MOVIES SECTION</h2>
 		<div style="display:inline-flex;">
 			<section style="display:flex; width:95vw; height:500px;background-color:black;">
-				<div id="horror"class="cards_container">
+				<div class="cards_container">
 					<img class="card" src="./assets/horror/card_horror1.jpg">
 					<img class="card" src="./assets/horror/card_horror2.jpg">
 					<img class="card" src="./assets/horror/card_horror3.jpg">
@@ -36,13 +54,15 @@
 			<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
 				<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM A24'S <bold class="b">TALK TO ME</bold> <br>TO <bold class="b">EVIL DEAD RISE</bold></p>
 				<p></p>
-				<button style="margin-left: 2rem;">BE SPOOKED</button>
+				<form action="/frontend/404.html" method="get" enctype="multipart/form-data">
+					<button style="margin-left: 2rem;">BE SPOOKED</button>
+				</form>
 			</section>
 		</div>
 	</div>
-	<div class="spacing"></div>
+	<div id="wes" style="margin-top: 20vh;" class="spacing"></div>
 	<div>
-		<h2 id="wes">ENTER <br>
+		<h2 >ENTER <br>
 		<bold class="b" style="font-size: 125px;">WES ANDERSON</bold></h2>
 	</div>
 	<div style="display:inline-flex;">
@@ -59,12 +79,14 @@
 		<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
 			<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM <bold class="b">THE GRAND BUDAPEST HOTEL</bold> <br>TO <bold class="b"> FANTASTIC MR. FOX</bold></p>
 			<p></p>
-			<button style="margin-left: 2rem; width:max-content;"> ENTER WES ANDERSON </button>
+			<form action="/frontend/404.html" method="get" enctype="multipart/form-data">
+				<button style="margin-left: 2rem; width:max-content;"> ENTER WES ANDERSON </button>
+			</form>
 		</section>
 	</div>
-	<div class="spacing"></div>
+	<div id="ai" style="margin-top: 30vh;" class="spacing"></div>
 	<div>
-		<h2 id="ai">LIVE THE FUTURE WITH OUR <br>
+		<h2 >LIVE THE FUTURE WITH OUR <br>
 		<bold class="b" style="font-size: 115px;">AI MOST ACCLAIMED</bold> <br>MOVIES</h2>
 	</div>
 	<div style="display:inline-flex;">
@@ -81,7 +103,9 @@
 		<section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
 			<p style="font-size:40px; color:white; padding:2rem; margin:0;">FROM <bold class="b">TEENAGE MUTANT NINJA TURTLES</bold> <br>TO <bold class="b"> VADER: A STAR WARS ILIAD</bold></p>
 			<p></p>
-			<button style="margin-left: 2rem; width:max-content;"> I AM NOT A ROBOT ? </button>
+			<form action="/frontend/404.html" method="get" enctype="multipart/form-data">
+				<button style="margin-left: 2rem; width:max-content;"> I AM NOT A ROBOT ? </button>
+			</form>
 		</section>
 	</div>
 </body>
