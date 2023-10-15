@@ -84,20 +84,7 @@ int Parsing::file_extension_check(std::string& config_file) {
 
 //PARSING OF DOCUMENT (COMMON FOR BOTH CONSTRUCTORS)
 int Parsing::document_parsing() {
-	std::ifstream file("./configs/" + this->config_file);
-	std::string line;
-	if (file.is_open()) {
-		while (getline(file, line)) {
-			std::cout << line << std::endl;
-		}
-		file.close();
-	}
-	else {
-		std::cout << "Unable to open file" << std::endl;
-		this->status = 1;
-		return (1);
-	}
-	return (0);
+	Configfile config_file(this->config_file);
 }
 
 //DESTRUCTOR
