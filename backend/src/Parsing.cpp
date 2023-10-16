@@ -85,6 +85,7 @@ int Parsing::file_extension_check(std::string& config_file) {
 //PARSING OF DOCUMENT (COMMON FOR BOTH CONSTRUCTORS)
 int Parsing::document_parsing() {
 	Configfile config_file(this->config_file);
+	return (0);
 }
 
 //DESTRUCTOR

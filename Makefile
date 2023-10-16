@@ -2,6 +2,7 @@ NAME	=	webserv
 
 SRCS	=	backend/src/Webserv.cpp \
 			backend/src/Parsing.cpp \
+			backend/src/Configfile.cpp \
 
 HEADER	=	backend/include/Webserv.hpp
 
