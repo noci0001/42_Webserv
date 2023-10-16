@@ -2,11 +2,12 @@
 # define PARSING_HPP
 
 #include <fstream>
+#include "ParsingUtils.hpp"
 
-class Parsing {
+class Parsing: public ParsingUtils {
 private:
-	std::string config_file;
-	int status;
+	std::string _config_file;
+	int _status;
 protected:
 public:
 	Parsing();
@@ -15,7 +16,7 @@ public:
 	int config_file_exist();
 	int document_parsing();
 	int file_extension_check(std::string& config_file);
-	int get_status() const { return (this->status); };
+	int get_status() const { return (this->_status);};
 	~Parsing();
 };
 

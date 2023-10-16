@@ -1,38 +1,44 @@
 #include "../include/Webserv.hpp"
 
 //START DEFAULT CONSTRUCTOR
-Parsing::Parsing(): config_file("webserv.conf"), status(-1){
+Parsing::Parsing(): _config_file("webserv.conf"), _status(TBD){
 	std::cout << "Parsing of config file" << std::endl;
 	config_file_exist();
-	if (this->status == -1 && file_extension_check(this->config_file) == 0) {
+	if (this->_status == TBD && file_extension_check(this->_config_file) == 0) {
 		std::cout << "Parsing: file extension is correct" << std::endl;
-		this->document_parsing();
+		this->_status = SUCCESS;
+	} else {
+		std::cout << "Parsing: file extension is incorrect" << std::endl;
+		this->_status = FAILURE;
 	}
 }
 
 int Parsing::config_file_exist() {
-	std::ifstream file("./configs/" + this->config_file);
+	std::ifstream file("./configs/" + this->_config_file);
 	if (file.is_open()) {
 		std::cout << "Config file exist" << std::endl;
 		file.close();
-		return (0);
+		return (SUCCESS);
 	} else {
 		std::cout << "Config file doesn't exist" << std::endl;
-		this->status = 1;
-		return (1);
+		this->_status = FAILURE;
+		return (FAILURE);
 	}
-	return (0);
+	return (SUCCESS);
 }
-
 //END DEFAULT CONSTRUCTOR
 
+
 //START CUSTOM CONSTRUCTOR
-Parsing::Parsing(char *argv): config_file(argv), status(-1) {
+Parsing::Parsing(char *argv): _config_file(argv), _status(TBD) {
 	std::cout << "Parsing of custom config file" << std::endl;
-	config_file_exist(config_file);
-	if (this->status == -1 && file_extension_check(config_file) == 0) {
+	config_file_exist(_config_file);
+	if (this->_status == TBD && file_extension_check(_config_file) == 0) {
 		std::cout << "Parsing: file extension is correct" << std::endl;
-		this->document_parsing();
+		this->_status = SUCCESS;
+	} else {
+		std::cout << "Parsing: file extension is incorrect" << std::endl;
+		this->_status = FAILURE;
 	}
 }
 
@@ -41,20 +47,20 @@ Parsing::Parsing(char *argv): config_file(argv), status(-1) {
 int Parsing::config_file_exist(std::string& config_file) {
 	if (config_file == "./configs/webserv.conf") {
 		std::cout << "Default config file selected in custom mode" << std::endl;
-		return (0);
+		return (SUCCESS);
 	}
 	std::ifstream file("./configs/" + config_file);
 
 	if (file.is_open()) {
 		std::cout << "Config file exist" << std::endl;
 		file.close();
-		return (0);
+		return (SUCCESS);
 	} else {
 		std::cout << "Config file doesn't exist!" << std::endl;
-		this->status = 1;
-		return (1);
+		this->_status = FAILURE;
+		return (FAILURE);
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 int Parsing::file_extension_check(std::string& config_file) {
@@ -63,35 +69,37 @@ int Parsing::file_extension_check(std::string& config_file) {
 	if (idx != std::string::npos) {
 		std::string file_extension = config_file.substr(idx);
 		if (file_extension == extension) {
-			std::cout << "Parsing: file extension is correct" << std::endl;
-			return (0);
+			return (SUCCESS);
 		}
 		else {
 			std::cout << "Parsing: file extension is incorrect" << std::endl;
-			this->status = 1;
-			return (1);
+			this->_status = FAILURE;
+			return (FAILURE);
 		}
 	}
 	else {
 		std::cout << "Parsing: file extension is incorrect" << std::endl;
-		this->status = 1;
-		return (1);
+		this->_status = FAILURE;
+		return (FAILURE);
 	}
-	return (0);
+	return (SUCCESS);
 }
-
 //END CUSTOM CONSTRUCTOR
+
 
 //PARSING OF DOCUMENT (COMMON FOR BOTH CONSTRUCTORS)
 int Parsing::document_parsing() {
-	Configfile config_file(this->config_file);
-	return (0);
+	Configfile config_file(this->_config_file);
+	if (config_file._status == SUCCESS)
+		return (SUCCESS);
+	else
+		return (FAILURE);
 }
 
 //DESTRUCTOR
 Parsing::~Parsing() {
-	if (this->status == 0)
-		std::cout << "Parsing successful" << std::endl;
-	else if (this->status == 1)
-		std::cout << " parsing unsuccessful" << std::endl;
+	if (this->_status == SUCCESS){
+		std::cout << "First parsing successful" << std::endl;
+	} else if (this->_status == FAILURE)
+		std::cout << "Parsing unsuccessful" << std::endl;
 }
