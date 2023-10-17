@@ -14,8 +14,17 @@
 #include "Parsing.hpp"
 #include "Configfile.hpp"
 #include "ParsingUtils.hpp"
+#include "ServerConfig.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
+
+//ServerConfig.hpp
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <sys/select.h>
+#include <arpa/inet.h>
+#include <map>
+
 
 #endif
