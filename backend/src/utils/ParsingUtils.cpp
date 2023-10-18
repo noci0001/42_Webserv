@@ -10,6 +10,10 @@ ParsingUtils::~ParsingUtils() {}
 // -1: (TBD) To Be Determined -> This status indicates that the
 // 1: FAILURE
 int ParsingUtils::message(std::string message, int ret) {
-	std::cout << message << std::endl;
+    if (ret == FAILURE)
+        std::cout << RED;
+    else
+        std::cout << GREEN;
+	std::cout << message << RESET << std::endl;
 	return (ret);
 }
