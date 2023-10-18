@@ -2,12 +2,6 @@
 
 Configfile::Configfile(): _status(-1) {}
 
-int Configfile::parseline(std::string line) {
-	std::cout << "Currently parsing the following line: " << line << std::endl;
-	return (SUCCESS);
-}
-
-
 // Given a keyword string and its position in the config file
 // the value is extracted by iterating through the string until
 // the semicolon is found
@@ -22,12 +16,8 @@ std::string Configfile::get_value_from_key(std::string keyword, std::size_t posi
 	return (value);
 }
 
-void Configfile::get_value_serverData(std::string keyword) {
-	return;
-}
-
 void Configfile::get_value_serverData() {
-	std::cout << "Currently getting all server data" << std::endl;
+    std::cout << "Currently getting all server data" << std::endl;
 	for (int i = 0; i <= _serverData.size(); ++i) {
         std::cout << "Value from vector: " << this->_serverData[i] << std::endl;
     }
@@ -46,7 +36,7 @@ int Configfile::find_all_server_keywords(std::string& config_file) {
 		std::size_t position = config_file.find(keywords[i]);
 		if (position != std::string::npos) {
 			std::cout << "Keyword: " << (keywords[i]) << std::endl;
-			this->get_value_from_key(keywords[i] , position += std::strlen(keywords[i]));
+			this->get_value_from_key(keywords[i] , position += std::mbrlen(keywords[i], 30, NULL));
 			std::cout << std::endl;
 			key_found++;
 		}

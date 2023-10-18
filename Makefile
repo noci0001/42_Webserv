@@ -11,7 +11,6 @@ OBJS	=	$(SRCS:.cpp=.o)
 
 CC		=	c++
 CFLAGS	=	-Wall -Werror -Wextra -g -std=c++98
-CDEBUG	=	-g3
 RM		=	rm -rf
 
 all: $(NAME)
