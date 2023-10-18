@@ -14,6 +14,7 @@
 #include "Parsing.hpp"
 #include "Configfile.hpp"
 #include "ParsingUtils.hpp"
+#include "ServerConfig.hpp"
 #include <vector>
 #include <iostream>
 #include <string>

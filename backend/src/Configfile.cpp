@@ -63,8 +63,10 @@ Configfile::Configfile(Parsing *parser, std::string& config_file): _original_con
 		this->_status = FAILURE;
 		std::cout << "❌\t" << RED << "Unable to open file" << RESET << std::endl;
 	}
-	if (find_all_server_keywords(this->_original_config_file) == SUCCESS && parser->get_status() != FAILURE)
-		std::cout << "✅\t" << GREEN << "All key-value pairs FOUND" << RESET << std::endl;
+	if (find_all_server_keywords(this->_original_config_file) == SUCCESS && parser->get_status() != FAILURE) {
+        std::cout << "✅\t" << GREEN << "All key-value pairs FOUND" << RESET << std::endl;
+        this->_status = SUCCESS;
+    }
 	else {
 		this->_status = FAILURE;
 		std::cout << RED << "❌\tCouldn't find all the keywords"<< RESET << std::endl;
@@ -73,12 +75,11 @@ Configfile::Configfile(Parsing *parser, std::string& config_file): _original_con
 }
 
 Configfile::~Configfile() {
-	if (this->_status == SUCCESS) {
-		Configfile::_status = SUCCESS;
-		Configfile::get_value_serverData();
-        std::cout << GREEN << "\n✅\tConfiguration correctly analyzed" << RESET << std::endl;
-	}
-	else {
-		std::cout << RED << "❌\tError found in configuration file analysis" << RESET << std::endl;
-    }
+//	if (this->_status == SUCCESS) {
+//		Configfile::_status = SUCCESS;
+//        std::cout << GREEN << "\n✅\tConfiguration correctly analyzed" << RESET << std::endl;
+//	}
+//	else {
+//		std::cout << RED << "❌\tError found in configuration file analysis" << RESET << std::endl;
+//    }
 }

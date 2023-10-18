@@ -4,6 +4,7 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/Parsing.cpp \
 			backend/src/Configfile.cpp \
 			backend/src/utils/ParsingUtils.cpp \
+			backend/src/ServerConfig.cpp \
 
 HEADER	=	backend/include/Webserv.hpp
 

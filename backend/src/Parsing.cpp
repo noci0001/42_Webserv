@@ -86,15 +86,6 @@ int Parsing::file_extension_check(std::string& config_file) {
 }
 //END CUSTOM CONSTRUCTOR
 
-//PARSING OF DOCUMENT (COMMON FOR BOTH CONSTRUCTORS)
-int Parsing::document_parsing() {
-	Configfile config_file(this, this->_config_file);
-	if (config_file._status == SUCCESS)
-		return (SUCCESS);
-	else
-		return (FAILURE);
-}
-
 //DESTRUCTOR
 Parsing::~Parsing() {
 	if (this->_status == SUCCESS){
