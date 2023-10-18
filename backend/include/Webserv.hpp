@@ -19,6 +19,7 @@
 #include <string>
 #include <cstring>
 #include <utility>
+#include <iomanip>
 
 const std::string BOLD = "\033[1m";
 const std::string RED = "\033[38;5;1m";
