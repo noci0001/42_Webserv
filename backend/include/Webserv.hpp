@@ -15,6 +15,7 @@
 #include "Configfile.hpp"
 #include "ParsingUtils.hpp"
 #include <vector>
+#include <map>
 #include <iostream>
 #include <string>
 
