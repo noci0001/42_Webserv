@@ -31,7 +31,7 @@ int Parsing::config_file_exist() {
 
 //START CUSTOM CONSTRUCTOR
 Parsing::Parsing(char *argv): _config_file(argv), _status(TBD) {
-	std::cout << GREEN << "Parsing of custom config file:" << RESET << std::endl;
+	std::cout << "Parsing of custom config file\n" << std::endl;
 	config_file_exist(_config_file);
 	if (this->_status == TBD && file_extension_check(_config_file) == 0) {
 		std::cout << GREEN << "✅\tPARSING: File extension is correct" << RESET << std::endl;
@@ -98,7 +98,7 @@ int Parsing::document_parsing() {
 //DESTRUCTOR
 Parsing::~Parsing() {
 	if (this->_status == SUCCESS){
-		std::cout << BOLD << GREEN << "✅\tPARSING SUCCESSFUL\n" << RESET << std::endl;
+		std::cout << BOLD << GREEN << "✅\t\tPARSING SUCCESSFUL\n" << RESET << std::endl;
 	} else if (this->_status == FAILURE)
-		std::cout << RED << "❌\tPARSING UNSUCCESSFUL\n" << RESET << std::endl;
+		std::cout << RED << "❌\t\tPARSING UNSUCCESSFUL\n" << RESET << std::endl;
 }

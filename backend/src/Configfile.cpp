@@ -17,7 +17,7 @@ std::string Configfile::get_value_from_key(std::string keyword, int position) {
 }
 
 void Configfile::get_value_serverData() {
-	std::cout << "Key-value pairs: \n" << std::endl;
+	std::cout << "KEY-VALUE PAIRS: \n" << std::endl;
     std::cout << std::left << std::setw(15) << BOLD << YELLOW << "KEY" << std::setw(25) << RESET << BOLD << YELLOW << "VALUE\n" << RESET << std::endl;
     for (std::map<std::string, std::string>::iterator it = _serverData.begin(); it != _serverData.end(); ++it) {
         std::cout << std::left << std::setw(25) << it->first << "|    " << std::setw(25) << it->second << std::endl;
