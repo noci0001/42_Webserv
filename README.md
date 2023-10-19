@@ -143,6 +143,13 @@ b) Validate configuration file content.
 - Ensure the provided values (e.g., port numbers, paths) are valid and usable.
 - Provide meaningful error messages if invalid configurations are detected.
 
+# Update ReadMe file
+- About
+- Structure
+- Usage
+- Resources
+
+
 c)  Integration & Testing:
 - Integration Testing
 - Unit Testing:
