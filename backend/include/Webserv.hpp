@@ -25,7 +25,11 @@
 #include <sys/select.h>
 #include <arpa/inet.h>
 #include <map>
+#include <unistd.h>
 #define MAX_CONTENT_LENGTH 1024
+
+//Utils.cpp
+int ft_stoi(std::string str);
 
 
 #endif

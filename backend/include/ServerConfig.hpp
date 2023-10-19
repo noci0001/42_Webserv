@@ -30,6 +30,31 @@ public:
     ServerConfig &operator=( const ServerConfig &rhs);
 
     void    initErrorPages( void );
+    void    ServerConfig::setServerName(std::string server_name);
+    void    ServerConfig::setHost(std::string parameter);
+    void    ServerConfig::setRoot(std::string root);
+    void    ServerConfig::setPorts(std::string parameter);
+    void    ServerConfig::setMaxBodySizeClient(std::string parameter);
+    void    ServerConfig::setIndex(std::string index);
+    void    ServerConfig::setAutoIndex(std::string autoindex);
+    void    ServerConfig::setErrorPages(std::vector<std::string> &parameter);
+
+    public:
+        class ErrorException : public std::exception
+        {
+            private:
+                std::string _message;
+            public:
+                ErrorException(std::string message) throw()
+                {
+                    _message = "ServerConfig Error: " + message;
+                }
+                virtual const char* what() const throw()
+                {
+                    return (_message.c_str());
+                }
+                virtual ~ErrorException() throw() {}
+        };
 };
 
 #endif
