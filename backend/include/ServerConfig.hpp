@@ -32,13 +32,4 @@ public:
     void    initErrorPages( void );
 };
 
-ServerConfig::ServerConfig(/* args */)
-{
-}
-
-ServerConfig::~ServerConfig()
-{
-}
-
-
 #endif

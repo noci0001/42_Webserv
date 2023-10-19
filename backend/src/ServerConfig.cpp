@@ -6,7 +6,7 @@ ServerConfig::ServerConfig()
     this->_host = 0;
     this->_server_name = "";
     this->_root = "";
-    this->_max_body_size_client = MAX_CONTENT_LENGHT;
+    this->_max_body_size_client = MAX_CONTENT_LENGTH;
     this->_index = "";
     this->_fd_listen = 0;
     this->_autoindex = false;
@@ -77,4 +77,28 @@ void    ServerConfig::initErrorPages( void )
     _error_pages[503] = "";
     _error_pages[505] = "";
     _error_pages[505] = "";
+}
+
+//[**** Set Functions ****]
+
+void    ServerConfig::setServerName(std::string server_name)
+{
+    checkServerInfo(server_name);
+    this->_server_name = server_name;
+}
+
+void    ServerConfig::setHost(std::string parameter)
+{
+    checkServerInfo(parameter);
+    if (parameter == "localhost")
+        parameter = "127.0.0.1";
+    if (!validHost(parameter))
+        throw ErrorException("Wrong syntax: host");
+    this->_host = inet_addr(parameter.data());
+}
+
+void    ServerConfig::setRoot(std::string root)
+{
+    checkServerInfo(root);
+    if (Configfile::)
 }

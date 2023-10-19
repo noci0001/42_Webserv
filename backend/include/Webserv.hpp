@@ -25,6 +25,7 @@
 #include <sys/select.h>
 #include <arpa/inet.h>
 #include <map>
+#define MAX_CONTENT_LENGTH 1024
 
 
 #endif
