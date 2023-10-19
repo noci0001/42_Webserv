@@ -5,7 +5,7 @@ BUILDING A HTTP WEWBSERVER C++98 COMPATIBLE FROM SCRATCH
 
 ## MEMBERS OF THE TEAM AND TASKS DELEGATION ##
 
-# 1. Tom (Server Core)
+### 1. Tom (Server Core) ###
    
 a) Establish the fundamental architecture of the server.
 - Decide on a single-threaded vs. multi-threaded architecture given the non-blocking requirement.
@@ -36,9 +36,9 @@ f) Configuration File Parsing at the Core Level.
 - Extract essential core-related configurations, like port numbers and default paths.
 - Initialize the server based on the extracted configurations.
 
-# 2. Sam (Request Parser + Front-end)
+### 2. Sam (Request Parser + Front-end) ###
 
-    Request Parser:
+   Request Parser:
 a) Develop a parser to read incoming HTTP requests.
 - Buffered reading of data from the socket.
 - Identification of request's end.
@@ -60,7 +60,8 @@ d) Forward the request to the appropriate module.
 - Determine the handling module (static file, CGI, error handler, etc.).
 - Forward request data to the determined module for processing.
 
-    Front-end:
+
+   Front-end:
 a) Design the user interface.
 - Sketch wireframes/mockups for the static website pages.
 - Decide on a color palette, typography, and overall design theme.
@@ -95,7 +96,7 @@ g) Integration with the back-end.
 - Handle and display server responses (e.g., success messages, error notifications).
 - Implement real-time features if required, possibly using WebSockets or Server-Sent Events.
 
-# 3. Yana (Response Builder and CGI)
+### 3. Yana (Response Builder and CGI) ###
    
 a) Build appropriate HTTP responses.
 - Construct the status line based on the processing outcome.
@@ -129,7 +130,7 @@ e) Handle file uploads.
 - Save each file to the server's designated directory.
 - Respond with a success message or error details.
 
-# 4. All
+### 4. All ###
 
 a) Configuration File Setup: Each team member will introduce their own configuration file, inspired by NGINX. Their configuration file should handle:
 - Port and host configuration.
