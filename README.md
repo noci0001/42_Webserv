@@ -38,7 +38,7 @@ f) Configuration File Parsing at the Core Level.
 
 ### 2. Sam (Request Parser + Front-end) ###
 
-   Request Parser:
+   #### Request Parser: #### 
 a) Develop a parser to read incoming HTTP requests.
 - Buffered reading of data from the socket.
 - Identification of request's end.
@@ -61,7 +61,7 @@ d) Forward the request to the appropriate module.
 - Forward request data to the determined module for processing.
 
 
-   Front-end:
+  #### Front-end: #### 
 a) Design the user interface.
 - Sketch wireframes/mockups for the static website pages.
 - Decide on a color palette, typography, and overall design theme.
