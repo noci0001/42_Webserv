@@ -143,16 +143,16 @@ b) Validate configuration file content.
 - Ensure the provided values (e.g., port numbers, paths) are valid and usable.
 - Provide meaningful error messages if invalid configurations are detected.
 
-# Update ReadMe file
-- About
-- Structure
-- Usage
-- Resources
-
-
 c)  Integration & Testing:
 - Integration Testing
 - Unit Testing:
   Each module or functionality (like parsing, response building, server core operations) should be unit-tested to ensure individual components work as expected.
 - End-to-End Testing:
   Simulate actual user behaviors, like accessing a webpage, uploading a file, or deleting content, to ensure the entire system works from the user's perspective.
+
+
+# Update ReadMe file
+- About
+- Structure
+- Usage
+- Resources
