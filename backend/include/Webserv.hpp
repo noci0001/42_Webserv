@@ -26,7 +26,7 @@
 #include <arpa/inet.h>
 #include <map>
 #include <unistd.h>
-#define MAX_CONTENT_LENGTH 1024
+#define MAX_CONTENT_LENGTH 420000
 
 //Utils.cpp
 int ft_stoi(std::string str);
