@@ -199,3 +199,9 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
             this->_error_pages.insert(std::make_pair(error_code, path));
     }
 }
+
+bool    ServerConfig::validHost(std::string host) const
+{
+    struct sockaddr_in sockaddr;
+    return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) & true : false);
+}

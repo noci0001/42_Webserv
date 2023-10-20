@@ -38,6 +38,7 @@ public:
     void    ServerConfig::setIndex(std::string index);
     void    ServerConfig::setAutoIndex(std::string autoindex);
     void    ServerConfig::setErrorPages(std::vector<std::string> &parameter);
+    bool    ServerConfig::validHost(std::string host) const;
 
     public:
         class ErrorException : public std::exception
