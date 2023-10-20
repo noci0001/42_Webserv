@@ -197,7 +197,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
             this->_error_pages[error_code] = path;
         else
             this->_error_pages.insert(std::make_pair(error_code, path));
-    }
+    };
 }
 
 bool    ServerConfig::validHost(std::string host) const
