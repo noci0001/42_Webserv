@@ -83,7 +83,7 @@ void    ServerConfig::initErrorPages( void )
 
 void    ServerConfig::setServerName(std::string server_name)
 {
-    checkServerInfo(server_name);
+    Configfile::get_value_from_key(server_name, 1);
     this->_server_name = server_name;
 }
 

@@ -7,7 +7,7 @@
 class Parsing: public ParsingUtils {
 private:
 	std::string _config_file;
-	int _status;
+    int         _status;
 protected:
 public:
 	Parsing();
@@ -16,7 +16,8 @@ public:
 	int config_file_exist();
 	int document_parsing();
 	int file_extension_check(std::string& config_file);
-	int get_status() const { return (this->_status);};
+    int get_status() { return (_status);};
+    void set_status(int status) { _status = status; };
 	~Parsing();
 };
 

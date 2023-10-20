@@ -3,11 +3,11 @@
 
 #include "Webserv.hpp"
 
-static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
+//static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
 
 class Location; //needed for root and directories <-- parsing
 
-class ServerConfig
+class ServerConfig : public Configfile
 {
 private:
     uint16_t                        _port;
