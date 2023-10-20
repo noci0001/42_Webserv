@@ -87,3 +87,28 @@ Configfile::~Configfile() {
 		std::cout << RED << "❌\tError found in configuration file analysis" << RESET << std::endl;
     }
 }
+
+//[* defines if path is: file(1), directory(2) or other(3) *]
+int Configfile::getTypePath(std::string const path)
+{
+	struct stat buffer;
+	int			result;
+
+	result = stat(path.c_str(), &buffer);
+	if (result == 0)
+	{
+		if (buffer.st_mode & S_IFREG)
+			return 1;
+		else if (buffer. st_mode & S_IFDIR)
+			return 2;
+		else
+			return 3;
+	}
+	else
+		return -1;
+}
+
+int Configfile::checkFile(std::string const path, int mode)
+{
+	return (access(path.c_str(), mode));
+}

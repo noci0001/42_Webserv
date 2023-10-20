@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include <vector>
 
 ServerConfig::ServerConfig()
 {
@@ -83,13 +84,13 @@ void    ServerConfig::initErrorPages( void )
 
 void    ServerConfig::setServerName(std::string server_name)
 {
-    Configfile::get_value_from_key(server_name, 1);
+    Configfile::obtain_serverdata(server_name);
     this->_server_name = server_name;
 }
 
 void    ServerConfig::setHost(std::string parameter)
 {
-    checkServerInfo(parameter);
+    Configfile::obtain_serverdata(parameter);
     if (parameter == "localhost")
         parameter = "127.0.0.1";
     if (!validHost(parameter))
@@ -99,7 +100,7 @@ void    ServerConfig::setHost(std::string parameter)
 
 void    ServerConfig::setRoot(std::string root)
 {
-    checkServerInfo(root);
+    Configfile::obtain_serverdata(root);
     if (Configfile::getTypePath(root) == 2)
     {
         this->_root = root;
@@ -118,7 +119,7 @@ void    ServerConfig::setPorts(std::string parameter)
     unsigned int    port;
 
     port = 0;
-    checkServerInfo(parameter);
+    Configfile::obtain_serverdata(parameter);
     for (size_t i = 0; i < parameter.length(); i++)
     {
         if (!std::isdigit(parameter[i]))
@@ -135,7 +136,7 @@ void    ServerConfig::setMaxBodySizeClient(std::string parameter)
     unsigned long   body_size;
 
     body_size = 0;
-    checkServerInfo(parameter);
+    Configfile::obtain_serverdata(parameter);
     for (size_t i = 0; i < parameter.length(); i++)
     {
         if (parameter[i] < '0' || parameter[i] > '9')
@@ -149,13 +150,13 @@ void    ServerConfig::setMaxBodySizeClient(std::string parameter)
 
 void    ServerConfig::setIndex(std::string index)
 {
-    checkServerInfo(index);
+    Configfile::obtain_serverdata(index);
     this->_index = index;
 }
 
 void    ServerConfig::setAutoIndex(std::string autoindex)
 {
-    checkServerInfo(autoindex);
+    Configfile::obtain_serverdata(autoindex);
     if (autoindex != "on" && autoindex != "off")
         throw ErrorException("Wrong syntax: autoindex");
     if (autoindex == "on")
@@ -184,7 +185,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
             throw ErrorException("Invalid Error Code" + parameter[i]);
         i++;
         std::string path = parameter[i];
-        checkServerInfo(path);
+        Configfile::obtain_serverdata(path);
         if (Configfile::getTypePath(path) != 2)
         {
             if (Configfile::getTypePath(this->_root + path) != 1)
@@ -203,5 +204,5 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
 bool    ServerConfig::validHost(std::string host) const
 {
     struct sockaddr_in sockaddr;
-    return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) & true : false);
+    return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) ? true : false);
 }

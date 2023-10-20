@@ -28,6 +28,8 @@ public:
 	std::string obtain_serverdata(std::string keyword);
 	void get_values_serverData();
 	int find_all_server_keywords(std::string& config_file);
+	int getTypePath(std::string const path);
+	int	checkFile(std::string const path, int mode);
 	~Configfile();
 };
 
