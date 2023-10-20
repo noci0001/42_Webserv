@@ -16,7 +16,12 @@ std::string Configfile::get_value_from_key(std::string keyword, int position) {
 	return (value);
 }
 
-void Configfile::get_value_serverData() {
+std::string Configfile::obtain_serverdata(std::string keyword) {
+    std::cout << "RETURN VALUE: " << this->_serverData[keyword] << std::endl;
+    return this->_serverData[keyword];
+}
+
+void Configfile::get_values_serverData() {
 	std::cout << "Key-value pairs: \n" << std::endl;
     std::cout << std::left << std::setw(15) << BOLD << YELLOW << "KEY" << std::setw(25) << RESET << BOLD << YELLOW << "VALUE\n" << RESET << std::endl;
     for (std::map<std::string, std::string>::iterator it = _serverData.begin(); it != _serverData.end(); ++it) {
@@ -75,7 +80,7 @@ Configfile::Configfile(Parsing *parser, std::string& config_file): _original_con
 Configfile::~Configfile() {
 	if (this->_status == SUCCESS) {
 		Configfile::_status = SUCCESS;
-		Configfile::get_value_serverData();
+		Configfile::get_values_serverData();
         std::cout << GREEN << "\n✅\tConfiguration correctly analyzed" << RESET << std::endl;
 	}
 	else {
