@@ -5,8 +5,74 @@ Response::Response(){}
 //deconstructor
 Response::~Response() {}
 //reference to an HttpRequest object and initialization of the request member
-Response::Response(HttpRequest &req) : request(req)
+Response::Response(HttpRequest &req) : request(req) {}
 
+MimeType::MimeType()
+{
+	_mimeTypes[".css"] = "text/css";
+	_mimeTypes[".csv"] = "text/csv";
+	_mimeTypes[".doc"] = "application/msword";
+	_mimeTypes[".docx"]
+		= "application/"
+		  "vnd.openxmlformats-officedocument.wordprocessingml.document";
+	_mimeTypes[".epub"]   = "application/epub+zip";
+	_mimeTypes[".gz"]	 = "application/gzip";
+	_mimeTypes[".gif"]	= "image/gif";
+	_mimeTypes[".htm"]	= "text/html";
+	_mimeTypes[".html"]   = "text/html";
+	_mimeTypes[".ico"]	= "image/vnd.microsoft.icon";
+	_mimeTypes[".ics"]	= "text/calendar";
+	_mimeTypes[".jpeg"]   = "image/jpeg";
+	_mimeTypes[".jpg"]	= "image/jpeg";
+	_mimeTypes[".js"]	 = "text/javascript";
+	_mimeTypes[".json"]   = "application/json";
+	_mimeTypes[".jsonld"] = "application/ld+json";
+	_mimeTypes[".mp3"]	= "audio/mpeg";
+	_mimeTypes[".mpeg"]   = "video/mpeg";
+	_mimeTypes[".png"]	= "image/png";
+	_mimeTypes[".pdf"]	= "application/pdf";
+	_mimeTypes[".php"]	= "application/x-httpd-php";
+	_mimeTypes[".rar"]	= "application/vnd.rar";
+	_mimeTypes[".svg"]	= "image/svg+xml";
+	_mimeTypes[".txt"]	= "text/plain";
+}
+
+MimeType::~MimeType() {}
+
+std::string MimeType::getMimeType( std::string extension )
+{
+	return _mimeTypes[extension];
+}
+
+StatusCode::StatusCode()
+{
+	_statusCode[200] = "200 OK";
+	_statusCode[201] = "201 Created";
+	_statusCode[202] = "202 Accepted";
+	_statusCode[204] = "204 No Content";
+	_statusCode[300] = "300 Multiple Choice";
+	_statusCode[301] = "301 Moved Permanently";
+	_statusCode[302] = "302 Found";
+	_statusCode[400] = "400 Bad Request";
+	_statusCode[401] = "401 Unauthorized";
+	_statusCode[403] = "403 Forbidden";
+	_statusCode[404] = "404 Not Found";
+	_statusCode[405] = "405 Method Not Allowed";
+	_statusCode[409] = "409 Conflict";
+	_statusCode[413] = "413 Request Entity Too Large";
+	_statusCode[415] = "415 Unsupported Media Type";
+	_statusCode[500] = "500 Internal Server Error";
+	_statusCode[502] = "502 Bad Gateway";
+	_statusCode[504] = "504 Gateway Timeout";
+	_statusCode[505] = "505 HTTP Version Not Supported";
+}
+
+StatusCode::~StatusCode() {}
+
+std::string StatusCode::getStatusCode( int code ) 
+{ 
+	return _statusCode[code];
+}
 
 void Response::setStatusCode( std::string code )
 {
@@ -41,8 +107,8 @@ int Response::isValidMethod( std::string			  method,
 }
 
 
-Response::Response( Request request, Config server_conf ) :
-	request( request ), server_conf( server_conf )
+Response::Response( Request request, Config serverConfig ) :
+	request( request ), server_conf( serverConfig )
 {
 	//host verification. checks if the server_name from the configuration 
 	//matches the host from the request. If not, set the response status 

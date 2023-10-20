@@ -4,12 +4,38 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <map>
+#include <string>
 
 #define TRUE 1
 #define FALSE 0
 
 static MimeType   mime_types;
 static StatusCode status_codes;
+
+#include <map>
+#include <string>
+
+class MimeType {
+
+public:
+	MimeType();
+	~MimeType();
+	std::string getMimeType( std::string extension );
+
+private:
+	std::map<std::string, std::string> _mimeTypes;
+};
+
+class StatusCode {
+public:
+	StatusCode();
+	~StatusCode();
+	std::string getStatusCode( int code );
+
+private:
+	std::map<int, std::string> _statusCode;
+};
 
 class Response {
 
@@ -22,7 +48,7 @@ private:
 
 public:
 	Response();
-	Response( Request request, Config server_conf );
+	Response( Request request, Config serverConf );
 	~Response();
 
 	std::string statusCode;
