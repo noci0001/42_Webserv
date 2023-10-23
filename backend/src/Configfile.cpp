@@ -2,9 +2,95 @@
 
 Configfile::Configfile(): _status(-1) {}
 
-bool Configfile::key_pairs_checking(std::string keyword, std::string value) {
-    std::cout << "KEYWORD: " << keyword << std::endl;
-    std::cout << "VALUE: " << value << std::endl;
+bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverData) {
+    std::cout << "Key value pairs CHECKING\n" << std::endl;
+
+    //LISTENING PORT
+    std::string int_version_of_value = serverData["listen "];
+    std::istringstream ss(int_version_of_value);
+    int int_value;
+    if (ss >> int_value) {
+        if (int_value >= 1024 && int_value <= 65353)
+            std::cout << "✅\t" << "[Default]Listening port value correctly set to " << int_value << std::endl;
+        else {
+            std::cout << "❌\t" << "[Default]Listening port value out of range: must be between 1024 up to 65353"
+                      << std::endl;
+            return (false);
+        }
+    }
+
+    //HOST
+    if (serverData["host "] == "127.0.0.1")
+        std::cout << "✅\t" << "[Default]Host correctly set to loopback address of " << serverData["host "] << std::endl;
+    else {
+        std::cout << "❌\t" << "[Default]Host incorrectly set to " << serverData["host "] << std::endl;
+        return (false);
+    }
+
+    //SERVER NAME
+    if (serverData["server_name "] == "localhost")
+        std::cout << "✅\t" << "[Default]Server Name correctly set to localhost" << std::endl;
+    else {
+        std::cout << "❌\t" << "[Default]Server Name incorrectly set to localhost" << std::endl;
+        return (false);
+    }
+
+    //ERROR PAGE
+    if (serverData["error_page "].find(' ') != std::string::npos) {
+        std::istringstream ss(serverData["error_page "]);
+        std::vector<std::string> tokens;
+        std::string token;
+        while (ss >> token)
+            tokens.push_back(token);
+
+        std::string error_path =  "/frontend/" + tokens[0] + ".html";
+        if (tokens[0][0] != '4' || tokens[1].compare(error_path) != 0) {
+            std::cout << "❌\t"
+                      << "[Default]Error page incorrectly set. Error present in either error code (not in the range 400 - 499)."
+                      << std::endl << "ERROR CODE in configuration file: " << tokens[0] << std::endl
+                      << "ERROR PATH in configuration file: " << tokens[1] << std::endl;
+            return (false);
+        }
+        else
+            std::cout << "✅\t" << "[Default]Error page correctly set to " << serverData["error_page "] << std::endl;
+    }
+    else {
+        std::cout << "❌\t" << "[Default]Error page incorrectly set" << std::endl;
+        return (false);
+    }
+
+    //CLIENT MAX BODY SIZE
+    int_version_of_value = serverData["client_max_body_size "];
+    int_value = 0;
+    //CMBS -> short for CLIENT MAX BODY SIZE
+    std::istringstream cmbs_ss(int_version_of_value);
+    if (cmbs_ss >> int_value) {
+        if (int_value <= MAX_CONTENT_LENGTH)
+            std::cout << "✅\t" << "[Default]Client max body size correctly set to " << int_value << std::endl;
+        else {
+            std::cout << "❌\t" << "[Default]Client max body size set to out of range value" << std::endl;
+            return (false);
+        }
+    } else {
+        std::cout << "❌\t" << "[Default]Operation failed at Client Max Body Size " << std::endl;
+        return (false);
+    }
+
+    //ROOT
+    if (serverData["root"] == " /frontend/index.html")
+        std::cout << "✅\t" << "[Default]Root correctly set to localhost" << std::endl;
+    else {
+        std::cout << "❌\t" << "[Default]Root incorrectly set to localhost" << std::endl;
+        return (false);
+    }
+
+    //INDEX
+    if (serverData["index "] == "/frontend/index.html")
+        std::cout << "✅\t" << "[Default]Index correctly set to path " << serverData["index "] << std::endl;
+    else {
+        std::cout << "❌\t" << "[Default]Index incorrectly set to " << serverData["index"] << std::endl;
+        return (false);
+    }
     return (true);
 }
 
@@ -18,12 +104,8 @@ std::string Configfile::get_value_from_key(std::string keyword, int position) {
 		value += this->_original_config_file[i];
 		i++;
 	}
-    if (this->key_pairs_checking(keyword, value)) {
-	    this->_serverData[keyword] = value;
-        return (value);
-    }
-    this->_status = FAILURE;
-    return ("NULL");
+    this->_serverData[keyword] = value;
+    return (value);
 }
 
 std::string Configfile::obtain_serverdata(std::string keyword) {
@@ -55,6 +137,7 @@ int Configfile::find_all_server_keywords(std::string& config_file) {
 		}
 		i++;
 	}
+    this->key_pairs_checking(_serverData);
 	if (key_found == serverParameter->size()) {
 		// this->get_value_serverData();
 		return (SUCCESS);
@@ -85,11 +168,11 @@ Configfile::Configfile(Parsing *parser, std::string& config_file): _original_con
 		std::cout << RED << "❌\tCouldn't find all the keywords"<< RESET << std::endl;
         parser->set_status(FAILURE);
 	}
+    this->_status = SUCCESS;
 }
 
 Configfile::~Configfile() {
 	if (this->_status == SUCCESS) {
-		Configfile::_status = SUCCESS;
 		Configfile::get_values_serverData();
         std::cout << GREEN << "\n✅\tConfiguration correctly analyzed" << RESET << std::endl;
 	}
