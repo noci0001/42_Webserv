@@ -26,6 +26,7 @@ public:
 	std::string get_value_from_key(std::string keyword, int position);
 	// int add_serverData(std::string keyword, std::string value);
 	std::string obtain_serverdata(std::string keyword);
+    bool key_pairs_checking(std::string keyword, std::string value);
 	void get_values_serverData();
 	int find_all_server_keywords(std::string& config_file);
 	~Configfile();
