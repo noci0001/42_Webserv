@@ -49,6 +49,6 @@ const std::string YELLOW = "\033[38;5;3m";
 const std::string RESET = "\033[0m";
 
 static std::string serverParameter[] = { "listen ", "host ", "server_name ",
-"error_page ", "client_max_body_size ", "root" , "index ", "allow_methods"};
+"error_page ", "client_max_body_size ", "root " , "index ", "allow_methods"};
 
 #endif

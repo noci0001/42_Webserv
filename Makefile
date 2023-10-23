@@ -18,6 +18,8 @@ all: $(NAME)
 $(NAME): $(OBJS) $(HEADERS) $(MEMCHECK)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo Webserv has been successfully compiled
+	echo "Executing program by calling the executable..."
+	./webserv
 
 $(MEMCHECK):
 	@echo Checking for leaks...

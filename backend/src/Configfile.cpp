@@ -13,8 +13,8 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         if (int_value >= 1024 && int_value <= 65353)
             std::cout << "✅\t" << "[Default]Listening port value correctly set to " << int_value << std::endl;
         else {
-            std::cout << "❌\t" << "[Default]Listening port value out of range: must be between 1024 up to 65353"
-                      << std::endl;
+            std::cout << "❌\t" << "[Default]Listening port value out of range: must be between 1024 up to 65353" << std::endl;
+            this->_status = FAILURE;
             return (false);
         }
     }
@@ -24,6 +24,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         std::cout << "✅\t" << "[Default]Host correctly set to loopback address of " << serverData["host "] << std::endl;
     else {
         std::cout << "❌\t" << "[Default]Host incorrectly set to " << serverData["host "] << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
 
@@ -32,6 +33,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         std::cout << "✅\t" << "[Default]Server Name correctly set to localhost" << std::endl;
     else {
         std::cout << "❌\t" << "[Default]Server Name incorrectly set to localhost" << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
 
@@ -43,12 +45,13 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         while (ss >> token)
             tokens.push_back(token);
 
-        std::string error_path =  "/root/" + tokens[0] + ".html";
-        if (tokens[0][0] != '4' || tokens[1].compare(error_path) != 0) {
+        std::string error_path =  "/error_pages/" + tokens[0] + ".html";
+        if (tokens[0][0] != '4' || (tokens[1].compare(error_path) != 0 && tokens[1].compare("/root/" + tokens[0] + ".html") != 0)) {
             std::cout << "❌\t"
                       << "[Default]Error page incorrectly set. Error present in either error code (not in the range 400 - 499)."
                       << std::endl << "ERROR CODE in configuration file: " << tokens[0] << std::endl
                       << "ERROR PATH in configuration file: " << tokens[1] << std::endl;
+            this->_status = FAILURE;
             return (false);
         }
         else
@@ -56,6 +59,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
     }
     else {
         std::cout << "❌\t" << "[Default]Error page incorrectly set" << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
 
@@ -69,18 +73,21 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
             std::cout << "✅\t" << "[Default]Client max body size correctly set to " << int_value << std::endl;
         else {
             std::cout << "❌\t" << "[Default]Client max body size set to out of range value" << std::endl;
+            this->_status = FAILURE;
             return (false);
         }
     } else {
         std::cout << "❌\t" << "[Default]Operation failed at Client Max Body Size " << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
 
     //ROOT
-    if (serverData["root"] == " /root/index.html" || serverData["root"] == " root/index.html")
-        std::cout << "✅\t" << "[Default]Root correctly set to " << serverData["root"] << std::endl;
+    if (serverData["root "] == "/root/index.html" || serverData["root"] == "root/index.html")
+        std::cout << "✅\t" << "[Default]Root correctly set to " << serverData["root "] << std::endl;
     else {
-        std::cout << "❌\t" << "[Default]Root incorrectly set to localhost" << std::endl;
+        std::cout << "❌\t" << "[Default]Root incorrectly set to "<< serverData["root "] << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
 
@@ -89,6 +96,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         std::cout << "✅\t" << "[Default]Index correctly set to path " << serverData["index "] << std::endl;
     else {
         std::cout << "❌\t" << "[Default]Index incorrectly set to " << serverData["index"] << std::endl;
+        this->_status = FAILURE;
         return (false);
     }
     std::cout << std::endl;
