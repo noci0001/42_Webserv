@@ -43,7 +43,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         while (ss >> token)
             tokens.push_back(token);
 
-        std::string error_path =  "/frontend/" + tokens[0] + ".html";
+        std::string error_path =  "/root/" + tokens[0] + ".html";
         if (tokens[0][0] != '4' || tokens[1].compare(error_path) != 0) {
             std::cout << "❌\t"
                       << "[Default]Error page incorrectly set. Error present in either error code (not in the range 400 - 499)."
@@ -77,20 +77,21 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
     }
 
     //ROOT
-    if (serverData["root"] == " /frontend/index.html")
-        std::cout << "✅\t" << "[Default]Root correctly set to localhost" << std::endl;
+    if (serverData["root"] == " /root/index.html" || serverData["root"] == " root/index.html")
+        std::cout << "✅\t" << "[Default]Root correctly set to " << serverData["root"] << std::endl;
     else {
         std::cout << "❌\t" << "[Default]Root incorrectly set to localhost" << std::endl;
         return (false);
     }
 
     //INDEX
-    if (serverData["index "] == "/frontend/index.html")
+    if (serverData["index "] == "/root/index.html" || serverData["index "] == "root/index.html")
         std::cout << "✅\t" << "[Default]Index correctly set to path " << serverData["index "] << std::endl;
     else {
         std::cout << "❌\t" << "[Default]Index incorrectly set to " << serverData["index"] << std::endl;
         return (false);
     }
+    std::cout << std::endl;
     return (true);
 }
 
