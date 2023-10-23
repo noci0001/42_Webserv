@@ -2,6 +2,12 @@
 
 Configfile::Configfile(): _status(-1) {}
 
+bool Configfile::key_pairs_checking(std::string keyword, std::string value) {
+    std::cout << "KEYWORD: " << keyword << std::endl;
+    std::cout << "VALUE: " << value << std::endl;
+    return (true);
+}
+
 // Given a keyword string and its position in the config file
 // the value is extracted by iterating through the string until
 // the semicolon is found
@@ -12,8 +18,12 @@ std::string Configfile::get_value_from_key(std::string keyword, int position) {
 		value += this->_original_config_file[i];
 		i++;
 	}
-	this->_serverData[keyword] = value;
-	return (value);
+    if (this->key_pairs_checking(keyword, value)) {
+	    this->_serverData[keyword] = value;
+        return (value);
+    }
+    this->_status = FAILURE;
+    return ("NULL");
 }
 
 std::string Configfile::obtain_serverdata(std::string keyword) {
@@ -62,7 +72,7 @@ Configfile::Configfile(Parsing *parser, std::string& config_file): _original_con
 		while (getline(file, line))
 			this->_original_config_file += line + "\n";
 		file.close();
-		this->_status = SUCCESS;
+		//this->_status = TBD;
 	}
 	else {
 		this->_status = FAILURE;
