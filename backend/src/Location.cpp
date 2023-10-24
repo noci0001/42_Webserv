@@ -69,6 +69,7 @@ void    Location::setRoot(std::string parameter)
 
 void    Location::setMethods(std::vector<std::string> methods)
 {
+    Configfile::obtain_serverdata()
     this->_methods[0] = 0;
     this->_methods[1] = 0;
     this->_methods[2] = 0;
