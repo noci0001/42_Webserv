@@ -7,10 +7,12 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/utils/Utils.cpp \
 			backend/src/Location.cpp \
 			backend/src/ServerConfig.cpp \
+			backend/src/Booting.cpp
 
 HEADER	=	backend/include/Webserv.hpp \
 			backend/include/Locations.hpp \
 			backend/include/ServerConfig.hpp \
+			backend/include/Booting.hpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -29,7 +31,6 @@ $(NAME): $(OBJS) $(HEADERS) $(MEMCHECK)
 $(MEMCHECK):
 	@echo Checking for leaks...
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) webserv.conf
-	
 
 clean:
 	@$(RM) $(OBJS)

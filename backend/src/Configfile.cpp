@@ -170,7 +170,6 @@ void Configfile::get_values_serverData() {
 int Configfile::find_all_server_keywords(std::string& config_file) {
 	std::cout << "\nBuilding key-value pairs \n" << std::endl;
 	int i = 0;
-	//const char *keywords[] = { "listen ", "host ", "server_name ", "error_page ", "client_max_body_size ", "root" , "index ", "allow_methods"};
     int key_found = 0;
     int parameter_array_size = serverParameter->size();
     parameter_array_size += 1;

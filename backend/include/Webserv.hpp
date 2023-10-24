@@ -14,12 +14,16 @@
 //CLIENT MAX BODY SIZE
 #define MAX_CONTENT_LENGTH 420000
 
+#define MAXLINE 4096
+#define SA struct sockaddr
+
 
 #include "Parsing.hpp"
 #include "Configfile.hpp"
 #include "Location.hpp"
 #include "ParsingUtils.hpp"
-//#include "ServerConfig.hpp"
+#include "Booting.hpp"
+#include "ServerConfig.hpp"
 //#include "Response.hpp"
 #include <vector>
 #include <map>
@@ -29,9 +33,16 @@
 #include <cstring>
 #include <utility>
 #include <sstream>
+#include <cerrno>
+#include <netdb.h>
+#include <fcntl.h>
+#include <sys/time.h>
 
 //ServerConfig.hpp
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <csignal>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/select.h>
 #include <arpa/inet.h>

@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
 		config_file_name = argv[1];
 		Configfile config_file(&parsing, config_file_name);
 	}
+    ServerConfig serverconfig;
+    Booting booting(serverconfig);
 	std::cout << "Webserv started" << std::endl;
 	return (Parsing::message("Thanks for using our Webserv!", SUCCESS));
 }
