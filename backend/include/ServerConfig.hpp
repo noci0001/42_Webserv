@@ -39,7 +39,19 @@ public:
     void    setIndex(std::string index);
     void    setAutoIndex(std::string autoindex);
     void    setErrorPages(std::vector<std::string> &parameter);
+    
     bool    validHost(std::string host) const;
+
+    const std::string &getServerName();
+    const std::string &getRoot();
+    const bool &getAutoIndex();
+    const in_addr_t &getHost();
+    const uint16_t &getPort();
+    const size_t &getMaxBodySizeClient();
+    const std::string &getIndex();
+    const std::map<short, std::string> &getErrorPages();
+    const std::vector<Location> &getLocations();
+    const int &getFdListen();
 
     public:
         class ErrorException : public std::exception
