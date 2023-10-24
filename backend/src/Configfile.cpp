@@ -108,6 +108,7 @@ int Configfile::getTypePath(std::string const path)
 		return -1;
 }
 
+//[* checks if file is accessible to client *]
 int Configfile::checkFile(std::string const path, int mode)
 {
 	return (access(path.c_str(), mode));

@@ -2,7 +2,7 @@
 
 int ft_stoi(std::string str)
 {
-    std::stringstream strs(str);
+    std::stringstream ss(str);
     if (str.length() > 10)
         throw std::exception();
     for (size_t i = 0; i < str.length(); ++i)
@@ -11,7 +11,7 @@ int ft_stoi(std::string str)
             throw std::exception();
     }
     int res;
-    strs >> res;
+    ss >> res;
     return res;
 }
 

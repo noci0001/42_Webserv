@@ -4,13 +4,18 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/Parsing.cpp \
 			backend/src/Configfile.cpp \
 			backend/src/utils/ParsingUtils.cpp \
+			backend/src/utils/Utils.cpp \
+			backend/src/Location.cpp \
+			backend/src/ServerConfig.cpp \
 
-HEADER	=	backend/include/Webserv.hpp
+HEADER	=	backend/include/Webserv.hpp \
+			backend/include/Locations.hpp \
+			backend/include/ServerConfig.hpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
 CC		=	c++
-CFLAGS	=	-Wall -Werror -Wextra -g -std=c++98
+CFLAGS	=	-Wall -Werror -Wextra -g3 -std=c++98
 RM		=	rm -rf
 
 all: $(NAME)

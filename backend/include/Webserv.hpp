@@ -14,9 +14,10 @@
 
 #include "Parsing.hpp"
 #include "Configfile.hpp"
+#include "Location.hpp"
 #include "ParsingUtils.hpp"
 #include "ServerConfig.hpp"
-#include "Response.hpp"
+//#include "Response.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
@@ -24,6 +25,7 @@
 #include <iomanip>
 #include <cstring>
 #include <utility>
+#include <sstream>
 
 //ServerConfig.hpp
 #include <sys/socket.h>

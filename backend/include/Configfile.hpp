@@ -1,7 +1,7 @@
 #ifndef CONFIGFILE_HPP
 # define CONFIGFILE_HPP
 
-#include "ParsingUtils.hpp"
+#include "Webserv.hpp"
 
 #include <fstream>
 #include <map>
