@@ -206,3 +206,55 @@ bool    ServerConfig::validHost(std::string host) const
     struct sockaddr_in sockaddr;
     return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) ? true : false);
 }
+
+//[**** Getter Functions ****]
+
+const std::string &ServerConfig::getServerName()
+{
+    return this->_server_name;
+}
+
+const std::string &ServerConfig::getRoot()
+{
+    return this->_root;
+}
+
+const bool &ServerConfig::getAutoIndex()
+{
+    return this->_autoindex;
+}
+
+const in_addr_t &ServerConfig::getHost()
+{
+    return this->_host;
+}
+
+const uint16_t &ServerConfig::getPort()
+{
+    return this->_port;
+}
+
+const size_t &ServerConfig::getMaxBodySizeClient()
+{
+    return this->_max_body_size_client;
+}
+
+const std::string &ServerConfig::getIndex()
+{
+    return this->_index;
+}
+
+const std::map<short, std::string> &ServerConfig::getErrorPages()
+{
+    return this->_error_pages;
+}
+
+const std::vector<Location> &ServerConfig::getLocations()
+{
+    return this->_locations;
+}
+
+const int &ServerConfig::getFdListen()
+{
+    return this->_fd_listen;
+}
