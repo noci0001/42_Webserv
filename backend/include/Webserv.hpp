@@ -19,7 +19,7 @@
 #include "Configfile.hpp"
 #include "Location.hpp"
 #include "ParsingUtils.hpp"
-//#include "ServerConfig.hpp"
+#include "ServerConfig.hpp"
 //#include "Response.hpp"
 #include <vector>
 #include <map>
@@ -39,6 +39,10 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #define MAX_CONTENT_LENGTH 420000
+
+//ConsoleLog.hpp
+#include <fcntl.h>
+#include <sys/time.h>
 
 //Utils.cpp
 int ft_stoi(std::string str);
