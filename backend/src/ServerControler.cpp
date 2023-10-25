@@ -123,6 +123,9 @@ void    ServerControler::initSets()
     _max_fd = _servers.back().getFdListen();
 }
 
+// Accepts new connections incoming.
+// Creates a new Client object and adds it to _map_clients.
+// Adds Client socket to _receive_fd_pool.
 void    ServerControler::acceptConnection(ServerConfig &server)
 {
     struct  sockaddr_in client_address;
@@ -141,4 +144,79 @@ void    ServerControler::acceptConnection(ServerConfig &server)
         inet_ntop(AF_INET, &client_address, buffer, INET_ADDRSTRLEN), client_socket);
     
     addToSets(client_socket, _receive_fd_pool);
+
+    if (fcntl(client_socket, F_SETFL, O_NONBLOCK) < 0)
+    {
+        ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: fcntl failed: %s\t Closing Webserv", strerror(errno));
+        removeFromSets(client_socket, _receive_fd_pool);
+        close(client_socket);
+        return ;
+    }
+    client_new.setFd(client_socket);
+    if (_map_clients.count(client_socket) != 0)
+        _map_clients.erase(client_socket);
+    _map_clients.insert(std::make_pair(client_socket, client_new));
+}
+
+// Closes connection from fd.
+// Removes client from _map_clients.
+void    ServerControler::closeConnection(const int i)
+{
+    if (FD_ISSET(i, &_write_fd_pool))
+        removeFromSets(i, _write_fd_pool);
+    if (FD_ISSET(i, &_receive_fd_pool))
+        removeFromSets(i, _receive_fd_pool);
+    close(i);
+    _map_clients.erase(i);
+}
+
+void    ServerControler::sendResponse(const int &i, Client &client)
+{
+    int         sent_bytes;
+    std::string response = client.response.getResponse();
+    if (response.length() >= MESSAGE_BUFFER_SIZE)
+        sent_bytes = write(i, response.c_str(), MESSAGE_BUFFER_SIZE);
+    else
+        sent_bytes = write(i, response.c_str(), response.length());
+    
+    if (sent_bytes < 0)
+    {
+        ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: sendResponse(): write failed: %s", strerror(errno));
+        closeConnection(i);
+    }
+    else if (sent_bytes == 0 || (size_t)sent_bytes == response.length())
+    {
+        ConsoleLog::logMessage(ORANGE, CONSOLE_OUTPUT, "Response sent to socket %d, Status=[%d]",
+            i, client.response.getStatusCode());
+        if (client.request.keepAlive() == false || client.request.errorCode() /* || client.response.getCgiState() */)
+        {
+            ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Client %d: Closing connection", i);
+            closeConnection(i);
+        }
+        else
+        {
+            removeFromSets(i, _write_fd_pool);
+            addToSets(i, _receive_fd_pool);
+            client.clearClient();
+        }
+    }
+    else
+    {
+        client.updateTimestamp();
+        client.response.cutResponse(sent_bytes);
+    }
+}
+
+void    ServerControler::assignServer(Client &client)
+{
+    for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
+    {
+        if (client.server.getHost() == ito->getHost() &&
+            client.server.getPort() == ito->getPort() &&
+            client.request.getServerName() == ito->getServerName())
+        {
+            client.setServer(*ito);
+            return ;
+        }
+    }
 }
