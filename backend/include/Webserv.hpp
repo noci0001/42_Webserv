@@ -17,6 +17,9 @@
 //CONNECTION TIMEOUT -> time in seconds after which the connection to client will be closed
 #define CONNECTION_TIMEOUT 60
 
+//MESSAGE_BUFFER_SIZE
+#define MESSAGE_BUFFER_SIZE 42000
+
 #include "Parsing.hpp"
 #include "Configfile.hpp"
 #include "Location.hpp"
