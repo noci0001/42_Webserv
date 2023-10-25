@@ -14,6 +14,8 @@
 //CLIENT MAX BODY SIZE
 #define MAX_CONTENT_LENGTH 420000
 
+//CONNECTION TIMEOUT -> time in seconds after which the connection to client will be closed
+#define CONNECTION_TIMEOUT 60
 
 #include "Parsing.hpp"
 #include "Configfile.hpp"
@@ -21,6 +23,7 @@
 #include "ParsingUtils.hpp"
 #include "ServerConfig.hpp"
 //#include "Response.hpp"
+#include "ConsoleLog.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
@@ -38,7 +41,6 @@
 #include <map>
 #include <unistd.h>
 #include <sys/stat.h>
-#define MAX_CONTENT_LENGTH 420000
 
 //ConsoleLog.hpp
 #include <fcntl.h>
