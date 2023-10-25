@@ -19,7 +19,7 @@ private:
     unsigned long                   _max_body_size_client;
     std::string                     _index;
     bool                            _autoindex;
-    std::map<short, std::string>   _error_pages;
+    std::map<short, std::string>    _error_pages;
     std::vector<Location>           _locations;
     struct sockaddr_in                  _server_address;
     int                                 _fd_listen;
