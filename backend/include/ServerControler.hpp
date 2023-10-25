@@ -34,7 +34,7 @@ class ServerControler
         void    sendResponse(const int &, Client &);
         //void    sendCgiBody(Client &, CgiHandler &);
         //void    readCgiResponse(Client &, CgiHandler &);
-        void    closeConnection(const int &);
+        void    closeConnection(const int);
         void    assignServer(Client &);
         void    addToSets(const int, fd_set &);
         void    removeFromSets(const int, fd_set &);
