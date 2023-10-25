@@ -201,6 +201,11 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
     };
 }
 
+void    ServerConfig::setFdListen(int fd)
+{
+    this->_fd_listen = fd;
+}
+
 bool    ServerConfig::validHost(std::string host) const
 {
     struct sockaddr_in sockaddr;
@@ -257,4 +262,25 @@ const std::vector<Location> &ServerConfig::getLocations()
 const int &ServerConfig::getFdListen()
 {
     return this->_fd_listen;
+}
+
+// used to setup sockets and bind them to the server
+void    ServerConfig::startServer(void)
+{
+    if ((_fd_listen = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    {
+        ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: socket() failed %s\t Closing Webserv", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    int value_option = 1;
+    setsockopt(_fd_listen, SOL_SOCKET, SO_REUSEADDR, &value_option, sizeof(int));
+    memset(&_server_address, 0, sizeof(_server_address));
+    _server_address.sin_family = AF_INET;
+    _server_address.sin_addr.s_addr = _host;
+    _server_address.sin_port = htons(_port);
+    if (bind(_fd_listen, (struct sockaddr *) &_server_address, sizeof(_server_address)) == -1)
+    {
+        ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: bind failed %s\t Closing Webserv", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
 }

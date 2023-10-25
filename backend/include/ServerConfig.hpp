@@ -39,6 +39,7 @@ public:
     void    setIndex(std::string index);
     void    setAutoIndex(std::string autoindex);
     void    setErrorPages(std::vector<std::string> &parameter);
+    void    setFdListen(int);
     
     bool    validHost(std::string host) const;
 
@@ -69,6 +70,8 @@ public:
                 }
                 virtual ~ErrorException() throw() {}
         };
+
+        void    startServer();
 };
 
 #endif
