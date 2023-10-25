@@ -220,3 +220,42 @@ void    ServerControler::assignServer(Client &client)
         }
     }
 }
+
+void    ServerControler::readRequest(const int &i, Client &client)
+{
+    char    buffer[MESSAGE_BUFFER_SIZE];
+    int     read_bytes = 0;
+    read_bytes = read(i, buffer, MESSAGE_BUFFER_SIZE);
+    if (read_bytes == 0)
+    {
+        ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Webserv: Client %d disconnected", i);
+        closeConnection(i);
+        return ;
+    }
+    else if (read_bytes < 0)
+    {
+        ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: readRequest(): read failed: %s", strerror(errno));
+        closeConnection(i);
+        return ;
+    }
+    else if (read_bytes != 0)
+    {
+        client.updateTimestamp();
+        client.request.feed(buffer, read_bytes);
+        memset(buffer, 0, sizeof(buffer));
+    }
+
+    if (client.request.parsingComplete() || client.request.errorCode())
+    {
+        assignServer(client);
+        ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT, "Request parsed from socket %d, method=[%s], URI=[%s]",
+            i, client.request.getMethod().c_str(), client.request.getUri().c_str());
+        client.buildResponse();
+        /* if (client.response.getCgiState())
+        {
+            //CGI imlementation
+        } */
+        removeFromSets(i, _receive_fd_pool);
+        addToSets(i, _write_fd_pool);
+    }
+}
