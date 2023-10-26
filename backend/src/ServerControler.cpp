@@ -269,7 +269,7 @@ void    ServerControler::addToSets(const int i, fd_set &set)
 
 void    ServerControler::removeFromSets(const int i, fd_set &set)
 {
-    FD_SET(i, &set);
+    FD_CLR(i, &set);
     if (i == _max_fd)
         _max_fd--;
 }
