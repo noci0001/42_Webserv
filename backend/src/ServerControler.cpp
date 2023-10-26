@@ -259,3 +259,17 @@ void    ServerControler::readRequest(const int &i, Client &client)
         addToSets(i, _write_fd_pool);
     }
 }
+
+void    ServerControler::addToSets(const int i, fd_set &set)
+{
+    FD_SET(i, &set);
+    if (i > _max_fd)
+        _max_fd = i;
+}
+
+void    ServerControler::removeFromSets(const int i, fd_set &set)
+{
+    FD_SET(i, &set);
+    if (i == _max_fd)
+        _max_fd--;
+}
