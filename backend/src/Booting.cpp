@@ -35,11 +35,11 @@ char* addHTTPResponse(const char* file_path) {
         std::string html_content;
         std::string line;
         while (std::getline(input, line)) {
-            html_content += line + "\n";
+            html_content += line;
         }
 
         // Modify the content
-        html_content = "HTTP/1.0 200 OK\r\n" + html_content + "\r\n";
+        html_content = "HTTP/1.0 200 OK\r\n\r\n" + html_content + "\r\n\r\n";
 
         // Allocate memory for the C-style string
         char* result = new char[html_content.size() + 1];
@@ -91,9 +91,10 @@ Booting::Booting(ServerConfig& serverConfig) {
         if (n < 0)
             err_n_die("read error");
 
-        char *format = addHTTPResponse("/Users/snocita/Desktop/42_Projects/Core/42_Webserv/root/index.html");
+        char *format = addHTTPResponse("/Users/snocita/Desktop/42_Projects/Core/42_Webserv/root/test_index.html");
 
         printf("format: %s\n", format);
+//        char *format = "HTTP/1.0 200 OK\r\n\r\n<html></html>\r\n\r\n";
         snprintf((char *)buff, sizeof(buff), format);
 
         write(connfd, buff, strlen((char *)buff));

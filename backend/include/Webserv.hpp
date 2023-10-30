@@ -24,6 +24,9 @@
 #include "ParsingUtils.hpp"
 #include "Booting.hpp"
 #include "ServerConfig.hpp"
+#include "SimpleSocket.hpp"
+#include "BindingSocket.hpp"
+#include "ConnectingSocket.hpp"
 //#include "Response.hpp"
 #include <vector>
 #include <map>
@@ -37,6 +40,7 @@
 #include <netdb.h>
 #include <fcntl.h>
 #include <sys/time.h>
+#include <netinet/in.h>
 
 //ServerConfig.hpp
 #include <sys/socket.h>

@@ -7,12 +7,18 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/utils/Utils.cpp \
 			backend/src/Location.cpp \
 			backend/src/ServerConfig.cpp \
-			backend/src/Booting.cpp
+			backend/src/Booting.cpp \
+			backend/src/SimpleSocket.cpp \
+			backend/src/BindingSocket.cpp \
+			backend/src/ConnectingSocket.cpp \
 
 HEADER	=	backend/include/Webserv.hpp \
 			backend/include/Locations.hpp \
 			backend/include/ServerConfig.hpp \
-			backend/include/Booting.hpp
+			backend/include/Booting.hpp \
+			backend/include/SimpleSocket.hpp \
+			backend/include/BindingSocket.hpp \
+			backend/include/ConnectingSocket.hpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
