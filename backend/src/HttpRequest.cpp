@@ -1,4 +1,5 @@
 #include "../include/HttpRequest.hpp"
+#include "../include/ConsoleLog.hpp"
 
 HttpRequest::HttpRequest()
 {
@@ -12,7 +13,7 @@ HttpRequest::HttpRequest()
     _fragment = "";
     _body_str = "";
     _error_code = 0;
-    _chunked_size = 0;
+    _chunked_length = 0;
     _method = NONE;
     _method_index = 1;
     _state = Request_Line;
@@ -208,6 +209,36 @@ void HttpRequest::feed(char* data, size_t size)
                 {
                     _error_code = 414;
                     std::cout << "Method Error: Request_Line_URI_Path: URI too long" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Request_Line_URI_Query:
+            {
+                if (chara == ' ')
+                {
+                    _state = Request_Line_Version;
+                    _query.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (chara == '#')
+                {
+                    _state = Request_Line_URI_Fragment;
+                    _query.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (!allowedUriChar(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_URI_Query: Bad Character" << std::endl;
+                    return ;
+                }
+                else if (i > MAX_URI_LENGTH)
+                {
+                    _error_code = 414;
+                    std::cout << "Method Error: Request_Line_URI_Query: URI too long" << std::endl;
                     return ;
                 }
                 break ;
@@ -479,8 +510,8 @@ void HttpRequest::feed(char* data, size_t size)
                     _state = Chunked_Lenght_NL;
                 else
                 {
-                    _error_code = 400:
-                    std::cout << "Method Error: Chunked_Length_EOL: Bad character" << std:.endl;
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_Length_EOL: Bad character" << std::endl;
                     return ;
                 }
                 continue ;
@@ -516,6 +547,143 @@ void HttpRequest::feed(char* data, size_t size)
                     _state = Chunked_Data_EOL;
                 continue ;
             }
+            case Chunked_Data_EOL:
+            {
+                if (chara == '\r')
+                    _state = Chunked_Data_NL;
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_Data_EOL: Bad character" << std::endl;
+                    return ;
+                }
+                continue ;
+            }
+            case Chunked_Data_NL:
+            {
+                if (chara == '\n')
+                    _state = Chunked_Lenght_Start;
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_Data_NL: Bad character" << std::endl;
+                    return ;
+                }
+                continue ;
+            }
+            case Chunked_End_EOL:
+            {
+                if (chara == '\r')
+                    _state = Chunked_End_NL;
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_End_EOL: Bad character" << std::endl;
+                    return ;
+                }
+                continue ;
+            }
+            case Chunked_End_NL:
+            {
+                if (chara != '\n')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_End_NL: Bad character" << std::endl;
+                    return ;
+                }
+                _body_done_f = true;
+                _state = Http_Done;
+                continue ;
+            }
+            case Message_Body:
+            {
+                if (_body.size() < _body_size)
+                    _body.push_back(chara);
+                if (_body.size() == _body_size)
+                {
+                    _body_done_f = true;
+                    _state = Http_Done;
+                }
+                break ;
+            }
+            case Http_Done:
+            {
+                return ;
+            }
         }
+        _storage_buffer += chara;
     }
+    if (_state == Http_Done)
+        _body_str.append((char*)_body.data(), _body.size());
+}
+
+bool    HttpRequest::httpCompleted()
+{
+    return (_state == Http_Done);
+}
+
+//[**** Getter Functions ****]
+
+HttpMethod  &HttpRequest::getMethod()
+{
+    return _method;
+}
+
+std::string &HttpRequest::getPath()
+{
+    return _path;
+}
+
+std::string &HttpRequest::getQuery()
+{
+    return _query;
+}
+
+std::string &HttpRequest::getFragment()
+{
+    return _fragment;
+}
+
+std::string &HttpRequest::getHeader(std::string const &key)
+{
+    return _headers[key];
+}
+
+const std::map<std::string, std::string> &HttpRequest::getHeaders() const
+{
+    return (this->_headers);
+}
+
+std::string HttpRequest::getMethodStr()
+{
+    return _method_str[_method];
+}
+
+std::string &HttpRequest::getBody()
+{
+    return _body_str;
+}
+
+std::string HttpRequest::getServerName()
+{
+    return (this->_server_name);
+}
+
+bool    HttpRequest::getMultiformFlag()
+{
+    return (this->_multiform_f);
+}
+
+std::string &HttpRequest::getBoundary()
+{
+    return (this->_boundary);
+}
+
+//[**** Setter Functions ****]
+
+void    HttpRequest::setBody(std::string body)
+{
+    _body.clear();
+    _body.insert(_body.begin(), body.begin(), body.end());
+    _body_str = body;
 }
