@@ -1,5 +1,7 @@
-#ifndef INC_42_WEBSERV_NETWORKING_HPP
-#define INC_42_WEBSERV_NETWORKING_HPP
+#ifndef NETWORKING_HPP
+#define NETWORKING_HPP
+
+#include "Sockets/sockets.hpp"
 
 #include "Sockets/sockets.hpp"
 

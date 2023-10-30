@@ -24,9 +24,7 @@
 #include "ParsingUtils.hpp"
 #include "Booting.hpp"
 #include "ServerConfig.hpp"
-#include "SimpleSocket.hpp"
-#include "BindingSocket.hpp"
-#include "ConnectingSocket.hpp"
+#include "networking/networking.hpp"
 //#include "Response.hpp"
 #include <vector>
 #include <map>
