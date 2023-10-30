@@ -113,7 +113,7 @@ void HttpRequest::feed(char* data, size_t size)
                 else
                 {
                     _error_code = 501;
-                    std::cout << "Method Error: Request_Line: Charachter:" << chara << std::endl;
+                    std::cout << "Method Error: Request_Line: Character:" << chara << std::endl;
                     return ;
                 }
                 _state = Request_Line_Method;
@@ -128,12 +128,393 @@ void HttpRequest::feed(char* data, size_t size)
                 else
                 {
                     _error_code = 501;
-                    std::cout << "Method Error: Request_Line_Post_Put: Charachter:" << chara << std::endl;
+                    std::cout << "Method Error: Request_Line_Post_Put: Character:" << chara << std::endl;
                     return ;
                 }
                 _method_index++;
                 _state = Request_Line_Method;
                 break ;
+            }
+            case Request_Line_Method:
+            {
+                if (chara == _method_str[_method][_method_index])
+                    _method_index++;
+                else
+                {
+                    _error_code = 501;
+                    std::cout << "Method Error: Request_Line_Method: Character:" << chara << std::endl;
+                    return ;
+                }
+                if ((size_t) _method_index == _method_str[_method].length())
+                    _state = Request_Line_First_Space;
+                break ;
+            }
+            case Request_Line_First_Space:
+            {
+                if (chara != ' ')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_First_Space: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_URI_Path_Slash;
+                continue ;
+            }
+            case Request_Line_URI_Path_Slash:
+            {
+                if (chara == '/')
+                {
+                    _state = Request_Line_URI_Path;
+                    _storage_buffer.clear();
+                }
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_URI_Path_Slash: Bad Character" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Request_Line_URI_Path:
+            {
+                if (chara == ' ')
+                {
+                    _state = Request_Line_Version;
+                    _path.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (chara == '?')
+                {
+                    _state = Request_Line_URI_Query;
+                    _path.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (chara == '#')
+                {
+                    _state = Request_Line_URI_Fragment;
+                    _path.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (!allowedUriChar(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_URI_Path: Bad Character" << std::endl;
+                    return ;
+                }
+                else if (i > MAX_URI_LENGTH)
+                {
+                    _error_code = 414;
+                    std::cout << "Method Error: Request_Line_URI_Path: URI too long" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Request_Line_URI_Fragment:
+            {
+                if (chara == ' ')
+                {
+                    _state = Request_Line_Version;
+                    _fragment.append(_storage_buffer);
+                    _storage_buffer.clear();
+                    continue ;
+                }
+                else if (!allowedUriChar(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_URI_Fragment: Bad Character" << std::endl;
+                    return ;
+                }
+                else if (i > MAX_URI_LENGTH)
+                {
+                    _error_code = 414;
+                    std::cout << "Method Error: Request_Line_URI_Fragment: URI too long" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Request_Line_Version:
+            {
+                if (checkUriPosition(_path))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_Version: HTTP-Version before root" << std::endl;
+                    return ;
+                }
+                if (chara != 'H')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_Version: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_HT;
+                break ;
+            }
+            case Request_Line_HT:
+            {
+                if (chara != 'T')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_HT: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_HTT;
+                break ;
+            }
+            case Request_Line_HTT:
+            {
+                if (chara != 'T')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_HTT: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_HTTP;
+                break ;
+            }
+            case Request_Line_HTTP:
+            {
+                if (chara != 'P')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_HTTP: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_HTTP_Slash;
+                break ;
+            }
+            case Request_Line_HTTP_Slash:
+            {
+                if (chara != '/')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_HTTP_Slash: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_Major;
+                break ;
+            }
+            case Request_Line_Major:
+            {
+                if (!isdigit(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_Major: Bad Character" << std::endl;
+                    return ;
+                }
+                _version_major = chara;
+                _state = Request_Line_Dot;
+            }
+            case Request_Line_Dot:
+            {
+                if (chara != '.')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_Dot: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_Minor;
+                break ;
+            }
+            case Request_Line_Minor:
+            {
+                if (!isdigit(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_Minor: Bad Character" << std::endl;
+                    return ;
+                }
+                _version_minor = chara;
+                _state = Request_Line_EOL;
+                break ;
+            }
+            case Request_Line_EOL:
+            {
+                if (chara != '\r')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_EOL: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Request_Line_NL;
+                break ;
+            }
+            case Request_Line_NL:
+            {
+                if (chara != '\n')
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Request_Line_NL: Bad Character" << std::endl;
+                    return ;
+                }
+                _state = Field_Name_Begin;
+                _storage_buffer.clear();
+                continue ;
+            }
+            case Field_Name_Begin:
+            {
+                if (chara == '\r')
+                    _state = Field_Name_End;
+                else if (isFieldnameChar(chara))
+                    _state = Field_Name;
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Field_Name_Begin: Bad Character" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Field_Name_End:
+            {
+                if (chara != '\n')
+                {
+                    _storage_buffer.clear();
+                    _fields_done_f = true;
+                    _handleHeaders();
+                    if (_body_f == true)
+                    {
+                        if (_chunked_f == true)
+                            _state = Chunked_Lenght_Start;
+                        else
+                            _state = Message_Body;
+                    }
+                    else
+                        _state = Http_Done;
+                    continue ;
+                }
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Field_Name_End: Bad Character" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Field_Name:
+            {
+                if (chara == ':')
+                {
+                    _storage_key = _storage_buffer;
+                    _storage_buffer.clear();
+                    _state = Field_Value_Begin;
+                    continue ;
+                }
+                else if (!isFieldnameChar(chara))
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Field_Name: Bad Character" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Field_Value_Begin:
+            {
+                if (chara == '\r')
+                {
+                    setHeader(_storage_key, _storage_buffer);
+                    _storage_key.clear();
+                    _storage_buffer.clear();
+                    _state = Field_Value_End;
+                    continue ;
+                }
+                break ;
+            }
+            case Field_Value_End:
+            {
+                if (chara == '\n')
+                {
+                    _state = Field_Name_Begin;
+                    continue ;
+                }
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Field_Value_End: Bad Character" << std::endl;
+                    return ;
+                }
+                break ;
+            }
+            case Chunked_Lenght_Start:
+            {
+                if (isxdigit(chara) == 0)
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_Length_Start: Not hexadecimal" << std::endl;
+                    return ;
+                }
+                ss.str("");
+                ss.clear();
+                ss << chara;
+                ss >> std::hex >> _chunked_length;
+                if (_chunked_length == 0)
+                    _state = Chunked_End_EOL;
+                else
+                    _state = Chunked_Lenght;
+                continue ;
+            }
+            case Chunked_Lenght:
+            {
+                if (isxdigit(chara) != 0)
+                {
+                    int temp_length = 0;
+                    ss.str("");
+                    ss.clear();
+                    ss << chara;
+                    ss >> std::hex >> temp_length;
+                    _chunked_length *= 16;
+                    _chunked_length += temp_length;
+                }
+                else if (chara == '\r')
+                    _state = Chunked_Lenght_NL;
+                else
+                    _state = Chunked_Ignore;
+                continue ;
+            }
+            case Chunked_Lenght_EOL:
+            {
+                if (chara == '\r')
+                    _state = Chunked_Lenght_NL;
+                else
+                {
+                    _error_code = 400:
+                    std::cout << "Method Error: Chunked_Length_EOL: Bad character" << std:.endl;
+                    return ;
+                }
+                continue ;
+            }
+            case Chunked_Lenght_NL:
+            {
+                if (chara == '\n')
+                {
+                    if (_chunked_length == 0)
+                        _state = Chunked_End_EOL;
+                    else
+                        _state = Chunked_Data;
+                }
+                else
+                {
+                    _error_code = 400;
+                    std::cout << "Method Error: Chunked_Length_NL: Bad character" << std::endl;
+                    return ;
+                }
+                continue ;
+            }
+            case Chunked_Ignore:
+            {
+                if (chara == '\r')
+                    _state = Chunked_Lenght_EOL;
+                continue ;
+            }
+            case Chunked_Data:
+            {
+                _body.push_back(chara);
+                --_chunked_length;
+                if (_chunked_length == 0)
+                    _state = Chunked_Data_EOL;
+                continue ;
             }
         }
     }

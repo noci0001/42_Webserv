@@ -20,6 +20,9 @@
 //MESSAGE_BUFFER_SIZE
 #define MESSAGE_BUFFER_SIZE 42000
 
+//Max Length of URI
+#define MAX_URI_LENGTH 4096
+
 #include "Parsing.hpp"
 #include "Configfile.hpp"
 #include "Location.hpp"

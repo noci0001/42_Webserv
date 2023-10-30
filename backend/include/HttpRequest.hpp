@@ -37,7 +37,7 @@ enum HttpState
     Field_Name_End,
     Field_Name,
     Field_Value_Begin,
-    Field_Name_End,
+    Field_Value_End,
     Chunked_Lenght_Start,
     Chunked_Lenght,
     Chunked_Ignore,
@@ -68,7 +68,7 @@ class HttpRequest
         size_t                              _max_body_size;
         size_t                              _body_size;
         short                               _error_code;
-        size_t                              _chunked_size;
+        size_t                              _chunked_length;
         std::string                         _storage_buffer;
         std::string                         _storage_key;
         short                               _method_index;
