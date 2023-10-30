@@ -1,4 +1,4 @@
-#include "../include/Webserv.hpp"
+#include "../../Webserv.hpp"
 
 SimpleSocket::SimpleSocket(int domain, int service, int protocol, int port, u_long interface) {
     address.sin_family = domain;

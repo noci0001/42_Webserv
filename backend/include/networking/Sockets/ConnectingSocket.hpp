@@ -2,7 +2,6 @@
 #define INC_42_WEBSERV_CONNECTINGSOCKET_HPP
 
 #include "./ConnectingSocket.hpp"
-#include "Webserv.hpp"
 
 class ConnectingSocket {
 public:

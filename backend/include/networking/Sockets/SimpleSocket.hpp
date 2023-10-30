@@ -1,8 +1,8 @@
 #ifndef SIMPLESOCKET_HPP
 #define SIMPLESOCKET_HPP
 
-#include "Webserv.hpp"
-#include "ServerConfig.hpp"
+#include "../../Webserv.hpp"
+#include "../../ServerConfig.hpp"
 #include "SimpleSocket.hpp"
 
 class SimpleSocket {
