@@ -50,7 +50,7 @@ class Response
 		bool					_auto_index;
 		
 
-		
+		int						buildBody();
 };
 
 #endif
