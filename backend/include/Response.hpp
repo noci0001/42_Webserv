@@ -1,61 +1,56 @@
 #ifndef RESPONSE_HPP
 #define RESPONSE_HPP
 
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <map>
-#include <string>
+#include "Webserv.hpp"
+#include "HttpRequest.hpp"
 
-#define TRUE 1
-#define FALSE 0
+class Response 
+{
 
-static MimeType   mime_types;
-static StatusCode status_codes;
+	public:
+		static	Mime	mime;
+		Response();
+		Response( HttpRequest & );
+		~Response();
 
-#include <map>
-#include <string>
+		std::string	getResponse();
+		size_t		getResponseLength();
+		int			getStatusCode();
 
-class MimeType {
+		void		setHttpRequest( HttpRequest & );
+		void		setServerConfig( ServerConfig & );
 
-public:
-	MimeType();
-	~MimeType();
-	std::string getMimeType( std::string extension );
+		void		buildResponse();
+		void		clearResponse();
+		void		handleCgi( HttpRequest & );
+		void		cutResponse( size_t );
+		int			getCgiState();
+		void		setCgiState( int );
+		void		setErrorResponse( short error_code );
 
-private:
-	std::map<std::string, std::string> _mimeTypes;
-};
+		CgiHandler	cgiHandler;
 
-class StatusCode {
-public:
-	StatusCode();
-	~StatusCode();
-	std::string getStatusCode( int code );
+		std::string	removeBoundary( std::string &body, std::string &boundary );
+		std::string	responseContent;
 
-private:
-	std::map<int, std::string> _statusCode;
-};
+		HttpRequest	httpRequest;
 
-class Response {
+	private:
+		ServerConfig			_server_config;
+		std::string				_target_file;
+		std::vector<uint8_t>	_body;
+		size_t					_body_length;
+		std::string				_body_response;
+		std::string				_location;
+		short					_status_code;
+		char					*_response;
+		int						_cgi_state;
+		int						_cgi_fd[2];
+		size_t					_cgi_bytes_read;
+		bool					_auto_index;
+		
 
-private:
-	// store details of the associated HTTP request
-	Request			request; 
-	std::string		_contentType;
-	//load error page and update body
-	void			callErrorPage( std::string &body, std::string error_page );
-
-public:
-	Response();
-	Response( Request request, Config serverConf );
-	~Response();
-
-	std::string statusCode;
-	std::string body;
-	Config		server_conf; //check naming Tom
-	std::string location;	//redirection URL
-	Route		using_route; //routing details(endpoint)
+		
 };
 
 #endif

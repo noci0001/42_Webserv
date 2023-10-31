@@ -28,7 +28,7 @@
 #include "Location.hpp"
 #include "ParsingUtils.hpp"
 #include "ServerConfig.hpp"
-//#include "Response.hpp"
+#include "Response.hpp"
 #include "ConsoleLog.hpp"
 #include <vector>
 #include <map>
@@ -51,6 +51,13 @@
 //ConsoleLog.hpp
 #include <fcntl.h>
 #include <sys/time.h>
+
+//Response.hpp
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <map>
+#include <string>
 
 //Utils.cpp
 int ft_stoi(std::string str);
