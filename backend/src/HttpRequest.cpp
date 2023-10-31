@@ -337,6 +337,7 @@ void HttpRequest::feed(char* data, size_t size)
                 }
                 _version_major = chara;
                 _state = Request_Line_Dot;
+                break ;
             }
             case Request_Line_Dot:
             {
@@ -400,7 +401,7 @@ void HttpRequest::feed(char* data, size_t size)
             }
             case Field_Name_End:
             {
-                if (chara != '\n')
+                if (chara == '\n')
                 {
                     _storage_buffer.clear();
                     _fields_done_f = true;
@@ -686,4 +687,115 @@ void    HttpRequest::setBody(std::string body)
     _body.clear();
     _body.insert(_body.begin(), body.begin(), body.end());
     _body_str = body;
+}
+
+void    HttpRequest::setMethod(HttpMethod &method)
+{
+    _method = method;
+}
+
+void    HttpRequest::setHeader(std::string &key, std::string &value)
+{
+    trimHttp(value);
+    toLower(key);
+    _headers[key] = value;
+}
+
+void    HttpRequest::setMaxBodySize(size_t size)
+{
+    _max_body_size = size;
+}
+
+void    HttpRequest::printRequest()
+{
+    std::cout << _method_str[_method] + " " + _path + "?" + _query + "#" + _fragment
+        + " " + "HTTP/" << _version_major << "." << _version_minor << std::endl;
+    for (std::map<std::string, std::string>::iterator ito = _headers.begin();
+        ito != _headers.end(); ++ito)
+    {
+        std::cout << ito->first << ": " << ito->second << std::endl;
+    }
+    for (std::vector<u_int8_t>::iterator ito = _body.begin(); ito != _body.end(); ++ito)
+    {
+        std::cout << *ito;
+    }
+    std::cout << std::endl << "-----BODY END-----" << std::endl;
+    std::cout << "BODY FLAG = " << _body_f << " BODY DONE FLAG = " << _body_done_f <<
+        "FIELD FLAG = " << _fields_done_f << std::endl;
+}
+
+void    HttpRequest::_handleHeaders()
+{
+    std::stringstream   ss;
+    if (_headers.count("content-length"))
+    {
+        _body_f = true;
+        ss << _headers["content-length"];
+        ss >> _body_size;
+    }
+    if (_headers.count("transfer-encoding"))
+    {
+        if (_headers["transfer-encoding"].find_first_of("chunked") != std::string::npos)
+            _chunked_f = true;
+        _body_f = true;
+    }
+    if (_headers.count("host"))
+    {
+        size_t pos = _headers["host"].find_first_of(":");
+        _server_name = _headers["host"].substr(0, pos);
+    }
+    if (_headers.count("content-type") && _headers["content-type"].find("multipart/form-data") != std::string::npos)
+    {
+        size_t pos = _headers["content-type"].find("boundary=", 0);
+        if (pos != std::string::npos)
+            this->_boundary = _headers["content-type"].substr(pos + 9, _headers["content-type"].size());
+        this->_multiform_f = true;
+    }
+}
+
+short   HttpRequest::errorCode()
+{
+    return (this->_error_code);
+}
+
+//Resets the request object to default values for new requests
+void    HttpRequest::clear()
+{
+    _path.clear();
+    _error_code = 0;
+    _query.clear();
+    _fragment.clear();
+    _headers.clear();
+    _body.clear();
+    _body_str = "";
+    _boundary.clear();
+    _method = NONE;
+    _method_index = 1;
+    _state = Request_Line;
+    _fields_done_f = false;
+    _body_f = false;
+    _body_done_f = false;
+    _chunked_f = false;
+    _multiform_f = false;
+    _completed_f = false;
+    _body_size = 0;
+    _storage_buffer.clear();
+    _storage_key.clear();
+    _chunked_length = 0x0;
+    _server_name.clear();
+}
+
+bool    HttpRequest::keepAlive()
+{
+    if (_headers.count("connection"))
+    {
+        if (_headers["connection"].find("close", 0) != std::string::npos)
+            return false;
+    }
+    return true;
+}
+
+void    HttpRequest::cutRequestBody(int bytes)
+{
+    _body_str = _body_str.substr(bytes);
 }
