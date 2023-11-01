@@ -198,7 +198,156 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
             this->_error_pages[error_code] = path;
         else
             this->_error_pages.insert(std::make_pair(error_code, path));
-    };
+    }
+}
+
+void    ServerConfig::setLocations(std::string path, std::vector<std::string> parameter)
+{
+	Location location_new;
+	std::vector<std::string> methods;
+	bool flag_methods = false;
+	bool flag_autoindex = false;
+	bool flag_max_size = false;
+	int valid;
+
+	location_new.setPath(path);
+	for (size_t i = 0; i < parameter.size(); i++)
+	{
+		if (parameter[i] == "root" && (i + 1) < parameter.size())
+		{
+			if (!location_new.getRoot().empty())
+				throw ErrorException("setLocation: root already set");
+			checkToken(parameter[++i]);
+			if (Configfile::getTypePath(parameter[i]) == 2)
+				location_new.setRoot(parameter[i]);
+			else
+				location_new.setRoot(this->_root + parameter[i]);
+		}
+		else if ((parameter[i] == "allow_methods" || parameter[i] == "methods") && (i + 1) < parameter.size())
+		{
+			if (flag_methods)
+				throw ErrorException("setLocation: methods already set");
+			std::vector<std::string> methods;
+			while (++i < parameter.size())
+			{
+				if (parameter[i].find(";") != std::string::npos)
+				{
+					checkToken(parameter[i]);
+					methods.push_back(parameter[i]);
+					break ;
+				}
+				else
+				{
+					methods.push_back(parameter[i]);
+					if (i + 1 >= parameter.size())
+						throw ErrorException("setLocation: methods not closed");
+				}
+			}
+			location_new.setMethods(methods);
+			flag_methods = true;
+		}
+		else if (parameter[i] == "autoindex" && (i + 1) < parameter.size())
+		{
+			if (path == "/cgi-bin")
+				throw ErrorException("setLocation: autoindex not allowed in cgi-bin");
+			if (flag_autoindex)
+				throw ErrorException("setLocation: autoindex already set");
+			checkToken(parameter[++i]);
+			location_new.setAutoIndex(parameter[i]);
+			flag_autoindex = true;
+		}
+		else if (parameter[i] == "index" && (i + 1) < parameter.size())
+		{
+			if (!location_new.getIndex().empty())
+				throw ErrorException("setLocation: index already set");
+			checkToken(parameter[++i]);
+			location_new.setIndex(parameter[i]);
+		}
+		else if (parameter[i] == "return" && (i + 1) < parameter.size())
+		{
+			if (path == "/cgi-bin")
+				throw ErrorException("setLocation: return not allowed in cgi-bin");
+			if (!location_new.getReturn().empty())
+				throw ErrorException("setLocation: return already set");
+			checkToken(parameter[++i]);
+			location_new.setReturn(parameter[i]);
+		}
+		else if (parameter[i] == "alias" && (i + 1) < parameter.size())
+		{
+			if (path == "/cgi-bin")
+				throw ErrorException("setLocation: alias not allowed in cgi-bin");
+			if (!location_new.getAlias().empty())
+				throw ErrorException("setLocation: alias already set");
+			checkToken(parameter[++i]);
+			location_new.setAlias(parameter[i]);
+		}
+		else if (parameter[i] == "cgi_ext" && (i + 1) < parameter.size())
+		{
+			std::vector<std::string> cgi_extension;
+			while (++i < parameter.size())
+			{
+				if (parameter[i].find(";") != std::string::npos)
+				{
+					checkToken(parameter[i]);
+					cgi_extension.push_back(parameter[i]);
+					break ;
+				}
+				else
+				{
+					cgi_extension.push_back(parameter[i]);
+					if (i + 1 >= parameter.size())
+						throw ErrorException("setLocation: cgi_ext not closed");
+				}
+			}
+			location_new.setCgiExtension(cgi_extension);
+		}
+		else if (parameter[i] == "cgi_path" && (i + 1) < parameter.size())
+		{
+			std::vector<std::string> cgi_path;
+			while (++i < parameter.size())
+			{
+				if (parameter[i].find(";") != std::string::npos)
+				{
+					checkToken(parameter[i]);
+					cgi_path.push_back(parameter[i]);
+					break ;
+				}
+				else
+				{
+					cgi_path.push_back(parameter[i]);
+					if (i + 1 >= parameter.size())
+						throw ErrorException("setLocation: cgi_path not closed");
+				}
+				if (parameter[i].find("/python") == std::string::npos && parameter[i].find("/bash") == std::string::npos)
+					throw ErrorException("setLocation: cgi_path not valid");
+			}
+			location_new.setCgiPath(cgi_path);
+		}
+		else if (parameter[i] == "client_max_body_size" && (i + 1) < parameter.size())
+		{
+			if (flag_max_size)
+				throw ErrorException("setLocation: client_max_body_size already set");
+			checkToken(parameter[++i]);
+			location_new.setMaxBodySize(parameter[i]);
+			flag_max_size = true;
+		}
+		else if (i < parameter.size())
+			throw ErrorException("setLocation: invalid parameter");
+	}
+	if (location_new.getPath() != "/cgi-bin" && location_new.getIndex().empty())
+		location_new.setIndex(this->_index);
+	if (!flag_max_size)
+		location_new.setMaxBodySize(this->_max_body_size_client);
+	valid = isValidLocation(location_new);
+	if (valid == 1)
+		throw ErrorException("CGI validation failed");
+	else if (valid == 2)
+		throw ErrorException("Path in location validation failed");
+	else if (valid == 3)
+		throw ErrorException("Redirection file validation failed");
+	else if (valid == 4)
+		throw ErrorException("Alias validation failed");
+	this->_locations.push_back(location_new);
 }
 
 void    ServerConfig::setFdListen(int fd)
@@ -210,6 +359,14 @@ bool    ServerConfig::validHost(std::string host) const
 {
     struct sockaddr_in sockaddr;
     return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) ? true : false);
+}
+
+void	ServerConfig::checkToken(std::string &parameter)
+{
+	size_t pos = parameter.rfind(";");
+	if (pos != parameter.size() - 1)
+		throw ErrorException("checkToken: invalid token");
+	parameter.erase(pos);
 }
 
 //[**** Getter Functions ****]

@@ -28,7 +28,7 @@ class Response
 		void		setCgiState( int );
 		void		setErrorResponse( short error_code );
 
-		CgiHandler	cgiHandler;
+		CgiHandler	_cgiHandler;
 
 		std::string	removeBoundary( std::string &body, std::string &boundary );
 		std::string	_responseContent;

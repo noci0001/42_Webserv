@@ -138,6 +138,55 @@ static std::string pairPaths(std::string path1, std::string path2, std::string p
 
 	length1 = path1.length();
 	length2 = path2.length();
-	if (path1[length1 - 1] == '/' && (path2.empty() && path2[0] == '/'))
+	if (path1[length1 - 1] == '/' && (!path2.empty() && path2[0] == '/'))
 		path2.erase(0, 1);
+	if (path1[length1 - 1] != '/' && (!path2.empty() && path2[0] != '/'))
+		path1.insert(path1.end(), '/');
+	if (path2[length2 - 1] == '/' && (!path3.empty() && path3[0] == '/'))
+		path3.erase(0, 1);
+	if (path2[length2 - 1] != '/' && (!path3.empty() && path3[0] != '/'))
+		path2.insert(path1.end(), '/');
+	result = path1 + path2 + path3;
+	return result;
+}
+
+static void		replaceAlias(Location &location, HttpRequest &httprequest, std::string &target_file)
+{
+	target_file = pairPaths(location.getAlias(),
+	httprequest.getPath().substr(location.getPath().length()), "");
+}
+
+static void		replaceRoot(Location &location, HttpRequest &httprequest, std::string &target_file)
+{
+	target_file = pairPaths(location.getRoot(), httprequest.getPath(), "");
+}
+
+int 	Response::CgiHandlingTmp(std::string &location_key)
+{
+	std::string	path;
+	path = _target_file;
+	_cgiHandler.clear();
+	_cgiHandler.setCgiPath(path);
+	_cgi_state = 1;
+	if (pipe(_cgi_fd) < 0)
+	{
+		_status_code = 500;
+		return 1;
+	}
+	_cgiHandler.initEnvCgi(httprequest, _server_config.getLocations(location_key));
+	_cgiHandler.execute(this->_status_code);
+	return 0;
+}
+
+int 	Response::CgiHandling(std::string &location_key)
+{
+	std::string cgi_path;
+	std::string cgi_extension;
+	size_t 		pos;
+
+	cgi_path = this->httpRequest.getPath();
+	if (cgi_path[0] && cgi_path[0] == '/')
+		cgi_path.erase(0, 1);
+	if (cgi_path == "cgi-bin")
+		cgi_path += "/" + _server_config.getLocations(location_key)->getIndex();
 }
