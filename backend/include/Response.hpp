@@ -51,6 +51,22 @@ class Response
 		
 
 		int						buildBody();
+		size_t 					file_size();
+		void					setStatusCode();
+		void 					setHeaders();
+		void					setDefaultErrorPages();
+		int						readFile();
+		void					contentType();
+		void					contentLength();
+		void					currentConnection();
+		void					server();
+		void					location();
+		void					date();
+		int						targetHandle();
+		void					buildBodyError();
+		bool					requestError();
+		int						CgiHandling(std::string &);
+		int						CgiHandlingTmp(std::string &);
 };
 
 #endif
