@@ -1,10 +1,18 @@
 #ifndef RESPONSE_HPP
 #define RESPONSE_HPP
 
+#include "CgiHandler.hpp"
+#include "Mime.hpp"
+#include "StatusCode.hpp"
+//#include "utils.hpp"
+#include "webserv.hpp"
+#include <cerrno>
+#include <cstdlib>
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <algorithm>
 #include <iostream>
-#include <string>
-#include <map>
 #include <string>
 
 #define TRUE 1
@@ -13,29 +21,7 @@
 static MimeType   mime_types;
 static StatusCode status_codes;
 
-#include <map>
-#include <string>
-
-class MimeType {
-
-public:
-	MimeType();
-	~MimeType();
-	std::string getMimeType( std::string extension );
-
-private:
-	std::map<std::string, std::string> _mimeTypes;
-};
-
-class StatusCode {
-public:
-	StatusCode();
-	~StatusCode();
-	std::string getStatusCode( int code );
-
-private:
-	std::map<int, std::string> _statusCode;
-};
+namespace ft {
 
 class Response {
 
@@ -53,9 +39,28 @@ public:
 
 	std::string statusCode;
 	std::string body;
-	Config		server_conf; //check naming Tom
+	Config		serverConfig;
 	std::string location;	//redirection URL
 	Route		using_route; //routing details(endpoint)
-};
 
+	int         getContentLength();
+    void        setStatusCode( std::string code );
+    void        setBody( std::string body );
+    void        setLocation( std::string location );
+    void        setContentType( std::string type );
+    std::string getContentType();
+    std::string makeResponse();
+    int         isValidMethod( std::string              method,
+                               std::vector<std::string> allowed_methods );
+    void createDirectoryListingIntoHTML( std::string path, std::string &body );
+    std::string getPath( std::string uri );
+    int         canAutoIndex( std::string path );
+    int         checkRedirect();
+    void        handleGet();
+    std::string generateFileName();
+    void        handlePost();
+    void        handleDelete();
+    int         isLocation( std::string path );
+};
+}
 #endif

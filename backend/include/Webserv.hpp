@@ -20,7 +20,12 @@
 #include "Location.hpp"
 #include "ParsingUtils.hpp"
 #include "ServerConfig.hpp"
+
+#include "CgiHandler.hpp"
+
 //#include "Response.hpp"
+#include "Mime.hpp"
+#include "StatusCode.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
