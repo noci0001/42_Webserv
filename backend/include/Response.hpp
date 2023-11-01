@@ -31,7 +31,7 @@ class Response
 		CgiHandler	cgiHandler;
 
 		std::string	removeBoundary( std::string &body, std::string &boundary );
-		std::string	responseContent;
+		std::string	_responseContent;
 
 		HttpRequest	httpRequest;
 
