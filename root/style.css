@@ -209,3 +209,72 @@ p {
 	font-size: 100;
 	opacity: 1;
 }
+
+.menu_overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(41, 41, 41);
+	z-index: 100;
+	display: none;
+}
+
+.menu_actions {
+
+	position: absolute;
+	max-width: 1000px;
+	height: 500px;
+	left: 100px;
+	top: 100px;
+}
+
+#this {
+	background: white;
+	opacity: 1;
+	margin: 1rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: black;
+}
+
+#that {
+	background: white;
+	opacity: 1;
+	margin: 1rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: black;
+}
+
+/* Hide the default file input */
+.hidden-input {
+	display: none;
+}
+  
+  /* Style the custom label to make it look like a button */
+.custom-label {
+	background-color: hsl(270, 50%, 40%);
+	color: #fff;
+	padding: 10px 20px;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+  }
+  
+  /* Style label on hover to give visual feedback */
+  .custom-label:hover {
+	background-color: hsl(270, 52%, 30%);
+  }
+
+  .hidden-text_input {
+	display: none;
+  }
+
+  #insert_movie_show {
+	background-color: red;
+  }
