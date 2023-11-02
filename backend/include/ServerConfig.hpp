@@ -41,6 +41,7 @@ public:
     void    setErrorPages(std::vector<std::string> &parameter);
 	void    setLocations(std::string path, std::vector<std::string> parameter);
     void    setFdListen(int);
+	void	checkToken(std::string &parameter);
     
     bool    validHost(std::string host) const;
 

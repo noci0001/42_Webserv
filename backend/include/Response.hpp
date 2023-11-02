@@ -8,7 +8,7 @@ class Response
 {
 
 	public:
-		static	Mime	mime;
+		//static	Mime	mime;
 		Response();
 		Response( HttpRequest & );
 		~Response();
@@ -28,7 +28,7 @@ class Response
 		void		setCgiState( int );
 		void		setErrorResponse( short error_code );
 
-		CgiHandler	_cgiHandler;
+		//CgiHandler	_cgiHandler;
 
 		std::string	removeBoundary( std::string &body, std::string &boundary );
 		std::string	_responseContent;

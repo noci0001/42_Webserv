@@ -254,3 +254,12 @@ int Configfile::checkFile(std::string const path, int mode)
 {
 	return (access(path.c_str(), mode));
 }
+
+int Configfile::isFileExistAndReadable(std::string const path, std::string const index)
+{
+	if (getTypePath(index) == 1 && checkFile(index, 4) == 0)
+		return (0);
+	if (getTypePath(path + index) == 1 && checkFile(path + index, 4) == 0)
+		return (0);
+	return (-1);
+}

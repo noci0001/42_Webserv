@@ -26,6 +26,7 @@ public:
 	int find_all_server_keywords(std::string& config_file);
 	int getTypePath(std::string const path);
 	int	checkFile(std::string const path, int mode);
+	int isFileExistAndReadable(std::string const path, std::string const index);
 	~Configfile();
 };
 

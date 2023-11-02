@@ -69,7 +69,7 @@ void    Location::setRoot(std::string parameter)
 
 void    Location::setMethods(std::vector<std::string> methods)
 {
-    Configfile::obtain_serverdata()
+    Configfile::obtain_serverdata(methods[0]);
     this->_methods[0] = 0;
     this->_methods[1] = 0;
     this->_methods[2] = 0;
@@ -116,21 +116,20 @@ void    Location::setAlias(std::string parameter)
     this->_alias = parameter;
 }
 
-/* void    Location::setCgiPath(std::string parameter)
+void    Location::setCgiPath(std::vector<std::string> path)
 {
-    this->_cgi_path = parameter;
+    this->_cgi_path = path;
 }
 
-void    Location::setCgiExtension(std::string parameter)
+void    Location::setCgiExtension(std::vector<std::string> extension)
 {
-    this->_cgi_extension = parameter;
-} */
+    this->_cgi_extension = extension;
+}
 
 void    Location::setMaxBodySizeClient(std::string parameter)
 {
-    unsigned long   body_size = 0;
+	unsigned long   body_size = 0;
 
-    Configfile::obtain_serverdata(parameter);
     for (size_t i = 0; i < parameter.length(); i++)
     {
         if (parameter[i] < '0' || parameter[i] > '9')
@@ -167,6 +166,16 @@ const std::string &Location::getIndex() const
 const std::vector<short> &Location::getMethods() const
 {
     return this->_methods;
+}
+
+const std::vector<std::string> &Location::getCgiPath() const
+{
+	return this->_cgi_path;
+}
+
+const std::vector<std::string> &Location::getCgiExtension() const
+{
+	return this->_cgi_extension;
 }
 
 const bool  &Location::getAutoindex() const
