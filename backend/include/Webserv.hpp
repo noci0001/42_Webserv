@@ -30,6 +30,7 @@
 #include "ServerConfig.hpp"
 #include "Response.hpp"
 #include "ConsoleLog.hpp"
+#include "HttpRequest.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
@@ -60,8 +61,11 @@
 #include <string>
 
 //Utils.cpp
+#include <dirent.h>
 int ft_stoi(std::string str);
 std::string statusCodeString(short statusCode);
+std::string getErrorPage(short statusCode);
+int	buildHtmlIndex(std::string &dir_name, std::vector<uint8_t> &body, size_t &body_length);
 
 //Colors
 const std::string BOLD = "\033[1m";
@@ -74,5 +78,13 @@ static std::string serverParameter[] = { "listen ", "host ", "server_name ",
 "error_page ", "client_max_body_size ", "root " , "index ", "allow_methods "};
 
 static std::string methods[] = { "GET", "POST", "DELETE", "PUT", "HEAD" };
+
+template <typename T>
+std::string toString(const T value)
+{
+	std::stringstream ss;
+	ss << value;
+	return ss.str();
+}
 
 #endif

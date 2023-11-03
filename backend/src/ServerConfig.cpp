@@ -328,7 +328,7 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 			if (flag_max_size)
 				throw ErrorException("setLocation: client_max_body_size already set");
 			checkToken(parameter[++i]);
-			location_new.setMaxBodySize(parameter[i]);
+			location_new.setMaxBodySizeClient(parameter[i]);
 			flag_max_size = true;
 		}
 		else if (i < parameter.size())
@@ -337,7 +337,7 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 	if (location_new.getPath() != "/cgi-bin" && location_new.getIndex().empty())
 		location_new.setIndex(this->_index);
 	if (!flag_max_size)
-		location_new.setMaxBodySize(this->_max_body_size_client);
+		location_new.setMaxBodySizeClient(this->_max_body_size_client);
 	valid = isValidLocation(location_new);
 	if (valid == 1)
 		throw ErrorException("CGI validation failed");
@@ -361,7 +361,7 @@ bool    ServerConfig::validHost(std::string host) const
     return (inet_pton(AF_INET, host.c_str(), &(sockaddr.sin_addr)) ? true : false);
 }
 
-bool	ServerConfig::isValidErrorPage()
+bool	ServerConfig::validErrorPages()
 {
 	std::map<short, std::string>::const_iterator cito;
 	for (cito = this->_error_pages.begin(); cito != this->_error_pages.end(); cito++)
@@ -383,14 +383,14 @@ int 	ServerConfig::isValidLocation(Location &location) const
 			return (1);
 		if (Configfile::checkFile(location.getIndex(), 4) < 0)
 		{
-			std::string path = location.getRoot() # location.getPath() + "/" + location.getIndex();
+			std::string path = location.getRoot() + location.getPath() + "/" + location.getIndex();
 			if (Configfile::getTypePath(path) != 1)
 			{
 				std::string root = getcwd(NULL, 0);
 				location.setRoot(root);
 				path = location.getPath() + "/" + location.getIndex();
 			}
-			if (path.empty() || Configfile::getTypePath(path) != 1) || Configfile::checkFile(path, 4) < 0)
+			if (path.empty() || Configfile::getTypePath(path) != 1 || Configfile::checkFile(path, 4) < 0)
 				return (1);
 		}
 		if (location.getCgiPath().size() != location.getCgiExtension().size())
@@ -402,9 +402,9 @@ int 	ServerConfig::isValidLocation(Location &location) const
 				return (1);
 		}
 		std::vector<std::string>::const_iterator cito_path;
-		for (cito = location.getCgiExtension(.begin(); cito != location.getCgiExtension().end(); ++cito)
+		for (cito = location.getCgiExtension().begin(); cito != location.getCgiExtension().end(); ++cito)
 		{
-			std:.string temp = *cito;
+			std::string temp = *cito;
 			if (temp != ".py" && temp != ".sh" && temp != "*.py" && temp != "*.sh")
 				return (1);
 			for (cito_path = location.getCgiPath().begin(); cito != location.getCgiPath().end(); ++cito_path)
@@ -412,7 +412,7 @@ int 	ServerConfig::isValidLocation(Location &location) const
 				std::string temp_path = *cito_path;
 				if (temp == ".py" || temp == "*.py")
 				{
-					if (temp_path.fin("python") != std::string::npos)
+					if (temp_path.find("python") != std::string::npos)
 						location._extension_path.insert(std::make_pair(".py", temp_path));
 				}
 				else if (temp == ".sh" || temp == "*.sh")
@@ -422,7 +422,7 @@ int 	ServerConfig::isValidLocation(Location &location) const
 				}
 			}
 		}
-		if location.getCgiPath().size() != location.getExtensionPath().size())
+		if (location.getCgiPath().size() != location.getExtensionPath().size())
 			return (1);
 	}
 	else

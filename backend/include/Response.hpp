@@ -10,12 +10,12 @@ class Response
 	public:
 		//static	Mime	mime;
 		Response();
-		Response( HttpRequest & );
+		Response( HttpRequest& );
 		~Response();
 
 		std::string	getResponse();
-		size_t		getResponseLength();
-		int			getStatusCode();
+		size_t		getResponseLength() const;
+		int			getStatusCode() const;
 
 		void		setHttpRequest( HttpRequest & );
 		void		setServerConfig( ServerConfig & );

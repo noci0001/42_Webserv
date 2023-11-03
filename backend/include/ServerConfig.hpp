@@ -44,6 +44,8 @@ public:
 	void	checkToken(std::string &parameter);
     
     bool    validHost(std::string host) const;
+	bool	validErrorPages();
+	int 	isValidLocation(Location &location) const;
 
     const std::string &getServerName();
     const std::string &getRoot();

@@ -189,4 +189,297 @@ int 	Response::CgiHandling(std::string &location_key)
 		cgi_path.erase(0, 1);
 	if (cgi_path == "cgi-bin")
 		cgi_path += "/" + _server_config.getLocations(location_key)->getIndex();
+	else if (path == "cgi-bin/")
+		cgi_path.append(_server_config.getLocations(location_key)->getIndex());
+	pos = cgi_path.find(".");
+	if (pos == std::string::npos)
+	{
+		_status_code = 501;
+		return 1;
+	}
+	cgi_extension = cgi_path.substr(pos);
+	if (cgi_extension != ".py" && cgi_extension != ".sh")
+	{
+		_status_code = 501;
+		return 1;
+	}
+	if (Configfile::getTypePath(cgi_path) != 1)
+	{
+		_status_code = 404;
+		return 1;
+	}
+	if (Configfile::checkFile(cgi_path, 1) == -1 || Configfile::checkFile(cgi_path, 3) == -1)
+	{
+		_status_code = 403;
+		return 1;
+	}
+	if (isAllowedMethod(httpRequest.getMethod(), *_server_config.getLocations(location_key), _status_code))
+		return 1;
+	_cgiHandler.clear();
+	_cgiHandler.setCgiPath(cgi_path);
+	_cgi_state = 1;
+	if (pipe(_cgi_fd) < 0)
+	{
+		_status_code = 500;
+		return 1;
+	}
+	_cgiHandler.initEnvCgi(httpRequest, _server_config.getLocations(location_key));
+	_cgiHandler.execute(this->_status_code);
+	return 0;
+}
+
+static void	getLocationMatch(std::string &path, std::vector<Location> location, std::string location_key)
+{
+	size_t	max_match = 0;
+	for (std::vector<Location>::const_iterator cito = location.begin(); cito != location.end(); ++cito)
+	{
+		if (path.find(cito->getPath()) == 0)
+		{
+			if (cito->getPath() == "/" || path.length() == cito->getPath().length() || path[it->getPath().length()] == '/')
+			{
+				max_match = cito->getPath().length();
+				location_key = cito->getPath();
+			}
+		}
+	}
+}
+
+int Response::targetHandle()
+{
+	std::string location_key;
+	getLocationMatch(httpRequest.getPath(), _server_config.getLocations(), location_key);
+	if (location_key.length() > 0)
+	{
+		Location target_location = *_server_config.getLocations(location_key);
+		if (isAllowedMethod(httpRequest.getMethod(), target_location, _status_code))
+		{
+			std::cout << "Method is not allowed" << std::endl;
+			return 1;
+		}
+		if (httpRequest.getBody().length() > target_location.getMaxBodySizeClient())
+		{
+			_status_code = 413;
+			return 1;
+		}
+		if (statusReturn(target_location, _status_code, _location))
+			return 1;
+		if (target_location.getPath().find("cgi-bin") != std::string::npos)
+			return CgiHandling(location_key);
+		if (!target_location.getAlias().empty())
+			replaceAlias(target_location, httpRequest, _target_file);
+		else
+			replaceRoot(target_location, httpRequest, _target_file);
+		if (!target_location.getCgiExtension().empty())
+		{
+			if (_target_file.rfind(target_location.getCgiExtension()[0]) != std::string::npos)
+			{
+				return CgiHandlingTmp(location_key);
+			}
+		}
+		if (isDirectory(_target_file))
+		{
+			if (_target_file[_target_file.length() - 1] != '/')
+			{
+				_status_code = 301;
+				_location = httpRequest.getPath() + "/";
+				return 1;
+			}
+			if (!target_location.getIndex().empty())
+				_target_file.append(target_location.getIndex());
+			else
+				_target_file.append(_server_config.getIndex());
+			if (!fileExists(_target_file))
+			{
+				if (target_location.getAutoIndex())
+				{
+					_target_file.erase(_target_file.find_last_of('/') + 1);
+					_auto_index = true;
+					return 0;
+				}
+				else
+				{
+					_status_code = 403;
+					return 1;
+				}
+			}
+		}
+		else
+		{
+			_target_file = pairPaths(_server_config.getRoot(), httpRequest.getPath(), "");
+			if (isDirectory(_target_file))
+			{
+				if (_target_file[_target_file.length() - 1] != '/')
+				{
+					_status_code = 301;
+					_location = httpRequest.getPath() + "/";
+					return 1;
+				}
+				_target_file += _server_config.getIndex();
+				if (!fileExists(_target_file))
+				{
+					_status_code = 301;
+					return 1;
+				}
+				if (isDirectory(_target_file))
+				{
+					_status_code = 301;
+					_location = pairPaths(httpRequest.getPath(), _server_config.getIndex(), "/");
+					if (_location[_location.length() - 1] != '/')
+						_location.insert(_location.end(), '/');
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+bool Response::requestError()
+{
+	if (httpRequest.errorCode())
+	{
+		_status_code = httpRequest.errorCode();
+		return 1;
+	}
+	return 0;
+}
+
+void	Response::setDefaultErrorPages()
+{
+	_body_response = getErrorPage(_status_code);
+}
+
+void	Response::buildBodyError()
+{
+	if (!_server_config.getErrorPages().count(_status_code) || _server_config.getErrorPages().at(_status_code).empty()
+		|| httpRequest.getMethod() == DELETE || httpRequest.getMethod() == POST)
+	{
+		setDefaultErrorPages();
+	}
+	else
+	{
+		if (_status_code >= 400 && _status_code < 500)
+		{
+			_location = _server_config.getErrorPages().at(_status_code);
+			if (_location[0] != '/')
+				_location.insert(_location.begin(), '/');
+			_status_code = 302;
+		}
+		_target_file = _server_config.getRoot() + _server_config.getErrorPages().at(_status_code);
+		short old_status_code = _status_code;
+		if (readFile())
+		{
+			_status_code = old_status_code;
+			_body_response = getErrorPage(_status_code);
+		}
+	}
+}
+
+void	Response::buildResponse()
+{
+	if (requestError() || buildBody())
+		buildBodyError();
+	if (_cgi_state)
+		return ;
+	else if (_auto_index)
+	{
+		std::cout << "Auto index " << std::endl;
+		if (buildHtmlIndex(_target_file, _body, _body_length))
+		{
+			_status_code = 500;
+			buildBodyError();
+		}
+		else
+			_status_code = 200;
+		_body_response.insert(_body_request.begin(), _body.begin(), _body.end());
+	}
+	setStatusCode();
+	setHeaders();
+	if (httpRequest.getMethod() != HEAD && (httpRequest.getMethod() == GET || _status_code != 200))
+		_responseContent.append(_body_response);
+}
+
+void	Response::setErrorResponse(short error_code)
+{
+	_responseContent = "";
+	_status_code = error_code;
+	_body_response = "";
+	buildBodyError();
+	setStatusCode();
+	setHeaders();
+	_responseContent.append(_body_response);
+}
+
+std::string	Response::getResponse()
+{
+	return _responseContent;
+}
+
+size_t	Response::getResponseLength() const
+{
+	return _responseContent.length();
+}
+
+void	Response::setStatusCode()
+{
+	_responseContent.append("HTTP/1.1 " + toString(_status_code) + " ");
+	_responseContent.append(statusCodeString(_status_code));
+	_responseContent.append("\r\n");
+}
+
+int	Response::buildBody()
+{
+	if (httpRequest.getBody().length() > _server_config.getMaxBodySizeClient())
+	{
+		_status_code = 413;
+		return 1;
+	}
+	if (targetHandle())
+		return 1;
+	if (_cgi_state || _auto_index)
+		return 0;
+	if (_status_code)
+		return 0;
+	if (httpRequest.getMethod() == GET || httpRequest.getMethod() == HEAD)
+	{
+		if (readFile())
+			return 1;
+	}
+	else if (httpRequest.getMethod() == POST || httpRequest.getMethod() == PUT)
+	{
+		if (fileExists(_target_file) && httpRequest.getMethod() == POST)
+		{
+			_status_code = 204;
+			return 0;
+		}
+		std::ofstream file(_target_file.c_str(), std::ios::binary);
+		if (file.fail())
+		{
+			_status_code = 404;
+			return 1;
+		}
+		if (httpRequest.getMultiformFlag())
+		{
+			std::string body = httpRequest.getBody();
+			body = removeBoundary(body, httpRequest.getBoundary());
+			file.write(body.c_str(), body.length());
+		}
+		else
+			file.write(httpRequest.getBody().c_str(), httpRequest.getBody().length());
+	}
+	else if (httpRequest.getMethod() == DELETE)
+	{
+		if (!fileExists(_target_file))
+		{
+			_status_code = 404;
+			return 1;
+		}
+		if (remove(_target_file.c_str()) != 0)
+		{
+			_status_code = 500;
+			return 1;
+		}
+	}
+	_status_code = 200;
+	return 0;
 }
