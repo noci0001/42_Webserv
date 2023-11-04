@@ -49,7 +49,7 @@ enum HttpState
     Chunked_End_EOL,
     Chunked_End_NL,
     Message_Body,
-    Http_Done,
+    Http_Done
 };
 
 class HttpRequest

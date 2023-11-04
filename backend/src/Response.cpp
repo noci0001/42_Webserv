@@ -107,8 +107,8 @@ static bool		isDirectory( std::string path )
 static bool		isAllowedMethod(HttpMethod &method, Location &location, short &status_code)
 {
 	std::vector<short> methods = location.getMethods();
-	if ((method == GET && !methods[0]) || (method == POST && !methods[1])
-		(method == DELETE && !methods[2]) || (method == PUT && !methods[3])
+	if ((method == GET && !methods[0]) || (method == POST && !methods[1]) ||
+		(method == DELETE && !methods[2]) || (method == PUT && !methods[3]) ||
 		(method == HEAD && !methods[4]))
 	{
 		status_code = 405;
@@ -189,7 +189,7 @@ int 	Response::CgiHandling(std::string &location_key)
 		cgi_path.erase(0, 1);
 	if (cgi_path == "cgi-bin")
 		cgi_path += "/" + _server_config.getLocations(location_key)->getIndex();
-	else if (path == "cgi-bin/")
+	else if (cgi_path == "cgi-bin/")
 		cgi_path.append(_server_config.getLocations(location_key)->getIndex());
 	pos = cgi_path.find(".");
 	if (pos == std::string::npos)
@@ -391,7 +391,7 @@ void	Response::buildResponse()
 		}
 		else
 			_status_code = 200;
-		_body_response.insert(_body_request.begin(), _body.begin(), _body.end());
+		_body_response.insert(_body_response.begin(), _body.begin(), _body.end());
 	}
 	setStatusCode();
 	setHeaders();
@@ -482,4 +482,129 @@ int	Response::buildBody()
 	}
 	_status_code = 200;
 	return 0;
+}
+
+int	Response::readFile()
+{
+	std::ifstream file(_target_file.c_str());
+	if (file.fail())
+	{
+		_status_code = 404;
+		return 1;
+	}
+	std::ostringstream oss;
+	oss << file.rdbuf();
+	_body_response = oss.str();
+	return 0;
+}
+
+void	Response::setServerConfig(ServerConfig &server_config)
+{
+	_server_config = server_config;
+}
+
+void	Response::setHttpRequest(HttpRequest &http_request)
+{
+	httpRequest = http_request;
+}
+
+void	Response::cutResponse(size_t size)
+{
+	_responseContent = _responseContent.substr(size);
+}
+
+void	Response::clearResponse()
+{
+	_target_file.clear();
+	_body.clear();
+	_body_length = 0;
+	_responseContent.clear();
+	_body_response.clear();
+	_location.clear();
+	_status_code = 0;
+	_cgi_state = 0;
+	_cgi_bytes_read = 0;
+	_auto_index = 0;
+}
+
+int	Response::getStatusCode() const
+{
+	return _status_code;
+}
+
+int	Response::getCgiState()
+{
+	return _cgi_state;
+}
+
+std::string Response::removeBoundary(std::string &body, std::string &boundary)
+{
+	std::string buffer;
+	std::string new_body;
+	std::string filename;
+	bool is_boundary = false;
+	bool is_content = false;
+
+	if (body.find("--" + boundary) != std::string::npos && body.find("--" + boundary + "--") != std::string::npos)
+	{
+		for (size_t i = 0; i < body.size(); i++)
+		{
+			buffer.clear();
+			while (body[i] != '\n')
+			{
+				buffer += body[i];
+				i++;
+			}
+			if (!buffer.compare(("--" + boundary + "--\r")))
+			{
+				is_boundary = false;
+				is_content = true;
+			}
+			if (!buffer.compare(("--" + boundary + "\r")))
+			{
+				is_boundary = true;
+			}
+			if (is_boundary)
+			{
+				if (!buffer.compare(0, 31, "Content-Disposition: form-data;"))
+				{
+					size_t start = buffer.find("filename=\"");
+					if (start != std::string::npos)
+					{
+						size_t end = buffer.find("\"", start + 10);
+						if (end != std::string::npos)
+						{
+							filename = buffer.substr(start + 10, end);
+						}
+					}
+				}
+				else if (!buffer.compare(0, 1, "\r") && !filename.empty())
+				{
+					is_content = true;
+					is_boundary = false;
+				}
+			}
+			else if (is_content)
+			{
+				if (!buffer.compare(("--" + boundary + "\r")))
+				{
+					is_boundary = true;
+				}
+				else if (!buffer.compare((boundary + "--\r")))
+				{
+					new_body.erase(new_body.end() - 1);
+					break ;
+				}
+				else
+					new_body += buffer + "\n";
+			}
+		}
+	}
+	body.clear();
+	return new_body;
+}
+
+void	Response::setCgiState(int state)
+{
+	_cgi_state = state;
 }

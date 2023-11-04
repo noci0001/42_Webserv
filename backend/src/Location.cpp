@@ -178,7 +178,7 @@ const std::vector<std::string> &Location::getCgiExtension() const
 	return this->_cgi_extension;
 }
 
-const bool  &Location::getAutoindex() const
+const bool  &Location::getAutoIndex() const
 {
     return this->_autoindex;
 }

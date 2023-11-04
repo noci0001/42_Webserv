@@ -1,5 +1,5 @@
 #ifndef RESPONSE_HPP
-#define RESPONSE_HPP
+# define RESPONSE_HPP
 
 #include "Webserv.hpp"
 #include "HttpRequest.hpp"
@@ -10,27 +10,27 @@ class Response
 	public:
 		//static	Mime	mime;
 		Response();
-		Response( HttpRequest& );
+		Response(HttpRequest&);
 		~Response();
 
 		std::string	getResponse();
 		size_t		getResponseLength() const;
 		int			getStatusCode() const;
 
-		void		setHttpRequest( HttpRequest & );
-		void		setServerConfig( ServerConfig & );
+		void		setHttpRequest(HttpRequest &);
+		void		setServerConfig(ServerConfig &);
 
 		void		buildResponse();
 		void		clearResponse();
-		void		handleCgi( HttpRequest & );
-		void		cutResponse( size_t );
+		void		handleCgi(HttpRequest &);
+		void		cutResponse(size_t);
 		int			getCgiState();
-		void		setCgiState( int );
-		void		setErrorResponse( short error_code );
+		void		setCgiState(int);
+		void		setErrorResponse(short error_code);
 
 		//CgiHandler	_cgiHandler;
 
-		std::string	removeBoundary( std::string &body, std::string &boundary );
+		std::string	removeBoundary(std::string &body, std::string &boundary);
 		std::string	_responseContent;
 
 		HttpRequest	httpRequest;

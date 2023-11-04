@@ -3,6 +3,7 @@
 
 #include "Webserv.hpp"
 #include <map>
+#include <cstdarg>
 
 #define RESET          "\x1B[0m"
 #define RED            "\x1B[31m"

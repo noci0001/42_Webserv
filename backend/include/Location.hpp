@@ -45,6 +45,7 @@ class Location : public Configfile
         const std::string &getRoot() const;
         const std::string &getIndex() const;
         const std::vector<short> &getMethods() const;
+        const bool &getAutoIndex() const;
 		const std::vector<std::string> &getCgiPath() const;
 		const std::vector<std::string> &getCgiExtension() const;
         const bool  &getAutoindex() const;
