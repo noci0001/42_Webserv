@@ -67,6 +67,7 @@ int ft_stoi(std::string str);
 std::string statusCodeString(short statusCode);
 std::string getErrorPage(short statusCode);
 int	buildHtmlIndex(std::string &dir_name, std::vector<uint8_t> &body, size_t &body_length);
+unsigned int fromHexToDecimal(const std::string &decimal);
 
 //Colors
 const std::string BOLD = "\033[1m";

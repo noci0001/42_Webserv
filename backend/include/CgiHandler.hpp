@@ -16,8 +16,8 @@ class CgiHandler {
 
 private:
     // Attributes
-    HttpRequest     _cgi_request;
-    std::string     _response_body; // new body to be sent to the client
+    //HttpRequest     _cgi_request;
+    //std::string     _response_body; // new body to be sent to the client
     char            **_envi_vars_array;
     char            **_argv;
     int             _exit_return;
@@ -46,12 +46,16 @@ public:
 
     // Methods
 
-    void initEnvi(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
-    void create_env_vars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
+    void createEnvi(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
+    void createEnviVars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
     void run(short &error_code);
     void sendBodyHeader(int &pipe_out, int &fd, std::string &);
     void fixHeader(std::string &fix_header);
     void clearCgiHandler();
+
+	int findStart(const std::string path, const std::string delimiter);
+	std::string getPathInfo(std::string &path, std::vector<std::string> cgi_extensions);
+	std::string decodeHttpRequest(std::string &path);
     
     void setCgiPid(pid_t cgi_pid);
     void setCgiPath(const std::string &cgi_path);

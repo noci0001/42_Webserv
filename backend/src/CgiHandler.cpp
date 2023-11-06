@@ -92,14 +92,50 @@ const pid_t &CgiHandler::getCgiPid() const
     return (this->_cgi_pid);
 }
 
-// Executes the CGI script and stores the response in _response_body
+// Executes the CGI script and returns its output
 void CgiHandler::run(short &error_code)
 {
-    _response_body = exec_cgi(_cgi_request.cgi_path);
+	if (this->_argv[0] == NULL || this->_argv[1] == NULL)
+	{
+		error_code = 500;
+		return ;
+	}
+	if (pipe(pipe_in) < 0)
+	{
+		ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "CgiHandler: Error: pipe_in failed");
+		error_code = 500;
+		return ;
+	}
+	if (pipe(pipe_out) < 0)
+	{
+		ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "CgiHandler: Error: pipe_out failed");
+		close(pipe_in[0]);
+		close(pipe_in[1]);
+		error_code = 500;
+		return ;
+	}
+	this->_cgi_pid = fork();
+	if (_cgi_pid == 0)
+	{
+		dup2(pipe_in[0], STDIN_FILENO);
+		dup2(pipe_out[1], STDOUT_FILENO);
+		close(pipe_in[0]);
+		close(pipe_in[1]);
+		close(pipe_out[0]);
+		close(pipe_out[1]);
+		this->_exit_return = execve(this->_argv[0], this->_argv, this->_envi_vars_array);
+		exit(this->_exit_return);
+	}
+	else if (this->_cgi_pid > 0) {}
+	else
+	{
+		std::cout << "CgiHandler: Error: fork failed" << std::endl;
+		error_code = 500;
+	}
 }
 
 // Creates a map of environment variables based on the provided CGI request
-void CgiHandler::create_env_vars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca)
+void CgiHandler::createEnviVars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca)
 {
     std::string run_cgi = ("cgi-bin/" + ito_loca->getCgiPath()[0].c_str);
     char    *cwd = getcwd(NULL, 0);
@@ -164,111 +200,114 @@ void CgiHandler::create_env_vars(HttpRequest &httprequest, const std::vector<Loc
     this->_argv[2] = NULL;
 }
 
-// Converts the map of environment variables into an array for execve function
-char **CgiHandler::_create_env_vars_array(std::map<std::string, std::string> env_vars)
+// Initializes the environment variables array for the CGI script
+void	CgiHandler::createEnvi(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca)
 {
-    int size = env_vars.size();
-    // Create a new array with size of map + 1 (for null terminator)
-    char **result = new char*[size + 1];
-    std::map<std::string, std::string>::const_iterator it = env_vars.begin();
+	int		position;
+	std::string cgi_extension;
+	std::string cgi_extension_path;
 
-    for (int i = 0; it != env_vars.end(); it++, i++)
-    {
-        std::string env_var = it->first + "=" + it->second;
-        result[i] = new char[env_var.length() + 1];
-        strcpy(result[i], env_var.c_str());
-    }
-    result[size] = 0; // Null-terminate the array
+	cgi_extension = this->_cgi_path.substr(this->_cgi_path.find_last_of("."));
+	std::map<std::string, std::string>::iterator ito_path = ito_loca->_extension_path.find(cgi_extension);
+	if (ito_path == ito_loca->_extension_path.end())
+		return ;
+	cgi_extension_path = ito_loca->_extension_path[cgi_extension];
 
-    return result;
+	this->_envi["AUTH_TYPE"]         = "Basic";
+	this->_envi["REDIRECT_STATUS"]   = "200";
+	this->_envi["GATEWAY_INTERFACE"] = "CGI/1.1";
+	position = findStart(this->_cgi_path, "cgi-bin/");
+	this->_envi["SCRIPT_NAME"]       = this->_cgi_path;
+	this->_envi["SCRIPT_FILENAME"]   = ((position < 0 || (size_t)(position + 8) >
+	        this->_cgi_path.size()) ? "" : this->_cgi_path.substr(position + 8, this->_cgi_path.size()));
+	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr;
+	this->_envi["CONTENT_LENGTH"]    = httprequest.getHeader("content-length");
+	this->_envi["CONTENT_TYPE"]      = httprequest.getHeader("content-type");
+	this->_envi["PATH_INFO"]         = getPathInfo(httprequest.getPath(), ito_loca->getCgiExtension());
+	this->_envi["PATH_TRANSLATED"]   = ito_loca->getRoot() + (this->_envi["PATH_INFO"] == "" ? "/" :
+			this->_envi["PATH_INFO"]);
+	this->_envi["QUERY_STRING"]      = decodeHttpRequest(httprequest.getQuery());
+	this->_envi["REMOTE_ADDR"]        = httprequest.getHeader("host");
+	position = findStart(httprequest.getHeader("host"), ":");
+	//tmp_env_vars["REMOTE_IDENT"]      = _cgi_request.authorization;
+	//tmp_env_vars["REMOTE_USER"]       = _cgi_request.authorization;
+	this->_envi["REQUEST_URI"]       = this->_cgi_path;
+	this->_envi["SERVER_NAME"]       = (position > 0 ? httprequest.getHeader("host").substr(0, position) : "");
+	this->_envi["SERVER_PORT"]       = (position > 0 ? httprequest.getHeader("host").substr(position + 1, httprequest.getHeader("host").size()) : ""
+	this->_envi["SERVER_PROTOCOL"]   = "HTTP/1.1";
+	this->_envi["SERVER_SOFTWARE"]   = "42 Webflix";
+	this->_envi["DOCUMENT_ROOT"]     = ito_loca->getRoot();
+	this->_envi["REQUEST_URI"]		 = httprequest.getPath() + httprequest.getQuery();
+
+	this->_envi_vars_array = (char **) calloc(sizeof (char*), this->_envi.size() + 1);
+	std::map<std::string, std::string>::const_iterator cito = this->_envi.begin();
+	for (int i = 0; cito != this->_envi.end(); cito++, i++)
+	{
+		std::string temp = cito->first + "=" + cito->second;
+		this->_envi_vars_array[i] = strdup(temp.c_str());
+	}
+	this->_argv = (char **) malloc(sizeof (char*) * 3);
+	this->_argv[0] = strdup(cgi_extension_path.c_str());
+	this->_argv[1] = strdup(this->_cgi_path.c_str());
+	this->_argv[2] = NULL;
 }
 
-// Executes the CGI script and returns its output
-std::string CgiHandler::exec_cgi(std::string cgi_script_path)
+int 	CgiHandler::findStart(const std::string path, const std::string delimiter)
 {
-    int pid;
-    int pipe_stdin[2];
-    int pipe_stdout[2];
-    std::string new_body;
-
-    // Create pipes for inter-process communication
-    if (pipe(pipe_stdin) == -1 || pipe(pipe_stdout) == -1)
-    {
-        perror("pipe");
-    }
-
-    // Fork a new process
-    pid = fork();
-
-    if (pid == -1)
-    {
-        std::cerr << "Fork failed." << std::endl;
-        return "Status: 500\r\n\r\n";
-    }
-    else if (!pid) // Child process
-    {
-        // Close the write-end of stdin and read-end of stdout pipes
-        close(pipe_stdin[1]);
-        close(pipe_stdout[0]);
-
-        // Redirect stdin and stdout to pipes
-        dup2(pipe_stdin[0], STDIN_FILENO);
-        dup2(pipe_stdout[1], STDOUT_FILENO);
-
-        // Execute the CGI script with environment variables
-        char *argv[] = { NULL };
-        execve(cgi_script_path.c_str(), argv, _env_vars_array);
-
-        // If execve fails, print error and return a 500 status
-        std::cerr << "Error: execve failed with error code: "
-                  << strerror(errno) << std::endl;
-        write(STDOUT_FILENO, "Status: 500\r\n\r\n", 15);
-    }
-    else // Parent process
-    {
-        // Close the read-end of stdin and write-end of stdout pipes
-        close(pipe_stdin[0]);
-        close(pipe_stdout[1]);
-
-        // Write request body to stdin pipe for CGI script to read
-        write(pipe_stdin[1], _cgi_request.body.c_str(), _cgi_request.body.size());
-        close(pipe_stdin[1]);
-
-        // Read the output of CGI script from stdout pipe
-        char buffer[CGI_BUFSIZE] = {0};
-        int ret = 1;
-        while (ret > 0)
-        {
-            memset(buffer, 0, CGI_BUFSIZE);
-            ret = read(pipe_stdout[0], buffer, CGI_BUFSIZE - 1);
-            new_body += buffer;
-        }
-        close(pipe_stdout[0]);
-
-        // Wait for child process to finish
-        waitpid(-1, NULL, 0);
-    }
-
-    // If in child process, clean up and exit
-    if (!pid)
-    {
-        int i = 0;
-        while (_env_vars_array[i])
-        {
-            delete[] _env_vars_array[i];
-            i++;
-        }
-        delete[] _env_vars_array;
-        exit(0);
-    }
-
-    return new_body;
+	if (path.empty())
+		return -1;
+	size_t	position = path.find(delimiter);
+	if (position != std::string::npos)
+		return (position);
+	else
+		return -1;
 }
 
-// Getter for _response_body
-std::string CgiHandler::get_response_body()
+std::string CgiHandler::getPathInfo(std::string &path, std::vector<std::string> cgi_extensions)
 {
-    return _response_body;
+	std::string temp;
+	size_t start, end;
+
+	for (std::vector<std::string>::iterator ito_extension = cgi_extensions.begin();
+		ito_extension != cgi_extensions.end(); ++ito_extension)
+	{
+		start = path.find(*ito_extension);
+		if (start != std::string::npos)
+			break ;
+	}
+	if (start == std::string::npos)
+		return "";
+	if (start + 3 >= path.size())
+		return "";
+	temp = path.substr(start + 3, path.size());
+	if (temp[0] || temp[0] != '/')
+		return "";
+	end = temp.find("?");
+	return (end == std::string::npos ? temp : temp.substr(0, end));
+}
+
+std::string CgiHandler::decodeHttpRequest(std::string &path)
+{
+	size_t token = path.find("%");
+	while (token != std::string::npos)
+	{
+		if (path.length() < token + 2)
+			break ;
+		char decimal = fromHexToDecimal(path.substr(token + 1, 2));
+		path.replace(token, 3, toString(decimal));
+		token = path.find("%");
+	}
+	return path;
+}
+
+void	CgiHandler::clearCgiHandler()
+{
+	this->_cgi_pid = -1;
+	this->_exit_return = 0;
+	this->_cgi_path = "";
+	this->_envi_vars_array = NULL;
+	this->_argv = NULL;
+	this->_envi.clear();
 }
 
 /*

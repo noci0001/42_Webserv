@@ -2,7 +2,7 @@
 # define RESPONSE_HPP
 
 #include "Webserv.hpp"
-#include "HttpRequest.hpp"
+//#include "HttpRequest.hpp"
 
 class Response 
 {

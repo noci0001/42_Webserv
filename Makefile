@@ -12,6 +12,7 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/HttpRequest.cpp \
 			backend/src/Response.cpp \
 			backend/src/ServerControler.cpp \
+			backend/src/CgiHandler.cpp \
 
 HEADER	=	backend/include/Webserv.hpp \
 			backend/include/Locations.hpp \

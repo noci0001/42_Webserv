@@ -1,4 +1,4 @@
-#include "../include/HttpRequest.hpp"
+#include "../include/Response.hpp"
 #include "../include/ConsoleLog.hpp"
 
 HttpRequest::HttpRequest()

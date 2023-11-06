@@ -204,3 +204,12 @@ int	buildHtmlIndex(std::string &dir_name, std::vector<uint8_t> &body, size_t &bo
 	body_length = body.size();
 	return 0;
 }
+
+unsigned int fromHexToDecimal(const std::string &decimal)
+{
+	unsigned int result;
+	std::stringstream ss;
+	ss << decimal;
+	ss >> std::hex >> result;
+	return result;
+}
