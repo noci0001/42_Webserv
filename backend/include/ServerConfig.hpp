@@ -75,7 +75,6 @@ public:
                 }
                 virtual ~ErrorException() throw() {}
         };
-
         void    startServer();
 };
 

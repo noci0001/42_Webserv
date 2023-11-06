@@ -46,6 +46,7 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
             tokens.push_back(token);
 
         std::string error_path =  "/error_pages/" + tokens[0] + ".html";
+
         // 4xx error_pages/4xx.html
         if (tokens[0][0] != '4' || (tokens[1].compare(error_path) != 0 && tokens[1].compare("/root/" + tokens[0] + ".html") != 0)) {
             std::cout << "❌\t"
@@ -127,7 +128,6 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         return (false);
     } else
         std::cout << "✅\t" << "Allow methods correctly set" << std::endl;
-
     this->_status = SUCCESS;
     std::cout << std::endl;
     return (true);

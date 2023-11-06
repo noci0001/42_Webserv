@@ -21,13 +21,11 @@ CgiHandler::CgiHandler(std::string path)
     this->_cgi_path = "";
     this->_envi_vars_array = NULL;
     this->_argv = NULL;
-
 }
 
 // Destructor: Cleans up dynamically allocated memory for environment variables array
 CgiHandler::~CgiHandler()
 {
-
     if (this->_envi_vars_array)
     {
         for (int i = 0; this->_envi_vars_array[i]; i++)
@@ -310,17 +308,4 @@ void	CgiHandler::clearCgiHandler()
 	this->_envi_vars_array = NULL;
 	this->_argv = NULL;
 	this->_envi.clear();
-
 }
-
-/*
-for multiple CGIs
-
-Concurrently (using threads): 
-Creating a separate thread for each request. 
-Each thread would instantiate its own CgiHandler and 
-execute the CGI script. 
-This way, multiple CGI scripts can be run in parallel.
-
-Issue: thread safety and resource contention
-*/
