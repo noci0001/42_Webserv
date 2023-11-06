@@ -23,7 +23,7 @@
 
 #include "CgiHandler.hpp"
 
-//#include "Response.hpp"
+#include "Response.hpp"
 #include "Mime.hpp"
 #include "StatusCode.hpp"
 #include <vector>

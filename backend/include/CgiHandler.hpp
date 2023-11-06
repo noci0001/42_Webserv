@@ -1,7 +1,7 @@
 #ifndef CGI_HANDLER_HPP
 #define CGI_HANDLER_HPP
 
-#include "webserv.hpp"
+#include "Webserv.hpp"
 #include <cstdlib>
 #include <cstring>
 #include <errno.h>

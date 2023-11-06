@@ -1,5 +1,4 @@
 #include "../include/Webserv.hpp"
-
 //default constructor
 ft::Response::Response(){}
 //deconstructor
