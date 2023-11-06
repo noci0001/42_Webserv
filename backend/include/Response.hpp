@@ -1,10 +1,12 @@
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
 
+
 #include "Webserv.hpp"
 #include "HttpRequest.hpp"
 #include "MimeType.hpp"
 #include "CgiHandler.hpp"
+
 
 class Response 
 {
@@ -14,6 +16,7 @@ class Response
 		Response();
 		Response(HttpRequest&);
 		~Response();
+
 
 		std::string	getResponse();
 		size_t		getResponseLength() const;
@@ -71,4 +74,25 @@ class Response
 		int						CgiHandlingTmp(std::string &);
 };
 
+
+	int         getContentLength();
+    void        setStatusCode( std::string code );
+    void        setBody( std::string body );
+    void        setLocation( std::string location );
+    void        setContentType( std::string type );
+    std::string getContentType();
+    std::string makeResponse();
+    int         isValidMethod( std::string              method,
+                               std::vector<std::string> allowed_methods );
+    void createDirectoryListingIntoHTML( std::string path, std::string &body );
+    std::string getPath( std::string uri );
+    int         canAutoIndex( std::string path );
+    int         checkRedirect();
+    void        handleGet();
+    std::string generateFileName();
+    void        handlePost();
+    void        handleDelete();
+    int         isLocation( std::string path );
+};
+}
 #endif

@@ -1,7 +1,9 @@
 #ifndef CGI_HANDLER_HPP
 #define CGI_HANDLER_HPP
 
+
 #include "Webserv.hpp"
+
 #include <cstdlib>
 #include <cstring>
 #include <errno.h>
@@ -26,12 +28,14 @@ private:
     pid_t           _cgi_pid;
 
 
+
     // Methods
     char **
     _create_env_vars_array( std::map<std::string, std::string> env_vars );
     std::map<std::string, std::string> _create_env_vars();
 
 public:
+
 
     int     pipe_in[2];
     int     pipe_out[2];
@@ -65,6 +69,7 @@ public:
     const std::string &getCgiPath() const;
 
     std::string get_response_body();
+
     std::string exec_cgi( std::string cgi_script_path );
 };
 

@@ -212,4 +212,5 @@ unsigned int fromHexToDecimal(const std::string &decimal)
 	ss << decimal;
 	ss >> std::hex >> result;
 	return result;
+
 }
