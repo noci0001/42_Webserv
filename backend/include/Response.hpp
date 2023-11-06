@@ -71,28 +71,6 @@ struct Request
     void display();
 };
 
-struct Response
-{
-    std::string version; // HTTP/1.1
-    std::string status_code; // 200
-    std::string status_message; // OK
-    std::string content_type; // text/html
-    std::string content_length; // 1234
-    std::string date; // Tue, 15 Nov 1994 08:12:31 GMT
-    std::string keep_alive; // timeout=5, max=100
-    std::string server; // Apache/2.4.1 (Unix)
-    std::string connection; // Keep-Alive
-    std::string accept_ranges; // bytes
-    std::string body;
-
-    Response();
-
-    Response( char *buf );
-
-    void setFirstLine( std::string &line );
-    void setBody( char *buf );
-};
-
 class Response 
 {
 
@@ -159,24 +137,4 @@ class Response
 		int						CgiHandlingTmp(std::string &);
 };
 
-	int         getContentLength();
-    void        setStatusCode( std::string code );
-    void        setBody( std::string body );
-    void        setLocation( std::string location );
-    void        setContentType( std::string type );
-    std::string getContentType();
-    std::string makeResponse();
-    int         isValidMethod( std::string              method,
-                               std::vector<std::string> allowed_methods );
-    void createDirectoryListingIntoHTML( std::string path, std::string &body );
-    std::string getPath( std::string uri );
-    int         canAutoIndex( std::string path );
-    int         checkRedirect();
-    void        handleGet();
-    std::string generateFileName();
-    void        handlePost();
-    void        handleDelete();
-    int         isLocation( std::string path );
-};
-}
 #endif
