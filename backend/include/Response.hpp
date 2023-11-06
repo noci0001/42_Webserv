@@ -1,47 +1,79 @@
 #ifndef RESPONSE_HPP
-#define RESPONSE_HPP
+# define RESPONSE_HPP
 
+
+#include "Webserv.hpp"
+#include "HttpRequest.hpp"
+#include "MimeType.hpp"
 #include "CgiHandler.hpp"
-#include "Mime.hpp"
-#include "StatusCode.hpp"
-//#include "utils.hpp"
-#include "webserv.hpp"
-#include <cerrno>
-#include <cstdlib>
-#include <fcntl.h>
-#include <unistd.h>
 
-#include <algorithm>
-#include <iostream>
-#include <string>
 
-#define TRUE 1
-#define FALSE 0
+class Response 
+{
 
-static MimeType   mime_types;
-static StatusCode status_codes;
+	public:
+		static	MimeType	_mime_type;
+		Response();
+		Response(HttpRequest&);
+		~Response();
 
-namespace ft {
 
-class Response {
+		std::string	getResponse();
+		size_t		getResponseLength() const;
+		int			getStatusCode() const;
 
-private:
-	// store details of the associated HTTP request
-	Request			request; 
-	std::string		_contentType;
-	//load error page and update body
-	void			callErrorPage( std::string &body, std::string error_page );
+		void		setHttpRequest(HttpRequest &);
+		void		setServerConfig(ServerConfig &);
 
-public:
-	Response();
-	Response( Request request, Config serverConf );
-	~Response();
+		void		buildResponse();
+		void		clearResponse();
+		void		handleCgi(HttpRequest &);
+		void		cutResponse(size_t);
+		int			getCgiState();
+		void		setCgiState(int);
+		void		setErrorResponse(short error_code);
 
-	std::string statusCode;
-	std::string body;
-	Config		serverConfig;
-	std::string location;	//redirection URL
-	Route		using_route; //routing details(endpoint)
+		CgiHandler	_cgiHandler;
+
+		std::string	removeBoundary(std::string &body, std::string &boundary);
+		std::string	_responseContent;
+
+		HttpRequest	httpRequest;
+
+	private:
+		ServerConfig			_server_config;
+		std::string				_target_file;
+		std::vector<uint8_t>	_body;
+		size_t					_body_length;
+		std::string				_body_response;
+		std::string				_location;
+		short					_status_code;
+		char					*_response;
+		int						_cgi_state;
+		int						_cgi_fd[2];
+		size_t					_cgi_bytes_read;
+		bool					_auto_index;
+		
+
+		int						buildBody();
+		size_t 					file_size();
+		void					setStatusCode();
+		void 					setHeaders();
+		void					setDefaultErrorPages();
+		int						readFile();
+		void					contentType();
+		void					contentLength();
+		void					currentConnection();
+		void					server();
+		void					location();
+		void					date();
+		int						targetHandle();
+		void					buildBodyError();
+		bool					requestError();
+		int						CgiHandling(std::string &);
+		int						CgiHandlingTmp(std::string &);
+};
+
 
 	int         getContentLength();
     void        setStatusCode( std::string code );

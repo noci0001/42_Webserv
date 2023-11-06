@@ -24,8 +24,9 @@ public:
     bool key_pairs_checking(std::map<std::string, std::string> serverData);
 	void get_values_serverData();
 	int find_all_server_keywords(std::string& config_file);
-	int getTypePath(std::string const path);
-	int	checkFile(std::string const path, int mode);
+	static int getTypePath(std::string const path);
+	static int checkFile(std::string const path, int mode);
+	static int isFileExistAndReadable(std::string const path, std::string const index);
 	~Configfile();
 };
 
