@@ -1,6 +1,6 @@
 #include "../include/Webserv.hpp"
 
-int main(int argc, char** argv)
+/*int main(int argc, char** argv)
 {
 	std::string config_file_name;
 	if (argc == 1) {
@@ -21,4 +21,35 @@ int main(int argc, char** argv)
 	}
 	std::cout << "Webserv started" << std::endl;
 	return (Parsing::message("Thanks for using our Webserv!", SUCCESS));
+}*/
+
+void	sigpipeHandler(int sig)
+{
+	if (sig) {}
+}
+
+int main (int argc, char **argv)
+{
+	if (argc == 1 || argc == 2) {
+		try {
+			std::string config_file_name;
+			Configfile	configfile;
+			ServerControler servercontroler;
+			signal(SIGPIPE, sigpipeHandler);
+			config_file_name = (argc == 1 ? "configs/webserv.conf" : argv[1]);
+			configfile.get_values_serverData();
+			servercontroler.startServers(configfile);
+			servercontroler.runServers();
+		}
+		catch (std::exception &e) {
+			std::cerr << e.what() << std::endl;
+			return 1;
+		}
+	}
+	else
+	{
+		ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Error: Wrong number of arguments");
+		return 1;
+	}
+	return 0;
 }
