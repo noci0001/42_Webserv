@@ -509,6 +509,17 @@ const int &ServerConfig::getFdListen()
     return this->_fd_listen;
 }
 
+const std::vector<Location>::iterator ServerConfig::getLocationKeys(std::string key)
+{
+	std::vector<Location>::iterator ito;
+	for (ito = this->_locations.begin(); ito != this->_locations.end(); ito++)
+	{
+		if (ito->getPath() == key)
+			return (ito);
+	}
+	throw ErrorException("getLocationKeys: Error: location to key not found");
+}
+
 // used to setup sockets and bind them to the server
 void    ServerConfig::startServer(void)
 {

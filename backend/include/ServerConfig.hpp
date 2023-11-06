@@ -56,8 +56,8 @@ public:
     const std::string &getIndex();
     const std::map<short, std::string> &getErrorPages();
     const std::vector<Location> &getLocations();
-	const std::vector<Location>::iterator getLocationKey(std::string key);
     const int &getFdListen();
+	const std::vector<Location>::iterator getLocationKeys(std::string key);
 
     public:
         class ErrorException : public std::exception

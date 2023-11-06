@@ -173,7 +173,7 @@ int 	Response::CgiHandlingTmp(std::string &location_key)
 		_status_code = 500;
 		return 1;
 	}
-	_cgiHandler.createEnvi(httpRequest, _server_config.getLocations(location_key));
+	_cgiHandler.createEnvi(httpRequest, _server_config.getLocationKeys(location_key));
 	_cgiHandler.run(this->_status_code);
 	return 0;
 }
@@ -188,9 +188,9 @@ int 	Response::CgiHandling(std::string &location_key)
 	if (cgi_path[0] && cgi_path[0] == '/')
 		cgi_path.erase(0, 1);
 	if (cgi_path == "cgi-bin")
-		cgi_path += "/" + _server_config.getLocations(location_key)->getIndex();
+		cgi_path += "/" + _server_config.getLocationKeys(location_key)->getIndex();
 	else if (cgi_path == "cgi-bin/")
-		cgi_path.append(_server_config.getLocations(location_key)->getIndex());
+		cgi_path.append(_server_config.getLocationKeys(location_key)->getIndex());
 	pos = cgi_path.find(".");
 	if (pos == std::string::npos)
 	{
