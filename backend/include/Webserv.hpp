@@ -31,6 +31,7 @@
 #include "Response.hpp"
 #include "ConsoleLog.hpp"
 #include "HttpRequest.hpp"
+#include "CgiHandler.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
