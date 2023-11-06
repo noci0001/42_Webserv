@@ -46,6 +46,8 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
             tokens.push_back(token);
 
         std::string error_path =  "/error_pages/" + tokens[0] + ".html";
+
+        // 4xx error_pages/4xx.html
         if (tokens[0][0] != '4' || (tokens[1].compare(error_path) != 0 && tokens[1].compare("/root/" + tokens[0] + ".html") != 0)) {
             std::cout << "❌\t"
                       << "Error page incorrectly set. Error present in either error code (not in the range 400 - 499)."
@@ -126,7 +128,6 @@ bool Configfile::key_pairs_checking(std::map<std::string, std::string> serverDat
         return (false);
     } else
         std::cout << "✅\t" << "Allow methods correctly set" << std::endl;
-
     this->_status = SUCCESS;
     std::cout << std::endl;
     return (true);
@@ -252,4 +253,13 @@ int Configfile::getTypePath(std::string const path)
 int Configfile::checkFile(std::string const path, int mode)
 {
 	return (access(path.c_str(), mode));
+}
+
+int Configfile::isFileExistAndReadable(std::string const path, std::string const index)
+{
+	if (getTypePath(index) == 1 && checkFile(index, 4) == 0)
+		return (0);
+	if (getTypePath(path + index) == 1 && checkFile(path + index, 4) == 0)
+		return (0);
+	return (-1);
 }

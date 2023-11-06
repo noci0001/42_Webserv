@@ -130,11 +130,88 @@ std::string statusCodeString(short statusCode)
     }
 }
 
-std::string NumberToString( int Number )
+std::string getErrorPage(short statusCode)
 {
-    std::ostringstream ss;
-    ss << Number;
-    return ss.str();
+	return ("<html>\r\n<head><title>" + toString(statusCode) + " " +
+			statusCodeString(statusCode) + "</title></head>\r\n<body>\r\n" +
+			"<center><h1>" + toString(statusCode) + " " + statusCodeString(statusCode) +
+			"</h1></center>\r\n");
+}
+
+int	buildHtmlIndex(std::string &dir_name, std::vector<uint8_t> &body, size_t &body_length)
+{
+	struct dirent	*dir;
+	DIR				*directory;
+	std::string		html;
+
+	directory = opendir(dir_name.c_str());
+	if (directory == NULL)
+	{
+		std::cerr << "buildHtmlIndex: Error: opendir failed" << std::endl;
+		return 1;
+	}
+	html.append("<html>\n");
+	html.append("<head>\n");
+	html.append("<title> Index of");
+	html.append(dir_name);
+	html.append("</title>\n");
+	html.append("</head>\n");
+	html.append("<body >\n");
+	html.append("<h1> Index of " + dir_name + "</h1>\n");
+	html.append("<table style=\"width:80%; font-size: 15px\">\n");
+	html.append("<hr>\n");
+	html.append("<th style=\"text-align:left\"> File Name </th>\n");
+	html.append("<th style=\"text-align:left\"> Last Modification  </th>\n");
+	html.append("<th style=\"text-align:left\"> File Size </th>\n");
+
+	struct stat	stat_file;
+	std::string	file_path;
+
+	while ((dir = readdir(directory)) != NULL)
+	{
+		if (strcmp(dir->d_name, ".") == 0)
+			continue ;
+		file_path = dir_name + dir->d_name;
+		stat(file_path.c_str(), &stat_file);
+		html.append("<tr>\n");
+		html.append("<td>\n");
+		html.append("<a href=\"");
+		html.append(dir->d_name);
+		if (S_ISDIR(stat_file.st_mode))
+			html.append("/");
+		html.append("\">");
+		html.append(dir->d_name);
+		if (S_ISDIR(stat_file.st_mode))
+			html.append("/");
+		html.append("</a>\n");
+		html.append("</td>\n");
+		html.append("<td>\n");
+		html.append(ctime(&stat_file.st_mtime));
+		html.append("</td>\n");
+		html.append("<td>\n");
+		if (!S_ISDIR(stat_file.st_mode))
+			html.append(toString(stat_file.st_size));
+		html.append("</td>\n");
+		html.append("</tr>\n");
+	}
+	html.append("</table>\n");
+	html.append("<hr>\n");
+
+	html.append("</body>\n");
+	html.append("</html>\n");
+
+	body.insert(body.begin(), html.begin(), html.end());
+	body_length = body.size();
+	return 0;
+}
+
+unsigned int fromHexToDecimal(const std::string &decimal)
+{
+	unsigned int result;
+	std::stringstream ss;
+	ss << decimal;
+	ss >> std::hex >> result;
+	return result;
 }
 
 std::vector<std::string> ftSplit( std::string text, char separator )

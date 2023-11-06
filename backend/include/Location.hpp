@@ -15,6 +15,9 @@ class Location : public Configfile
         std::vector<short>  _methods; // GET, POST, DELETE, PUT, HEAD
         std::string         _return;
         std::string         _alias;
+		    std::vector<std::string>    _cgi_path;
+		    std::vector<std::string>    _cgi_extension;
+
         unsigned long       _max_body_size_client;
 
     public:
@@ -33,8 +36,8 @@ class Location : public Configfile
         void    setIndex(std::string parameter);
         void    setReturn(std::string parameter);
         void    setAlias(std::string parameter);
-        //void    setCgiPath(std::string parameter);
-        //void    setCgiExtension(std::string parameter);
+		    void    setCgiPath(std::vector<std::string> path);
+		    void    setCgiExtension(std::vector<std::string> extension);
         void    setMaxBodySizeClient(std::string parameter);
         void    setMaxBodySizeClient(unsigned long parameter);
 
@@ -43,6 +46,9 @@ class Location : public Configfile
         const std::string &getRoot() const;
         const std::string &getIndex() const;
         const std::vector<short> &getMethods() const;
+        const bool &getAutoIndex() const;
+		    const std::vector<std::string> &getCgiPath() const;
+		    const std::vector<std::string> &getCgiExtension() const;
         const bool  &getAutoindex() const;
         const std::string &getReturn() const;
         const std::string &getAlias() const;

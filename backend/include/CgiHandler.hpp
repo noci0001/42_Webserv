@@ -10,13 +10,20 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-class Cgi_handler {
+class HttpRequest;
+
+class CgiHandler {
 
 private:
     // Attributes
-    Request     _cgi_request;
-    std::string _response_body; // new body to be sent to the client
-    char      **_env_vars_array;
+    //HttpRequest     _cgi_request;
+    //std::string     _response_body; // new body to be sent to the client
+    char            **_envi_vars_array;
+    char            **_argv;
+    int             _exit_return;
+    std::map<std::string, std::string>  _envi;
+    std::string     _cgi_path;
+    pid_t           _cgi_pid;
 
     // Methods
     char **
@@ -24,14 +31,38 @@ private:
     std::map<std::string, std::string> _create_env_vars();
 
 public:
+    int     pipe_in[2];
+    int     pipe_out[2];
     // Constructors and destructors
-    Cgi_handler();
-    Cgi_handler( Request _cgi_request );
-    ~Cgi_handler();
+    CgiHandler();
+    CgiHandler(std::string path);
+    ~CgiHandler();
+    CgiHandler(CgiHandler const &other);
+
+    // Operator Overload Assignment
+    CgiHandler &operator=(CgiHandler const &rhs);
 
     // Methods
+
+    void createEnvi(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
+    void createEnviVars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca);
+    void run(short &error_code);
+    void sendBodyHeader(int &pipe_out, int &fd, std::string &);
+    void fixHeader(std::string &fix_header);
+    void clearCgiHandler();
+
+	int findStart(const std::string path, const std::string delimiter);
+	std::string getPathInfo(std::string &path, std::vector<std::string> cgi_extensions);
+	std::string decodeHttpRequest(std::string &path);
+    
+    void setCgiPid(pid_t cgi_pid);
+    void setCgiPath(const std::string &cgi_path);
+
+    const std::map<std::string, std::string> &getEnvi() const;
+    const pid_t &getCgiPid() const;
+    const std::string &getCgiPath() const;
+
     std::string get_response_body();
-    void        run();
     std::string exec_cgi( std::string cgi_script_path );
 };
 
