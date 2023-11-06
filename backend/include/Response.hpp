@@ -2,13 +2,15 @@
 # define RESPONSE_HPP
 
 #include "Webserv.hpp"
-//#include "HttpRequest.hpp"
+#include "HttpRequest.hpp"
+#include "MimeType.hpp"
+#include "CgiHandler.hpp"
 
 class Response 
 {
 
 	public:
-		//static	Mime	mime;
+		static	MimeType	_mime_type;
 		Response();
 		Response(HttpRequest&);
 		~Response();
@@ -28,7 +30,7 @@ class Response
 		void		setCgiState(int);
 		void		setErrorResponse(short error_code);
 
-		//CgiHandler	_cgiHandler;
+		CgiHandler	_cgiHandler;
 
 		std::string	removeBoundary(std::string &body, std::string &boundary);
 		std::string	_responseContent;

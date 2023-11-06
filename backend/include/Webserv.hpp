@@ -28,10 +28,13 @@
 #include "Location.hpp"
 #include "ParsingUtils.hpp"
 #include "ServerConfig.hpp"
+#include "ServerControler.hpp"
 #include "Response.hpp"
 #include "ConsoleLog.hpp"
 #include "HttpRequest.hpp"
 #include "CgiHandler.hpp"
+#include "ClientSide.hpp"
+#include "MimeType.hpp"
 #include <vector>
 #include <map>
 #include <iostream>

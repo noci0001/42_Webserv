@@ -2,6 +2,7 @@
 # define PARSING_HPP
 
 #include <fstream>
+#include "Webserv.hpp"
 #include "ParsingUtils.hpp"
 
 class Parsing: public ParsingUtils {

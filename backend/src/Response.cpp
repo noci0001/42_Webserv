@@ -1,6 +1,6 @@
-#include "../include/Response.hpp"
+#include "../include/Webserv.hpp"
 
-Mime Response::mime;
+MimeType Response::_mime_type;
 
 Response::Response()
 {
@@ -36,9 +36,9 @@ void	Response::contentType()
 {
 	_responseContent.append("Content-Type: ");
 	if (_target_file.rfind(".", std::string::npos) != std::string::npos && _status_code == 200)
-		_responseContent.append(mime.getMimeType(_target_file.substr(_target_file.rfind(".", std::string::npos))));
+		_responseContent.append(_mime_type.getMimeType(_target_file.substr(_target_file.rfind(".", std::string::npos))));
 	else
-		_responseContent.append(mime.getMimeType("default"));
+		_responseContent.append(_mime_type.getMimeType("default"));
 	_responseContent.append("\r\n");
 }
 
@@ -165,7 +165,7 @@ int 	Response::CgiHandlingTmp(std::string &location_key)
 {
 	std::string	path;
 	path = _target_file;
-	_cgiHandler.clear();
+	_cgiHandler.clearCgiHandler();
 	_cgiHandler.setCgiPath(path);
 	_cgi_state = 1;
 	if (pipe(_cgi_fd) < 0)
@@ -173,8 +173,8 @@ int 	Response::CgiHandlingTmp(std::string &location_key)
 		_status_code = 500;
 		return 1;
 	}
-	_cgiHandler.initEnvCgi(httprequest, _server_config.getLocations(location_key));
-	_cgiHandler.execute(this->_status_code);
+	_cgiHandler.createEnvi(httpRequest, _server_config.getLocations(location_key));
+	_cgiHandler.run(this->_status_code);
 	return 0;
 }
 
@@ -215,7 +215,7 @@ int 	Response::CgiHandling(std::string &location_key)
 	}
 	if (isAllowedMethod(httpRequest.getMethod(), *_server_config.getLocations(location_key), _status_code))
 		return 1;
-	_cgiHandler.clear();
+	_cgiHandler.clearCgiHandler();
 	_cgiHandler.setCgiPath(cgi_path);
 	_cgi_state = 1;
 	if (pipe(_cgi_fd) < 0)
@@ -223,8 +223,8 @@ int 	Response::CgiHandling(std::string &location_key)
 		_status_code = 500;
 		return 1;
 	}
-	_cgiHandler.initEnvCgi(httpRequest, _server_config.getLocations(location_key));
-	_cgiHandler.execute(this->_status_code);
+	_cgiHandler.createEnvi(httpRequest, _server_config.getLocations(location_key));
+	_cgiHandler.run(this->_status_code);
 	return 0;
 }
 

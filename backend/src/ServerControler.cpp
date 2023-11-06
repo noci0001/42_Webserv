@@ -1,5 +1,5 @@
 #include "../include/Webserv.hpp"
-#include "../include/ServerControler.hpp"
+
 
 ServerControler::ServerControler() {}
 ServerControler::~ServerControler() {}
@@ -134,8 +134,8 @@ void    ServerControler::acceptConnection(ServerConfig &server)
     Client  client_new(server);
     char    buffer[INET_ADDRSTRLEN];
 
-    if (client_socket = accept(server.getFdListen(), (struct sockaddr *)&client_address,
-        ((socklen_t*) &client_address_size)) == -1)
+    if ((client_socket = accept(server.getFdListen(), (struct sockaddr *)&client_address,
+        (socklen_t*) &client_address_size)) == -1)
     {
         ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: accept failed: %s\t Closing Webserv", strerror(errno));
         return ;
@@ -207,7 +207,7 @@ void    ServerControler::sendResponse(const int &i, Client &client)
     }
 }
 
-void    ServerControler::assignServer(Client &client)
+void    ServerControler::assignServer(ClientSide &client)
 {
     for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
@@ -221,7 +221,7 @@ void    ServerControler::assignServer(Client &client)
     }
 }
 
-void    ServerControler::readRequest(const int &i, Client &client)
+void    ServerControler::readRequest(const int &i, ClientSide &client)
 {
     char    buffer[MESSAGE_BUFFER_SIZE];
     int     read_bytes = 0;

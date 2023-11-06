@@ -447,6 +447,8 @@ int 	ServerConfig::isValidLocation(Location &location) const
 	return (0);
 }
 
+
+
 void	ServerConfig::checkToken(std::string &parameter)
 {
 	size_t pos = parameter.rfind(";");

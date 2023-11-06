@@ -1,5 +1,4 @@
 #include "../include/Webserv.hpp"
-#include "../include/ConsoleLog.hpp"
 
 //START DEFAULT CONSTRUCTOR
 Parsing::Parsing(): _config_file("webserv.conf"), _status(TBD){
