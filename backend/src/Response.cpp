@@ -213,7 +213,7 @@ int 	Response::CgiHandling(std::string &location_key)
 		_status_code = 403;
 		return 1;
 	}
-	if (isAllowedMethod(httpRequest.getMethod(), *_server_config.getLocations(location_key), _status_code))
+	if (isAllowedMethod(httpRequest.getMethod(), *_server_config.getLocationKeys(location_key), _status_code))
 		return 1;
 	_cgiHandler.clearCgiHandler();
 	_cgiHandler.setCgiPath(cgi_path);
@@ -223,7 +223,7 @@ int 	Response::CgiHandling(std::string &location_key)
 		_status_code = 500;
 		return 1;
 	}
-	_cgiHandler.createEnvi(httpRequest, _server_config.getLocations(location_key));
+	_cgiHandler.createEnvi(httpRequest, _server_config.getLocationKeys(location_key));
 	_cgiHandler.run(this->_status_code);
 	return 0;
 }
@@ -235,7 +235,7 @@ static void	getLocationMatch(std::string &path, std::vector<Location> location, 
 	{
 		if (path.find(cito->getPath()) == 0)
 		{
-			if (cito->getPath() == "/" || path.length() == cito->getPath().length() || path[it->getPath().length()] == '/')
+			if (cito->getPath() == "/" || path.length() == cito->getPath().length() || path[cito->getPath().length()] == '/')
 			{
 				max_match = cito->getPath().length();
 				location_key = cito->getPath();
@@ -250,7 +250,7 @@ int Response::targetHandle()
 	getLocationMatch(httpRequest.getPath(), _server_config.getLocations(), location_key);
 	if (location_key.length() > 0)
 	{
-		Location target_location = *_server_config.getLocations(location_key);
+		Location target_location = *_server_config.getLocationKeys(location_key);
 		if (isAllowedMethod(httpRequest.getMethod(), target_location, _status_code))
 		{
 			std::cout << "Method is not allowed" << std::endl;

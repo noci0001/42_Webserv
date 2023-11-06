@@ -7,15 +7,8 @@ SRCS	=	backend/src/Webserv.cpp \
 			backend/src/utils/Utils.cpp \
 			backend/src/Location.cpp \
 			backend/src/ServerConfig.cpp \
-
-
-			backend/src/MimeTypes.cpp \
-			backend/src/StatusCodes.cpp \
-			backend/src/response/Response.cpp \
-			backend/src/response/ResponseDelete.cpp \
-			backend/src/response/ResponseGet.cpp \
-			backend/src/response/ResponsePost.cpp \
-
+			backend/src/MimeType.cpp \
+			backend/src/Response.cpp \
 			backend/src/ClientSide.cpp \
 			backend/src/ConsoleLog.cpp \
 			backend/src/HttpRequest.cpp \

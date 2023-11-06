@@ -41,7 +41,7 @@ void    ClientSide::setClientAddr(struct sockaddr_in &client_addr)
 
 void    ClientSide::setServer(ServerConfig &serverconfig)
 {
-    //response.setServerConfig(serverconfig);
+    response.setServerConfig(serverconfig);
 }
 
 const int   &ClientSide::getClientSocket() const
