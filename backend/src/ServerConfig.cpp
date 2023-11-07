@@ -83,13 +83,13 @@ void    ServerConfig::initErrorPages( void )
 
 void    ServerConfig::setServerName(std::string server_name)
 {
-    Configfile::obtain_serverdata(server_name);
+    checkToken(server_name);
     this->_server_name = server_name;
 }
 
 void    ServerConfig::setHost(std::string parameter)
 {
-    Configfile::obtain_serverdata(parameter);
+    checkToken(parameter);
     if (parameter == "localhost")
         parameter = "127.0.0.1";
     if (!validHost(parameter))
@@ -99,7 +99,7 @@ void    ServerConfig::setHost(std::string parameter)
 
 void    ServerConfig::setRoot(std::string root)
 {
-    Configfile::obtain_serverdata(root);
+    checkToken(root);
     if (Configfile::getTypePath(root) == 2)
     {
         this->_root = root;
@@ -118,7 +118,7 @@ void    ServerConfig::setPorts(std::string parameter)
     unsigned int    port;
 
     port = 0;
-    Configfile::obtain_serverdata(parameter);
+    checkToken(parameter);
     for (size_t i = 0; i < parameter.length(); i++)
     {
         if (!std::isdigit(parameter[i]))
@@ -135,7 +135,7 @@ void    ServerConfig::setMaxBodySizeClient(std::string parameter)
     unsigned long   body_size;
 
     body_size = 0;
-    Configfile::obtain_serverdata(parameter);
+    checkToken(parameter);
     for (size_t i = 0; i < parameter.length(); i++)
     {
         if (parameter[i] < '0' || parameter[i] > '9')
@@ -149,13 +149,13 @@ void    ServerConfig::setMaxBodySizeClient(std::string parameter)
 
 void    ServerConfig::setIndex(std::string index)
 {
-    Configfile::obtain_serverdata(index);
+    checkToken(index);
     this->_index = index;
 }
 
 void    ServerConfig::setAutoIndex(std::string autoindex)
 {
-    Configfile::obtain_serverdata(autoindex);
+    checkToken(autoindex);
     if (autoindex != "on" && autoindex != "off")
         throw ErrorException("Wrong syntax: autoindex");
     if (autoindex == "on")
@@ -184,7 +184,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
             throw ErrorException("Invalid Error Code" + parameter[i]);
         i++;
         std::string path = parameter[i];
-        Configfile::obtain_serverdata(path);
+        checkToken(path);
         if (Configfile::getTypePath(path) != 2)
         {
             if (Configfile::getTypePath(this->_root + path) != 1)
