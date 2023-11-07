@@ -184,7 +184,7 @@ std::vector<std::string> splitParams(std::string line, std::string seperator)
 	std::string::size_type   start, end;
 
 	start = end = 0;
-	while (1)
+	while (true)
 	{
 		end = line.find_first_of(seperator, start);
 		if (end == std::string::npos)
