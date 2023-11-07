@@ -72,10 +72,16 @@ void    ServerControler::runServers()
                 acceptConnection(_map_servers.find(i)->second);
             else if (FD_ISSET(i, &receive_fd_pool) && _map_clients.count(i))
                 readRequest(i, _map_clients[i]);
-            /* else if (FD_ISSET(i, &write_fd_pool) && _map_clients.count(i))
+            else if (FD_ISSET(i, &write_fd_pool) && _map_clients.count(i))
             {
-                // implementation of CGI
-            } */
+                int cgi_state = _map_clients[i].response.getCgiState();
+                if (cgi_state == 1 && FD_ISSET(_map_clients[i].response._cgiHandler.pipe_in[1], &write_fd_pool))
+                    sendBodyCgi(_map_clients[i], _map_clients[i].response._cgiHandler);
+                else if (cgi_state == 1 && FD_ISSET(_map_clients[i].response._cgiHandler.pipe_out[0], &receive_fd_pool))
+                    readCgiResponse(_map_clients[i], _map_clients[i].response._cgiHandler);
+                else if ((cgi_state == 0 || cgi_state == 2) && FD_ISSET(i, &write_fd_pool))
+                    sendResponse(i, _map_clients[i]);
+            }
         }
         checkTimeout();
     }

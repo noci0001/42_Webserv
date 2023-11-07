@@ -5,6 +5,7 @@
 #include "ClientSide.hpp"
 #include "HttpRequest.hpp"
 #include "Response.hpp"
+#include "ServerConfig.hpp"
 
 //       [**** ServerControler ****]
 // This class is used to control the server.

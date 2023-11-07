@@ -85,6 +85,7 @@ static std::string serverParameter[] = { "listen ", "host ", "server_name ",
 "error_page ", "client_max_body_size ", "root " , "index ", "allow_methods "};
 
 static std::string methods[] = { "GET", "POST", "DELETE", "PUT", "HEAD" };
+
 template <typename T>
 std::string toString(const T value)
 {

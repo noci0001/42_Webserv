@@ -3,9 +3,11 @@
 
 #include "Webserv.hpp"
 #include "ServerConfig.hpp"
+#include "Configfile.hpp"
+#include <map>
 #include <vector>
 
-class Location : public Configfile
+class Location
 {
     private:
         std::string         _path;

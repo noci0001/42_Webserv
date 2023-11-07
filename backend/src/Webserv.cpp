@@ -32,13 +32,13 @@ int main (int argc, char **argv)
 {
 	if (argc == 1 || argc == 2) {
 		try {
-			std::string config_file_name;
-			Configfile	configfile;
+			std::string		config_file_name;
+			ParsingUtils	configfile;
 			ServerControler servercontroler;
 			signal(SIGPIPE, sigpipeHandler);
 			config_file_name = (argc == 1 ? "configs/webserv.conf" : argv[1]);
-			configfile.get_values_serverData();
-			servercontroler.startServers(configfile);
+			configfile.createCluster(config_file_name);
+			servercontroler.startServers(configfile.getServers());
 			servercontroler.runServers();
 		}
 		catch (std::exception &e) {

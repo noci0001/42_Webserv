@@ -1,9 +1,8 @@
 NAME	=	webserv
 
 SRCS	=	backend/src/Webserv.cpp \
-			backend/src/Parsing.cpp \
 			backend/src/Configfile.cpp \
-			backend/src/utils/ParsingUtils.cpp \
+			backend/src/ParsingUtils.cpp \
 			backend/src/utils/Utils.cpp \
 			backend/src/Location.cpp \
 			backend/src/ServerConfig.cpp \
@@ -27,11 +26,9 @@ RM		=	rm -rf
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(HEADERS) $(MEMCHECK)
+$(NAME): $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo Webserv has been successfully compiled
-	echo "Executing program by calling the executable..."
-	./webserv
 
 $(MEMCHECK):
 	@echo Checking for leaks...
