@@ -276,6 +276,7 @@ p {
   }
 
   #insert_movie_show {
+<<<<<<< HEAD
 	font-size: 20px;
 	margin-left: 45vw;
 	position: absolute;
@@ -289,3 +290,7 @@ p {
 		top:auto;
 	}
 }
+=======
+	background-color: red;
+  }
+>>>>>>> e6e62de6782064f0d7c638119ca5a19f12798a6e

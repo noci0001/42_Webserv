@@ -1,6 +1,8 @@
 #ifndef PARSINGUTILS_HPP
 # define PARSINGUTILS_HPP
 
+#include "Webserv.hpp"
+
 class ParsingUtils {
 private:
 public:

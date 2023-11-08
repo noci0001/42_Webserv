@@ -1,6 +1,7 @@
 #include "../include/Webserv.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
 	std::string config_file_name;
 	if (argc == 1) {
 		std::cout << "Webserv starting in default mode" << std::endl;
