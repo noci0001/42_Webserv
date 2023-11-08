@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
-	<title>42 WEBFLIX: POST YOUR FAVORITE MOVIE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
+    <title>42 WEBFLIX: POST YOUR FAVORITE MOVIE</title>
 </head>
-    <body>
-        <div onclick="clicky();"><h1 id="this"><h1></div>
+<body onload="check_if_movie_has_been_posted()">
+    <div onclick="clicky();"><h1 id="this"></h1></div>
+    <div>
         <div id="show_menu_overlay" class="menu_overlay">
-			<div onclick="clicky();"><h1 id="that">BACK<h1></div>
-			<div class="menu_actions">
-				<h1>ACTION MENU</h1>
-				<ul>
-					<li><h2><a href="./post_movie.html">POST YOUR FAVORITE MOVIE<a></h2></li>
-					<li><h2>GET YOUR FAVORITE MOVIE</h2></li>
-					<li id="delete_movie"><h2>DELETE YOUR FAVORITE MOVIE</h2></li>
-				  </ul>
-			</div>
-		</div>
-        <form action="/backend/src/upload.php" method="post" enctype="multipart/form-data">
-        <legend><h1>POST YOUR FAVORITE MOVIE<h1></legend>
-        <h2>MOVIE TITLE AND POSTER:</h2><br><br><br>
-        <div style="width:100vw; text-align:center;">
-            <div class="file-input-container">
-                <input id="insert_movie_show" type="text" name="movie_title" class="hidden-text_input" id="textInput" placeholder="Insert movie title"><br /><br />
-                <input type="file" id="fileInput" class="hidden-input" name="movie_poster" style="padding:4rem; height:600px; background-color: rebeccapurple;">
-                <label id="insert_movie_button" for="textInput" class="custom-label">INSERT MOVIE TITLE</label>
-                <label for="fileInput" class="custom-label">UPLOAD POSTER</label>
+            <div style="display:flex;" onclick="clicky();">
+                <h1 id="that">BACK</h1>
+            </div>
+            <div class="menu_actions">
+                <h1>ACTION MENU</h1>
+                <ul>
+                    <li><h2><a href="./index.html">HOME</a></h2></li>
+                    <li><h2><a href="./post_movie.html">POST YOUR FAVORITE MOVIE</a></h2></li>
+                    <li><h2>GET YOUR FAVORITE MOVIE</h2></li>
+                    <li id="delete_movie"><h2 onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2></li>
+                </ul>
             </div>
         </div>
-        </form>
-        <div style="width:100vw; min-width:max-content; display: flex;">
-            <button style="margin-top:5rem;margin-left: 43%; min-width:max-content;">BACK TO HOME</button>
+        <h1>Upload Your Favorite Movie Poster</h1>
+
+        <?php
+        $uploadDirectory = './uploads/';
+        $customFileName = 'custom_upload.png';
+        $placeholderImage = './assets/poster_placeholder.png';
+
+        if (file_exists($uploadDirectory . $customFileName)) {
+            echo '<h2></h2>';
+            echo '<h2></h2>';
+            echo '<img style="margin-left:50%; width:500px;" src="./uploads/custom_upload.png" onerror="this.src='./assets/poster_placeholder.png'"> alt="Movie Poster">';
+        } else {
+            echo '<h2>UPLOAD NEW MOVIE POSTER</h2>';
+            echo'<form style="margin-left:50%;" action="/upload.php" method="post" enctype="multipart/form-data" onsubmit="setMoviePosted()">';
+                echo'<input type="file" name="poster" accept="image/*">';
+                echo'<input type="submit" value="Upload">';
+                echo'</form>';
+            }
+            ?>
+            
         </div>
     </body>
     <script src="index.js"></script>
-</html>
+    </html>
+    <!-- echo '<img style="margin-left:50%; width:500px;" src="./assets/poster_placeholder.png" alt="Movie Poster">'; -->

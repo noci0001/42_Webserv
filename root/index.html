@@ -7,11 +7,13 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
 	<title>42 WEBFLIX</title>
 </head>
-<body>
+<body onload="check_if_movie_has_been_posted()">
 	<div onclick="clicky();"><h1 id="this"><h1></div>
 	<div>
 		<div id="show_menu_overlay" class="menu_overlay">
-			<div onclick="clicky();"><h1 id="that">BACK<h1></div>
+			<div style="display:flex;" onclick="clicky();">
+				<h1 id="that">BACK<h1>
+			</div>
 			<div class="menu_actions">
 				<h1>ACTION MENU</h1>
 				<ul>
