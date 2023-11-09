@@ -53,7 +53,7 @@ void    ServerControler::runServers()
     _max_fd = 0;
     initSets();
     struct timeval timeout;
-    while (1)
+    while (true)
     {
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
