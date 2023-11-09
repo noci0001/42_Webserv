@@ -29,8 +29,8 @@ Location::Location(const Location &other)
     this->_alias = other._alias;
     this->_max_body_size_client = other._max_body_size_client;
     this->_extension_path = other._extension_path;
-    //this->_cgi_path = other._cgi_path;
-    //this->_cgi_extension = other._cgi_extension;
+    this->_cgi_path = other._cgi_path;
+    this->_cgi_extension = other._cgi_extension;
 }
 
 Location &Location::operator=(const Location &rhs)
@@ -46,8 +46,8 @@ Location &Location::operator=(const Location &rhs)
         this->_alias = rhs._alias;
         this->_max_body_size_client = rhs._max_body_size_client;
         this->_extension_path = rhs._extension_path;
-        //this->_cgi_path = rhs._cgi_path;
-        //this->_cgi_extension = rhs._cgi_extension;
+        this->_cgi_path = rhs._cgi_path;
+        this->_cgi_extension = rhs._cgi_extension;
     }
     return *this;
 }

@@ -50,7 +50,6 @@ ServerConfig &ServerConfig::operator=( const ServerConfig &rhs)
         this->_index = rhs._index;
         this->_error_pages = rhs._error_pages;
         this->_locations = rhs._locations;
-		std::cout << "Here" << std::endl;
         this->_fd_listen = rhs._fd_listen;
         this->_autoindex = rhs._autoindex;
         this->_server_address = rhs._server_address;

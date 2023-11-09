@@ -1,22 +1,32 @@
 NAME	=	webserv
 
-SRCS	=	backend/src/main.cpp \
-			backend/src/Configfile.cpp \
-			backend/src/ParsingUtils.cpp \
-			backend/src/utils/Utils.cpp \
-			backend/src/Location.cpp \
-			backend/src/ServerConfig.cpp \
-			backend/src/MimeType.cpp \
-			backend/src/Response.cpp \
+SRCS	=	backend/src/CgiHandler.cpp \
 			backend/src/ClientSide.cpp \
+			backend/src/Configfile.cpp \
 			backend/src/ConsoleLog.cpp \
 			backend/src/HttpRequest.cpp \
+			backend/src/Location.cpp \
+			backend/src/main.cpp \
+			backend/src/MimeType.cpp \
+			backend/src/ParsingUtils.cpp \
+			backend/src/Response.cpp \
+			backend/src/ServerConfig.cpp \
 			backend/src/ServerControler.cpp \
-			backend/src/CgiHandler.cpp \
+			backend/src/utils/Utils.cpp \
 
-HEADER	=	backend/include/Webserv.hpp \
-			backend/include/Locations.hpp \
+HEADER	=	backend/include/CgiHandler.hpp \
+			backend/include/ClientSide.hpp \
+			backend/include/Configfile.hpp \
+			backend/include/ConsoleLog.hpp \
+			backend/include/HttpRequest.hpp \
+			backend/include/Location.hpp \
+			backend/include/MimeType.hpp \
+			backend/include/ParsingUtils.hpp \
+			backend/include/Response.hpp \
 			backend/include/ServerConfig.hpp \
+			backend/include/ServerControler.hpp \
+			backend/include/StatusCode.hpp \
+			backend/include/Webserv.hpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
