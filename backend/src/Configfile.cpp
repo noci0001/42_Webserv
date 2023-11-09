@@ -229,6 +229,42 @@ Configfile::~Configfile() {
     }
 }
 
+Configfile::Configfile(Parsing *parser, std::string& config_file): _original_config_file(config_file), _status(-1) {
+	std::ifstream file("./configs/" + config_file);
+	std::string line;
+
+    if (parser->get_status() == FAILURE)
+        this->_status = FAILURE;
+	if (file.is_open()) {
+		while (getline(file, line))
+			this->_original_config_file += line + "\n";
+		file.close();
+		//this->_status = TBD;
+	}
+	else {
+		this->_status = FAILURE;
+		std::cout << "❌\t" << RED << "Unable to open file" << RESET << std::endl;
+	}
+	if (find_all_server_keywords(this->_original_config_file) == SUCCESS && parser->get_status() != FAILURE)
+		std::cout << "✅\t" << GREEN << "All key-value pairs FOUND" << RESET << std::endl;
+	else {
+		this->_status = FAILURE;
+		std::cout << RED << "❌\tCouldn't find all the keywords"<< RESET << std::endl;
+        parser->set_status(FAILURE);
+	}
+    this->_status = SUCCESS;
+}
+
+Configfile::~Configfile() {
+	if (this->_status == SUCCESS) {
+		Configfile::get_values_serverData();
+        std::cout << GREEN << "\n✅\tConfiguration correctly analyzed" << RESET << std::endl;
+	}
+	else {
+		std::cout << RED << "❌\tError found in configuration file analysis" << RESET << std::endl;
+    }
+}
+
 //[* defines if path is: file(1), directory(2) or other(3) *]
 int Configfile::getTypePath(std::string const path)
 {
