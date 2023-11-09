@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include <vector>
 
-//static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
+static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
 
 class Location; //needed for root and directories <-- parsing
 
