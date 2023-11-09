@@ -1,5 +1,5 @@
-#ifndef CGI_HANDLER_HPP
-#define CGI_HANDLER_HPP
+#ifndef CGIHANDLER_HPP
+#define CGIHANDLER_HPP
 
 #include "Webserv.hpp"
 

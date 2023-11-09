@@ -14,19 +14,6 @@
 //Max Length of URI
 #define MAX_URI_LENGTH 4096
 
-#include "Configfile.hpp"
-#include "Location.hpp"
-#include "ParsingUtils.hpp"
-#include "ServerConfig.hpp"
-#include "ServerControler.hpp"
-#include "Response.hpp"
-#include "ConsoleLog.hpp"
-#include "HttpRequest.hpp"
-#include "CgiHandler.hpp"
-#include "ClientSide.hpp"
-#include "MimeType.hpp"
-#include "StatusCode.hpp"
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -55,6 +42,19 @@
 #include <string>
 #include <map>
 #include <string>
+
+#include "Configfile.hpp"
+#include "Location.hpp"
+#include "ParsingUtils.hpp"
+#include "ServerConfig.hpp"
+#include "ServerControler.hpp"
+#include "Response.hpp"
+#include "ConsoleLog.hpp"
+#include "HttpRequest.hpp"
+#include "CgiHandler.hpp"
+#include "ClientSide.hpp"
+#include "MimeType.hpp"
+#include "StatusCode.hpp"
 
 //Utils.cpp
 #include <dirent.h>

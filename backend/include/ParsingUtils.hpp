@@ -8,7 +8,7 @@ class ServerConfig;
 class ParsingUtils
 {
 	private:
-		std::vector<ServerConfig> _servers;
+		std::vector<ServerConfig> _server_config;
 		std::vector<std::string>  _config_file;
 		size_t 					  _server_number;
 
