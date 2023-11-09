@@ -2,8 +2,10 @@
 #define LOCATION_HPP
 
 #include "Webserv.hpp"
+#include "ServerConfig.hpp"
+#include <vector>
 
-class Location
+class Location : public Configfile
 {
     private:
         std::string         _path;

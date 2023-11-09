@@ -3,24 +3,31 @@
 
 #include "Webserv.hpp"
 
-class Configfile
-{
-	private:
-		std::string					        _original_config_file;
-		size_t 								_file_size;
+#include <fstream>
+#include <map>
+#include <string>
 
-	public:
-		Configfile();
-		Configfile(std::string const config_file);
-		~Configfile();
 
-		static int getTypePath(std::string const path);
-		static int checkFile(std::string const path, int mode);
-		static int isFileExistAndReadable(std::string const path, std::string const index);
-		std::string readFile(std::string path);
+class Configfile: public ParsingUtils {
+private:
+	std::string					        _original_config_file;
+	std::map<std::string, std::string>	_serverData;
 
-		std::string getOriginalConfigFile();
-		int getFileSize();
+protected:
+public:
+	int							        _status;
+	Configfile();
+	Configfile(Parsing *parser, std::string& config_file);
+	std::string get_value_from_key(std::string keyword, int position);
+	// int add_serverData(std::string keyword, std::string value);
+	std::string obtain_serverdata(std::string keyword);
+    bool key_pairs_checking(std::map<std::string, std::string> serverData);
+	void get_values_serverData();
+	int find_all_server_keywords(std::string& config_file);
+	static int getTypePath(std::string const path);
+	static int checkFile(std::string const path, int mode);
+	static int isFileExistAndReadable(std::string const path, std::string const index);
+	~Configfile();
 };
 
 #endif

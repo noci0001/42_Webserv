@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include <vector>
 
 ServerConfig::ServerConfig()
 {
@@ -375,23 +376,6 @@ bool	ServerConfig::validErrorPages()
 	return (true);
 }
 
-bool	ServerConfig::validLocation() const
-{
-	if (this->_locations.size() < 2)
-		return (false);
-	std::vector<Location>::const_iterator cito1;
-	std::vector<Location>::const_iterator cito2;
-	for (cito1 = this->_locations.begin(); cito1 != this->_locations.end() - 1; cito1++)
-	{
-		for (cito2 = cito1 + 1; cito2 != this->_locations.end(); cito2++)
-		{
-			if (cito1->getPath() == cito2->getPath())
-				return (true);
-		}
-	}
-	return (false);
-}
-
 int 	ServerConfig::isValidLocation(Location &location) const
 {
 	if (location.getPath() == "/cgi-bin")
@@ -464,6 +448,8 @@ int 	ServerConfig::isValidLocation(Location &location) const
 	return (0);
 }
 
+
+
 void	ServerConfig::checkToken(std::string &parameter)
 {
 	size_t pos = parameter.rfind(";");
@@ -519,7 +505,7 @@ const std::vector<Location> &ServerConfig::getLocations()
     return this->_locations;
 }
 
-int ServerConfig::getFdListen()
+const int &ServerConfig::getFdListen()
 {
 	std::cout << "getFdListen: " << this->_fd_listen << std::endl;
     return this->_fd_listen;

@@ -2,6 +2,9 @@
 # define SERVERCONTROLER_HPP
 
 #include "Webserv.hpp"
+#include "ClientSide.hpp"
+#include "HttpRequest.hpp"
+#include "Response.hpp"
 
 //       [**** ServerControler ****]
 // This class is used to control the server.

@@ -2,6 +2,8 @@
 # define SERVERCONFIG_HPP
 
 #include "Webserv.hpp"
+#include <netinet/in.h>
+#include <vector>
 
 static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
 
@@ -9,24 +11,24 @@ class Location; //needed for root and directories <-- parsing
 
 class ServerConfig
 {
-	private:
-		uint16_t                        _port;
-		in_addr_t                       _host;
-		std::string                     _server_name;
-		std::string                     _root;
-		unsigned long                   _max_body_size_client;
-		std::string                     _index;
-		bool                            _autoindex;
-		std::map<short, std::string>    _error_pages;
-		std::vector<Location>           _locations;
-		struct sockaddr_in              _server_address;
-		int                             _fd_listen;
+private:
+    uint16_t                        _port;
+    in_addr_t                       _host;
+    std::string                     _server_name;
+    std::string                     _root;
+    unsigned long                   _max_body_size_client;
+    std::string                     _index;
+    bool                            _autoindex;
+    std::map<short, std::string>    _error_pages;
+    std::vector<Location>           _locations;
+    struct sockaddr_in                  _server_address;
+    int                                 _fd_listen;
 
-	public:
-		ServerConfig();
-		~ServerConfig();
-		ServerConfig(const ServerConfig &other);
-		ServerConfig &operator=( const ServerConfig &rhs);
+public:
+    ServerConfig();
+    ~ServerConfig();
+    ServerConfig( const ServerConfig &other );
+    ServerConfig &operator=( const ServerConfig &rhs);
 
     void    initErrorPages( void );
     void    setServerName(std::string server_name);
@@ -43,7 +45,6 @@ class ServerConfig
     
     bool    validHost(std::string host) const;
 	bool	validErrorPages();
-	bool	validLocation() const;
 	int 	isValidLocation(Location &location) const;
 
     const std::string &getServerName();
@@ -55,6 +56,7 @@ class ServerConfig
     const std::string &getIndex();
     const std::map<short, std::string> &getErrorPages();
     const std::vector<Location> &getLocations();
+    const int &getFdListen();
 	const std::vector<Location>::iterator getLocationKeys(std::string key);
 
     public:
