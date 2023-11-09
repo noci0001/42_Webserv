@@ -2,7 +2,6 @@
 # define HTTPREQUEST_HPP
 
 #include "Webserv.hpp"
-//#include "Response.hpp"
 
 enum HttpMethod
 {

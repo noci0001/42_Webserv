@@ -2,10 +2,6 @@
 # define RESPONSE_HPP
 
 #include "Webserv.hpp"
-#include "HttpRequest.hpp"
-#include "MimeType.hpp"
-#include "CgiHandler.hpp"
-#include "StatusCode.hpp"
 
 struct Route
 {

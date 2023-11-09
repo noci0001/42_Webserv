@@ -7,19 +7,9 @@ ParsingUtils::ParsingUtils()
 
 ParsingUtils::~ParsingUtils() {}
 
-// This function is used to print a message and RETURN an input value.
-// REMINDER INPUT VALUE:
-// 0: SUCCESS
-// -1: (TBD) To Be Determined -> This status indicates that the
-// 1: FAILURE
-int ParsingUtils::message(std::string message, int ret) {
-	std::cout << message << std::endl;
-	return (ret);
-}
-
 int ParsingUtils::printConfigFile()
 {
-	std::cout << "******PRINTING CONFIG FILE*****" << std::endl;
+	std::cout << "******PRINTING CONFIG FILE******" << std::endl;
 	for (size_t i = 0; i < _server_config.size(); i++)
 	{
 		std::cout << "Server Number: " << i + 1 << std::endl;

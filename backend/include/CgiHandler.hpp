@@ -2,13 +2,6 @@
 #define CGI_HANDLER_HPP
 
 #include "Webserv.hpp"
-#include <cstdlib>
-#include <cstring>
-#include <errno.h>
-#include <iostream>
-#include <stdio.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 class HttpRequest;
 

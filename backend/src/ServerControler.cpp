@@ -1,17 +1,20 @@
 #include "../include/Webserv.hpp"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
+ServerControler::ServerControler(){}
 
-ServerControler::ServerControler() {}
-ServerControler::~ServerControler() {}
+ServerControler::~ServerControler(){}
 
 // [**** ServerControler ****]
 // This will start all servers on ports specified
 // in the configuration file.
-void    ServerControler::startServers(std::vector<ServerConfig> servers)
+void    ServerControler::startServers(std::vector<ServerConfig> serverconfig)
 {
     std::cout << std::endl;
     ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Starting servers...");
-    _servers = servers;
+	_servers = serverconfig;
     char   buffer[INET_ADDRSTRLEN];
     bool    serverStart;
     for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
@@ -27,9 +30,8 @@ void    ServerControler::startServers(std::vector<ServerConfig> servers)
         }
         if (!serverStart)
             ito->startServer();
-        ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT,
-            "Created Server: ServerName(%s) | Host(%s) | Port(%d)", ito->getServerName().c_str(),
-            inet_ntop(AF_INET, &ito->getHost(), buffer, INET_ADDRSTRLEN), ito->getPort());
+        ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT, "Created Server: ServerName(%s) | Host(%s) | Port(%d)", ito->getServerName().c_str(),
+            		inet_ntop(AF_INET, &ito->getHost(), buffer, INET_ADDRSTRLEN), ito->getPort());
     }
 }
 

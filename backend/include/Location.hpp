@@ -1,11 +1,7 @@
 #ifndef LOCATION_HPP
-# define LOCATION_HPP
+#define LOCATION_HPP
 
 #include "Webserv.hpp"
-#include "ServerConfig.hpp"
-#include "Configfile.hpp"
-#include <map>
-#include <vector>
 
 class Location
 {
@@ -17,8 +13,8 @@ class Location
         std::vector<short>  _methods; // GET, POST, DELETE, PUT, HEAD
         std::string         _return;
         std::string         _alias;
-		    std::vector<std::string>    _cgi_path;
-		    std::vector<std::string>    _cgi_extension;
+		std::vector<std::string>    _cgi_path;
+		std::vector<std::string>    _cgi_extension;
 
         unsigned long       _max_body_size_client;
 

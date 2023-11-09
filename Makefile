@@ -1,6 +1,6 @@
 NAME	=	webserv
 
-SRCS	=	backend/src/Webserv.cpp \
+SRCS	=	backend/src/main.cpp \
 			backend/src/Configfile.cpp \
 			backend/src/ParsingUtils.cpp \
 			backend/src/utils/Utils.cpp \
@@ -20,8 +20,8 @@ HEADER	=	backend/include/Webserv.hpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-CC		=	c++
-CFLAGS	=	-Wall -Werror -Wextra -g3 -std=c++98
+CC		=	g++
+CFLAGS	=	-Wall -Werror -Wextra -g -std=c++98
 RM		=	rm -rf
 
 all: $(NAME)

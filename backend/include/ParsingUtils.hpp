@@ -2,25 +2,19 @@
 # define PARSINGUTILS_HPP
 
 #include "Webserv.hpp"
-#include "ServerConfig.hpp"
-#include "Configfile.hpp"
-#include "Location.hpp"
-#include "Parsing.hpp"
 
 class ServerConfig;
 
 class ParsingUtils
 {
 	private:
-		std::vector<ServerConfig> _server_config;
+		std::vector<ServerConfig> _servers;
 		std::vector<std::string>  _config_file;
 		size_t 					  _server_number;
 
 	public:
 		ParsingUtils();
 		~ParsingUtils();
-
-		static int message(std::string message, int ret);
 
 		int createCluster(const std::string &config_file);
 

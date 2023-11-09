@@ -31,13 +31,15 @@ void	sigpipeHandler(int sig)
 int main (int argc, char **argv)
 {
 	if (argc == 1 || argc == 2) {
-		try {
+		try
+		{
 			std::string		config_file_name;
 			ParsingUtils	configfile;
 			ServerControler servercontroler;
 			signal(SIGPIPE, sigpipeHandler);
 			config_file_name = (argc == 1 ? "configs/webserv.conf" : argv[1]);
 			configfile.createCluster(config_file_name);
+			//configfile.printConfigFile();
 			servercontroler.startServers(configfile.getServers());
 			servercontroler.runServers();
 		}

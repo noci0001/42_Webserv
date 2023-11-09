@@ -2,8 +2,6 @@
 # define CLIENTSIDE_HPP
 
 #include "Webserv.hpp"
-#include "HttpRequest.hpp"
-#include "Response.hpp"
 
 //                      [**** ClientSide ****]
 // - Stores Client Side info: socket, address, request, response, server

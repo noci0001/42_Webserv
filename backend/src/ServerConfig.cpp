@@ -17,7 +17,7 @@ ServerConfig::~ServerConfig()
 {}
 
 //[**** Copy Constructor ****]
-
+//Do not look
 ServerConfig::ServerConfig(const ServerConfig &other)
 {
     if (this != &other)
@@ -34,7 +34,6 @@ ServerConfig::ServerConfig(const ServerConfig &other)
         this->_autoindex = other._autoindex;
         this->_server_address = other._server_address;
     }
-    return ;
 }
 
 //[**** Assignment Operator ****]
@@ -51,6 +50,7 @@ ServerConfig &ServerConfig::operator=( const ServerConfig &rhs)
         this->_index = rhs._index;
         this->_error_pages = rhs._error_pages;
         this->_locations = rhs._locations;
+		std::cout << "Here" << std::endl;
         this->_fd_listen = rhs._fd_listen;
         this->_autoindex = rhs._autoindex;
         this->_server_address = rhs._server_address;
@@ -203,7 +203,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
 void    ServerConfig::setLocations(std::string path, std::vector<std::string> parameter)
 {
 	Location location_new;
-	std::vector<std::string> methods;
+	//std::vector<std::string> methods;
 	bool flag_methods = false;
 	bool flag_autoindex = false;
 	bool flag_max_size = false;
@@ -351,6 +351,8 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 
 void    ServerConfig::setFdListen(int fd)
 {
+	std::cout << "in fd_listen" << std::endl;
+	std::cout << "fd_listen: " << fd << std::endl;
     this->_fd_listen = fd;
 }
 
@@ -520,6 +522,7 @@ const std::vector<Location> &ServerConfig::getLocations()
 
 int ServerConfig::getFdListen()
 {
+	std::cout << "getFdListen: " << this->_fd_listen << std::endl;
     return this->_fd_listen;
 }
 

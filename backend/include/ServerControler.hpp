@@ -2,10 +2,6 @@
 # define SERVERCONTROLER_HPP
 
 #include "Webserv.hpp"
-#include "ClientSide.hpp"
-#include "HttpRequest.hpp"
-#include "Response.hpp"
-#include "ServerConfig.hpp"
 
 //       [**** ServerControler ****]
 // This class is used to control the server.
@@ -25,7 +21,7 @@ class ServerControler
     private:
         std::vector<ServerConfig>   _servers;
         std::map<int, ServerConfig> _map_servers;
-        std::map<int, ClientSide>       _map_clients;
+        std::map<int, ClientSide>   _map_clients;
         fd_set                      _receive_fd_pool;
         fd_set                      _write_fd_pool;
         int                         _max_fd;

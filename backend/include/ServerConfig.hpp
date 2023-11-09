@@ -2,17 +2,12 @@
 # define SERVERCONFIG_HPP
 
 #include "Webserv.hpp"
-#include "Configfile.hpp"
-#include "Location.hpp"
-#include "ParsingUtils.hpp"
-#include <netinet/in.h>
-#include <map>
 
 static std::string  serverParameter[] = {"server_name", "listen", "root", "index", "allow_methods", "client_body_buffer_size"};
 
 class Location; //needed for root and directories <-- parsing
 
-class ServerConfig : public Configfile
+class ServerConfig
 {
 	private:
 		uint16_t                        _port;
@@ -30,7 +25,7 @@ class ServerConfig : public Configfile
 	public:
 		ServerConfig();
 		~ServerConfig();
-		ServerConfig( const ServerConfig &other );
+		ServerConfig(const ServerConfig &other);
 		ServerConfig &operator=( const ServerConfig &rhs);
 
     void    initErrorPages( void );
@@ -78,8 +73,9 @@ class ServerConfig : public Configfile
                 }
                 virtual ~ErrorException() throw() {}
         };
+
         void    startServer();
-		int getFdListen();
+		int     getFdListen();
 };
 
 #endif
