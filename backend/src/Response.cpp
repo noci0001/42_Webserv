@@ -30,7 +30,7 @@ Response::Response(HttpRequest &request) : httpRequest(request)
 	_status_code = 0;
 	_cgi_state = 0;
 	_cgi_bytes_read = 0;
-	_auto_index = 0;
+	_auto_index = false;
 }
 
 void	Response::contentType()
@@ -54,7 +54,7 @@ void	Response::contentLength()
 
 void	Response::currentConnection()
 {
-	if (httpRequest.getHeader("Connection") == "keep-alive")
+	if (httpRequest.getHeader("connection") == "keep-alive")
 		_responseContent.append("Connection: keep-alive\r\n");
 }
 
