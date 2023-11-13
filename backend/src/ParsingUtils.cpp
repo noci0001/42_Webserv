@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ParsingUtils.hpp"
 
 ParsingUtils::ParsingUtils()
 {
@@ -67,6 +68,7 @@ int ParsingUtils::createCluster(const std::string &config_file)
 	content = file.readFile(config_file);
 	if (content.empty())
 		throw ErrorException("createCluster: Error: File is empty");
+	std::cout << "Content: " << content << std::endl;
 	removeComments(content);
 	removeWhiteSpaces(content);
 	splitConfigFile(content);
@@ -78,6 +80,7 @@ int ParsingUtils::createCluster(const std::string &config_file)
 		createServer(this->_config_file[i], server_config);
 		this->_server_config.push_back(server_config);
 	}
+	std::cout << "Size_createCluster: " << this->_server_config.size() << std::endl;
 	if (this->_server_number > 1)
 		checkServers();
 	return 0;
@@ -86,13 +89,13 @@ int ParsingUtils::createCluster(const std::string &config_file)
 void ParsingUtils::removeComments(std::string &content)
 {
 	size_t position = 0;
-	position = content.find("#");
+	position = content.find('#');
 	while (position != std::string::npos)
 	{
 		size_t position_end;
 		position_end = content.find('\n', position);
 		content.erase(position, position_end - position);
-		position = content.find("#");
+		position = content.find('#');
 	}
 }
 
@@ -111,7 +114,7 @@ void ParsingUtils::removeWhiteSpaces(std::string &content)
 void ParsingUtils::splitConfigFile(std::string &content)
 {
 	size_t position = 0;
-	size_t position_end = 0;
+	size_t position_end = 1;
 	if (content.find("server", 0) == std::string::npos)
 		throw ParsingUtils::ErrorException("ParsingUtil: Error: No server found");
 	while (position != position_end && position < content.length())
@@ -181,6 +184,7 @@ std::vector<std::string> splitParams(std::string line, std::string seperator)
 			break ;
 		std::string temp = line.substr(start, end - start);
 		params.push_back(temp);
+		start = line.find_first_not_of(seperator, end);
 		if (start == std::string::npos)
 			break ;
 	}
@@ -296,6 +300,7 @@ void ParsingUtils::createServer(std::string &config_file, ServerConfig &server_c
 	server_config.setErrorPages(error_codes);
 	if (!server_config.validErrorPages())
 		throw ErrorException("ParsingUtils: Error: createServer: Error page not found or Error Code wrong");
+	std::cout << "Size_createServer: " << server_config.getFdListen() << std::endl;
 }
 
 void ParsingUtils::checkServers()

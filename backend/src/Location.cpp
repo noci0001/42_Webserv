@@ -1,5 +1,6 @@
 
 #include "../include/Webserv.hpp"
+#include "../include/Location.hpp"
 
 Location::Location()
 {
@@ -88,7 +89,7 @@ void    Location::setMethods(std::vector<std::string> methods)
         else if (methods[i] == "HEAD")
             this->_methods[4] = 1;
         else
-            throw ServerConfig::ErrorException("method not supported" + methods[i]);
+            throw ServerConfig::ErrorException("method not supported " + methods[i]);
     }
 }
 

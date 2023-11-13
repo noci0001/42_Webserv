@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/Configfile.hpp"
 
 Configfile::Configfile(): _file_size(0) {}
 
@@ -17,7 +18,7 @@ int Configfile::getTypePath(std::string const path)
 	{
 		if (buffer.st_mode & S_IFREG)
 			return 1;
-		else if (buffer. st_mode & S_IFDIR)
+		else if (buffer.st_mode & S_IFDIR)
 			return 2;
 		else
 			return 3;

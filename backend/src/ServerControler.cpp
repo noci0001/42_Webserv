@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ServerControler.hpp"
 
 ServerControler::ServerControler()
 {
@@ -18,7 +19,7 @@ void    ServerControler::startServer(std::vector<ServerConfig> serverconfig)
     char   buffer[INET_ADDRSTRLEN];
     bool    serverStart;
 	std::vector<ServerConfig>::iterator ito;
-	std::cout << "Size: " << serverconfig.size() << std::endl;
+	std::cout << "Size_startServer: " << serverconfig.size() << std::endl;
     for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
 	std::cout << "fd_listen_startServer: " << ito->getFdListen() << std::endl;

@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ConsoleLog.hpp"
 
 std::string ConsoleLog::file_name = "serverlog.txt";
 ConsolePrio ConsoleLog::prio = ERROR;

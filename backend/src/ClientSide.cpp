@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ClientSide.hpp"
 
 ClientSide::ClientSide()
 {

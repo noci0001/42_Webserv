@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ServerConfig.hpp"
 #include <vector>
 
 ServerConfig::ServerConfig()
@@ -540,6 +541,7 @@ void    ServerConfig::startServer(void)
         ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: socket() failed %s\t Closing Webserv", strerror(errno));
         exit(EXIT_FAILURE);
     }
+	std::cout << "fd_listen: " << _fd_listen << std::endl;
     int value_option = 1;
     setsockopt(_fd_listen, SOL_SOCKET, SO_REUSEADDR, &value_option, sizeof(int));
     memset(&_server_address, 0, sizeof(_server_address));

@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/HttpRequest.hpp"
 
 HttpRequest::HttpRequest()
 {

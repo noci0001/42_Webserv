@@ -33,16 +33,18 @@ class ServerConfig
         ServerConfig &operator=( const ServerConfig &rhs);
 
         void    initErrorPages( void );
+
         void    setServerName(std::string server_name);
         void    setHost(std::string parameter);
         void    setRoot(std::string root);
+        void    setFdListen(int);
         void    setPorts(std::string parameter);
         void    setMaxBodySizeClient(std::string parameter);
-        void    setIndex(std::string index);
-        void    setAutoIndex(std::string autoindex);
         void    setErrorPages(std::vector<std::string> &parameter);
+        void    setIndex(std::string index);
         void    setLocations(std::string path, std::vector<std::string> parameter);
-        void    setFdListen(int);
+        void    setAutoIndex(std::string autoindex);
+
         void	checkToken(std::string &parameter);
         bool	checkLocation() const;
         
@@ -51,15 +53,16 @@ class ServerConfig
         int 	isValidLocation(Location &location) const;
 
         const std::string &getServerName();
-        const std::string &getRoot();
-        const bool &getAutoIndex();
-        const in_addr_t &getHost();
         const uint16_t &getPort();
+        const in_addr_t &getHost();
         const size_t &getMaxBodySizeClient();
-        const std::string &getIndex();
-        const std::map<short, std::string> &getErrorPages();
         const std::vector<Location> &getLocations();
+        const std::string &getRoot();
+        const std::map<short, std::string> &getErrorPages();
+        const std::string &getIndex();
+        const bool &getAutoIndex();
         const std::vector<Location>::iterator getLocationKeys(std::string key);
+
         int    getFdListen() const;
         void    startServer();
 
