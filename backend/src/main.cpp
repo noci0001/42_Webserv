@@ -1,6 +1,6 @@
 #include "../include/Webserv.hpp"
 
-//void	sigpipeHandle(int sig){	if (sig) {}}
+void	sigpipeHandle(int sig){	if (sig) {}}
 
 int main (int argc, char **argv)
 {
@@ -10,10 +10,10 @@ int main (int argc, char **argv)
 			std::string		config_file_name;
 			ParsingUtils	configfile;
 			ServerControler servercontroler;
-			//signal(SIGPIPE, sigpipeHandle);
+			signal(SIGPIPE, sigpipeHandle);
 			config_file_name = (argc == 1 ? "configs/webserv.conf" : argv[1]);
 			configfile.createCluster(config_file_name);
-			//configfile.printConfigFile();
+			configfile.printConfigFile();
 			servercontroler.startServer(configfile.getServers());
 			servercontroler.runServers();
 		}

@@ -78,6 +78,6 @@ void    ClientSide::buildResponse()
 
 void    ClientSide::clearClientSide()
 {
-    //response.clear();
+    response.clearResponse();
     httprequest.clear();
 }
