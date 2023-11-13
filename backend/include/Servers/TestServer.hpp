@@ -3,10 +3,12 @@
 
 #include "SimpleServer.hpp"
 #include <unistd.h>
+#include <string>
 
 namespace HDE {
 class TestServer: public SimpleServer {
 private:
+    std::string currect_request_url;
     char buffer[30000] = {0};
     int new_socket;
     void accepter();
