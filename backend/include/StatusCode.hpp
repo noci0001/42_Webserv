@@ -1,5 +1,5 @@
-#ifndef STATUS_CODE_HPP
-#define STATUS_CODE_HPP
+#ifndef STATUSCODE_HPP
+#define STATUSCODE_HPP
 
 #include <map>
 #include <string>

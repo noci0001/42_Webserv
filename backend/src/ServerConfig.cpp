@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ServerConfig.hpp"
 #include <vector>
 
 ServerConfig::ServerConfig()
@@ -18,7 +19,6 @@ ServerConfig::~ServerConfig()
 {}
 
 //[**** Copy Constructor ****]
-
 ServerConfig::ServerConfig(const ServerConfig &other)
 {
     if (this != &other)
@@ -35,7 +35,7 @@ ServerConfig::ServerConfig(const ServerConfig &other)
         this->_autoindex = other._autoindex;
         this->_server_address = other._server_address;
     }
-    return ;
+	return ;
 }
 
 //[**** Assignment Operator ****]
@@ -204,7 +204,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
 void    ServerConfig::setLocations(std::string path, std::vector<std::string> parameter)
 {
 	Location location_new;
-	std::vector<std::string> methods;
+	//std::vector<std::string> methods;
 	bool flag_methods = false;
 	bool flag_autoindex = false;
 	bool flag_max_size = false;
@@ -350,9 +350,9 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 	this->_locations.push_back(location_new);
 }
 
-void    ServerConfig::setFdListen(int fd)
+void    ServerConfig::setFdListen(int fd_listen)
 {
-    this->_fd_listen = fd;
+    this->_fd_listen = fd_listen;
 }
 
 bool    ServerConfig::validHost(std::string host) const
@@ -447,14 +447,27 @@ int 	ServerConfig::isValidLocation(Location &location) const
 	return (0);
 }
 
-
-
 void	ServerConfig::checkToken(std::string &parameter)
 {
 	size_t pos = parameter.rfind(";");
 	if (pos != parameter.size() - 1)
 		throw ErrorException("checkToken: invalid token");
 	parameter.erase(pos);
+}
+
+bool	ServerConfig::checkLocation() const
+{
+	if (this->_locations.size() < 2)
+		return (false);
+	std::vector<Location>::const_iterator cito1;
+	std::vector<Location>::const_iterator cito2;
+	for (cito1 = this->_locations.begin(); cito1 != this->_locations.end(); cito1++)
+		for (cito2 = cito1 + 1; cito2 != this->_locations.end(); cito2++)
+		{
+			if (cito1->getPath() == cito2->getPath())
+				return (true);
+		}
+	return (false);
 }
 
 //[**** Getter Functions ****]
@@ -504,7 +517,7 @@ const std::vector<Location> &ServerConfig::getLocations()
     return this->_locations;
 }
 
-const int &ServerConfig::getFdListen()
+int ServerConfig::getFdListen() const
 {
     return this->_fd_listen;
 }
@@ -528,6 +541,7 @@ void    ServerConfig::startServer(void)
         ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: socket() failed %s\t Closing Webserv", strerror(errno));
         exit(EXIT_FAILURE);
     }
+	std::cout << "fd_listen: " << _fd_listen << std::endl;
     int value_option = 1;
     setsockopt(_fd_listen, SOL_SOCKET, SO_REUSEADDR, &value_option, sizeof(int));
     memset(&_server_address, 0, sizeof(_server_address));

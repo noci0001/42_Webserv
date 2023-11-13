@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/Response.hpp"
 
 MimeType Response::_mime_type;
 

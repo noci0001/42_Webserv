@@ -4,6 +4,7 @@
 #include "Webserv.hpp"
 #include "HttpRequest.hpp"
 #include "Response.hpp"
+#include "ServerConfig.hpp"
 
 //                      [**** ClientSide ****]
 // - Stores Client Side info: socket, address, request, response, server
