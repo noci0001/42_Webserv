@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/MimeType.hpp"
 
 MimeType::MimeType()
 {

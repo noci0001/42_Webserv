@@ -1,7 +1,8 @@
 #include "../include/Webserv.hpp"
-
-// Define a buffer size for CGI responses
-#define CGI_BUFSIZE 8192
+<<<<<<< HEAD
+=======
+#include "../include/CgiHandler.hpp"
+>>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
 
 // Default constructor
 CgiHandler::CgiHandler()
@@ -137,7 +138,7 @@ void CgiHandler::run(short &error_code)
 // Creates a map of environment variables based on the provided CGI request
 void CgiHandler::createEnviVars(HttpRequest &httprequest, const std::vector<Location>::iterator ito_loca)
 {
-    std::string run_cgi = ("cgi-bin/" + ito_loca->getCgiPath()[0].c_str);
+    std::string run_cgi = ("cgi-bin/" + std::string(ito_loca->getCgiPath()[0]));
     char    *cwd = getcwd(NULL, 0);
     if (_cgi_path[0] != '/')
     {
@@ -163,7 +164,7 @@ void CgiHandler::createEnviVars(HttpRequest &httprequest, const std::vector<Loca
     this->_envi["GATEWAY_INTERFACE"] = std::string ("CGI/1.1");
     this->_envi["SCRIPT_NAME"]       = run_cgi;
     this->_envi["SCRIPT_FILENAME"]   = this->_cgi_path;
-    this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr;
+    this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr();
     //tmp_env_vars["CONTENT_LENGTH"]    = _cgi_request.body; // This might need conversion to char* or length of body
     //tmp_env_vars["CONTENT_TYPE"]      = _cgi_request.content_type;
     this->_envi["PATH_INFO"]         = this->_cgi_path;
@@ -196,7 +197,7 @@ void CgiHandler::createEnviVars(HttpRequest &httprequest, const std::vector<Loca
     }
     this->_argv = (char **)malloc(sizeof(char *) * 3);
     this->_argv[0] = strdup(run_cgi.c_str());
-    this->_argv[1] = strdup(this->_cgi_path.c_str);
+    this->_argv[1] = strdup(this->_cgi_path.c_str());
     this->_argv[2] = NULL;
 }
 
@@ -220,7 +221,7 @@ void	CgiHandler::createEnvi(HttpRequest &httprequest, const std::vector<Location
 	this->_envi["SCRIPT_NAME"]       = this->_cgi_path;
 	this->_envi["SCRIPT_FILENAME"]   = ((position < 0 || (size_t)(position + 8) >
 	        this->_cgi_path.size()) ? "" : this->_cgi_path.substr(position + 8, this->_cgi_path.size()));
-	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr;
+	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr();
 	this->_envi["CONTENT_LENGTH"]    = httprequest.getHeader("content-length");
 	this->_envi["CONTENT_TYPE"]      = httprequest.getHeader("content-type");
 	this->_envi["PATH_INFO"]         = getPathInfo(httprequest.getPath(), ito_loca->getCgiExtension());
@@ -233,7 +234,7 @@ void	CgiHandler::createEnvi(HttpRequest &httprequest, const std::vector<Location
 	//tmp_env_vars["REMOTE_USER"]       = _cgi_request.authorization;
 	this->_envi["REQUEST_URI"]       = this->_cgi_path;
 	this->_envi["SERVER_NAME"]       = (position > 0 ? httprequest.getHeader("host").substr(0, position) : "");
-	this->_envi["SERVER_PORT"]       = (position > 0 ? httprequest.getHeader("host").substr(position + 1, httprequest.getHeader("host").size()) : ""
+	this->_envi["SERVER_PORT"]       = (position > 0 ? httprequest.getHeader("host").substr(position + 1, httprequest.getHeader("host").size()) : "");
 	this->_envi["SERVER_PROTOCOL"]   = "HTTP/1.1";
 	this->_envi["SERVER_SOFTWARE"]   = "42 Webflix";
 	this->_envi["DOCUMENT_ROOT"]     = ito_loca->getRoot();

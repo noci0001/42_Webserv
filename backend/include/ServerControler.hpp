@@ -1,10 +1,12 @@
 #ifndef SERVERCONTROLER_HPP
 # define SERVERCONTROLER_HPP
 
+#include <sys/socket.h>
 #include "Webserv.hpp"
 #include "ClientSide.hpp"
 #include "HttpRequest.hpp"
 #include "Response.hpp"
+#include "CgiHandler.hpp"
 
 //       [**** ServerControler ****]
 // This class is used to control the server.
@@ -18,13 +20,14 @@ class ServerControler
     public:
         ServerControler();
         ~ServerControler();
-        void    startServers(std::vector<ServerConfig>);
+
+		void    startServer(std::vector<ServerConfig> serverconfig);
         void    runServers();
 
     private:
         std::vector<ServerConfig>   _servers;
         std::map<int, ServerConfig> _map_servers;
-        std::map<int, ClientSide>       _map_clients;
+        std::map<int, ClientSide>   _map_clients;
         fd_set                      _receive_fd_pool;
         fd_set                      _write_fd_pool;
         int                         _max_fd;
@@ -35,8 +38,8 @@ class ServerControler
         void    readRequest(const int &, ClientSide &);
         void    handleRequestBody(ClientSide &);
         void    sendResponse(const int &, ClientSide &);
-        //void    sendCgiBody(Client &, CgiHandler &);
-        //void    readCgiResponse(Client &, CgiHandler &);
+		void	sendBodyCgi(ClientSide &client, CgiHandler &cgi);
+        void    readCgiResponse(ClientSide &, CgiHandler &);
         void    closeConnection(const int);
         void    assignServer(ClientSide &);
         void    addToSets(const int, fd_set &);

@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include "../include/ClientSide.hpp"
 
 ClientSide::ClientSide()
 {
@@ -16,7 +17,7 @@ ClientSide::ClientSide(const ClientSide &copy)
         this->_client_addr = copy._client_addr;
         this->_last_request_time = copy._last_request_time;
         this->httprequest = copy.httprequest;
-        //this->response = copy.response;
+        this->response = copy.response;
         this->serverconfig = copy.serverconfig;
     }
     return ;
@@ -34,14 +35,14 @@ void    ClientSide::setClientSocket(int &client_socket)
     _client_socket = client_socket;
 }
 
-void    ClientSide::setClientAddr(struct sockaddr_in &client_addr)
+void    ClientSide::setClientAddr(sockaddr_in &client_addr)
 {
     _client_addr = client_addr;
 }
 
 void    ClientSide::setServer(ServerConfig &serverconfig)
 {
-    //response.setServerConfig(serverconfig);
+    response.setServerConfig(serverconfig);
 }
 
 const int   &ClientSide::getClientSocket() const
@@ -71,12 +72,12 @@ void    ClientSide::updateTimer()
 
 void    ClientSide::buildResponse()
 {
-    //response.setHttpRequest(this->httprequest);
-    //response.buildResponse();
+    response.setHttpRequest(this->httprequest);
+    response.buildResponse();
 }
 
 void    ClientSide::clearClientSide()
 {
-    //response.clear();
+    response.clearResponse();
     httprequest.clear();
 }

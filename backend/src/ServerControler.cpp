@@ -1,23 +1,31 @@
 #include "../include/Webserv.hpp"
+#include "../include/ServerControler.hpp"
 
+ServerControler::ServerControler()
+{
+    
+}
 
-ServerControler::ServerControler() {}
-ServerControler::~ServerControler() {}
+ServerControler::~ServerControler(){}
 
 // [**** ServerControler ****]
 // This will start all servers on ports specified
 // in the configuration file.
-void    ServerControler::startServers(std::vector<ServerConfig> servers)
+void    ServerControler::startServer(std::vector<ServerConfig> serverconfig)
 {
     std::cout << std::endl;
-    ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Starting servers...");
-    _servers = servers;
+    ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Starting server...");
+	_servers = serverconfig;
     char   buffer[INET_ADDRSTRLEN];
     bool    serverStart;
-    for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
+	std::vector<ServerConfig>::iterator ito;
+	std::cout << "Size_startServer: " << serverconfig.size() << std::endl;
+    for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
+	std::cout << "fd_listen_startServer: " << ito->getFdListen() << std::endl;
         serverStart = false;
-        for (std::vector<ServerConfig>::iterator ito2 = _servers.begin(); ito2 != ito; ++ito2)
+		std::vector<ServerConfig>::iterator ito2;
+		for (ito2 = _servers.begin(); ito2 != ito; ++ito2)
         {
             if (ito2->getHost() == ito->getHost() && ito2->getPort() == ito->getPort())
             {
@@ -27,9 +35,8 @@ void    ServerControler::startServers(std::vector<ServerConfig> servers)
         }
         if (!serverStart)
             ito->startServer();
-        ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT,
-            "Created Server: ServerName(%s) | Host(%s) | Port(%d)", ito->getServerName().c_str(),
-            inet_ntop(AF_INET, &ito->getHost(), buffer, INET_ADDRSTRLEN), ito->getPort());
+        ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT, "Created Server: ServerName(%s) | Host(%s) | Port(%d)", ito->getServerName().c_str(),
+            		inet_ntop(AF_INET, &ito->getHost(), buffer, INET_ADDRSTRLEN), ito->getPort());
     }
 }
 
@@ -52,8 +59,9 @@ void    ServerControler::runServers()
 
     _max_fd = 0;
     initSets();
+	std::cout << "_fd_listen_runServer" << std::endl;
     struct timeval timeout;
-    while (1)
+    while (true)
     {
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
@@ -85,9 +93,9 @@ void    ServerControler::runServers()
 // If more than CONNECTION_TIMEOUT -> close connection.
 void    ServerControler::checkTimeout()
 {
-    for (std::map<int, Client>::iterator ito = _map_clients.begin(); ito != _map_clients.end(); ++ito)
+    for (std::map<int, ClientSide>::iterator ito = _map_clients.begin(); ito != _map_clients.end(); ++ito)
     {
-        if (time(NULL) - ito->second.getLastTime() > CONNECTION_TIMEOUT)
+        if (time(NULL) - ito->second.getLastRequestTime() > CONNECTION_TIMEOUT)
         {
             ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Client %d timed out -> Closing connection.", ito->first);
             closeConnection(ito->first);
@@ -104,8 +112,10 @@ void    ServerControler::initSets()
     FD_ZERO(&_write_fd_pool);
 
     // adds server sockets to _receive_fd_pool
-    for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
+	std::vector<ServerConfig>::iterator ito;
+    for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
+		const ServerConfig &server = *ito;
         // calls on listen() and fcntl() to set server socket to non-blocking
         if (listen(ito->getFdListen(), 512) == -1)
         {
@@ -118,7 +128,7 @@ void    ServerControler::initSets()
             exit(EXIT_FAILURE);
         }
         addToSets(ito->getFdListen(), _receive_fd_pool);
-        _map_servers.insert(std::make_pair(ito->getFdListen(), *ito));
+        _map_servers.insert(std::make_pair(ito->getFdListen(), server));
     }
     _max_fd = _servers.back().getFdListen();
 }
@@ -131,7 +141,7 @@ void    ServerControler::acceptConnection(ServerConfig &server)
     struct  sockaddr_in client_address;
     long    client_address_size = sizeof(client_address);
     int     client_socket;
-    Client  client_new(server);
+    ClientSide  client_new(server);
     char    buffer[INET_ADDRSTRLEN];
 
     if ((client_socket = accept(server.getFdListen(), (struct sockaddr *)&client_address,
@@ -152,7 +162,7 @@ void    ServerControler::acceptConnection(ServerConfig &server)
         close(client_socket);
         return ;
     }
-    client_new.setFd(client_socket);
+    client_new.setClientSocket(client_socket);
     if (_map_clients.count(client_socket) != 0)
         _map_clients.erase(client_socket);
     _map_clients.insert(std::make_pair(client_socket, client_new));
@@ -170,7 +180,7 @@ void    ServerControler::closeConnection(const int i)
     _map_clients.erase(i);
 }
 
-void    ServerControler::sendResponse(const int &i, Client &client)
+void    ServerControler::sendResponse(const int &i, ClientSide &client)
 {
     int         sent_bytes;
     std::string response = client.response.getResponse();
@@ -188,7 +198,7 @@ void    ServerControler::sendResponse(const int &i, Client &client)
     {
         ConsoleLog::logMessage(ORANGE, CONSOLE_OUTPUT, "Response sent to socket %d, Status=[%d]",
             i, client.response.getStatusCode());
-        if (client.request.keepAlive() == false || client.request.errorCode() /* || client.response.getCgiState() */)
+        if (client.httprequest.keepAlive() == false || client.httprequest.errorCode() || client.response.getCgiState())
         {
             ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Client %d: Closing connection", i);
             closeConnection(i);
@@ -197,12 +207,12 @@ void    ServerControler::sendResponse(const int &i, Client &client)
         {
             removeFromSets(i, _write_fd_pool);
             addToSets(i, _receive_fd_pool);
-            client.clearClient();
+            client.clearClientSide();
         }
     }
     else
     {
-        client.updateTimestamp();
+        client.updateTimer();
         client.response.cutResponse(sent_bytes);
     }
 }
@@ -211,9 +221,9 @@ void    ServerControler::assignServer(ClientSide &client)
 {
     for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
-        if (client.server.getHost() == ito->getHost() &&
-            client.server.getPort() == ito->getPort() &&
-            client.request.getServerName() == ito->getServerName())
+        if (client.serverconfig.getHost() == ito->getHost() &&
+            client.serverconfig.getPort() == ito->getPort() &&
+            client.httprequest.getServerName() == ito->getServerName())
         {
             client.setServer(*ito);
             return ;
@@ -240,24 +250,109 @@ void    ServerControler::readRequest(const int &i, ClientSide &client)
     }
     else if (read_bytes != 0)
     {
-        client.updateTimestamp();
-        client.request.feed(buffer, read_bytes);
+        client.updateTimer();
+        client.httprequest.feed(buffer, read_bytes);
         memset(buffer, 0, sizeof(buffer));
     }
 
-    if (client.request.parsingComplete() || client.request.errorCode())
+    if (client.httprequest.httpCompleted() || client.httprequest.errorCode())
     {
         assignServer(client);
         ConsoleLog::logMessage(GREEN, CONSOLE_OUTPUT, "Request parsed from socket %d, method=[%s], URI=[%s]",
-            i, client.request.getMethod().c_str(), client.request.getUri().c_str());
+            i, client.httprequest.getMethodStr().c_str(), client.httprequest.getPath().c_str());
         client.buildResponse();
-        /* if (client.response.getCgiState())
+        if (client.response.getCgiState())
         {
-            //CGI imlementation
-        } */
+			handleRequestBody(client);
+			addToSets(client.response._cgiHandler.pipe_in[1], _write_fd_pool);
+			addToSets(client.response._cgiHandler.pipe_out[0], _receive_fd_pool);
+        }
         removeFromSets(i, _receive_fd_pool);
         addToSets(i, _write_fd_pool);
     }
+}
+
+void	ServerControler::handleRequestBody(ClientSide &client)
+{
+	if (client.httprequest.getBody().length() == 0)
+	{
+		std::string temp;
+		std::fstream file;(client.response._cgiHandler.getCgiPath().c_str());
+		std::stringstream ss;
+		ss << file.rdbuf();
+		temp = ss.str();
+		client.httprequest.setBody(temp);
+	}
+}
+
+void	ServerControler::sendBodyCgi(ClientSide &client, CgiHandler &cgi)
+{
+	int sent_bytes;
+	std::string &request_body = client.httprequest.getBody();
+
+	if (request_body.length() == 0)
+		sent_bytes = 0;
+	else if (request_body.length() >= MESSAGE_BUFFER_SIZE)
+		sent_bytes = write(cgi.pipe_in[1], request_body.c_str(), MESSAGE_BUFFER_SIZE);
+	else
+		sent_bytes = write(cgi.pipe_in[1], request_body.c_str(), request_body.length());
+	if (sent_bytes < 0)
+	{
+		ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: sendBodyCgi(): write failed: %s", strerror(errno));
+		removeFromSets(cgi.pipe_in[1], _write_fd_pool);
+		close(cgi.pipe_in[1]);
+		close(cgi.pipe_out[1]);
+		client.response.setErrorResponse(500);
+	}
+	else if (sent_bytes == 0 || (size_t)sent_bytes == request_body.length())
+	{
+		removeFromSets(cgi.pipe_in[1], _write_fd_pool);
+		close(cgi.pipe_in[1]);
+		close(cgi.pipe_out[1]);
+	}
+	else
+	{
+		client.updateTimer();
+		request_body = request_body.substr(sent_bytes);
+	}
+}
+
+void	ServerControler::readCgiResponse(ClientSide &client, CgiHandler &cgi)
+{
+	char	buffer[MESSAGE_BUFFER_SIZE * 2];
+	int		read_bytes = 0;
+	read_bytes = read(cgi.pipe_out[0], buffer, MESSAGE_BUFFER_SIZE * 2);
+
+	if (read_bytes == 0)
+	{
+		removeFromSets(cgi.pipe_out[0], _receive_fd_pool);
+		close(cgi.pipe_in[0]);
+		close(cgi.pipe_out[0]);
+		int status;
+		waitpid(cgi.getCgiPid(), &status, 0);
+		if (WEXITSTATUS(status) != 0)
+			client.response.setErrorResponse(502);
+		client.response.setCgiState(2);
+		if (client.response._responseContent.find("HTTP/1.1") == std::string::npos)
+			client.response._responseContent.insert(0, "HTTP/1.1 200 OK\r\n");
+		return ;
+	}
+	else if (read_bytes < 0)
+	{
+		ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: readCgiResponse(): read failed: %s", strerror(errno));
+		removeFromSets(cgi.pipe_out[0], _receive_fd_pool);
+		close(cgi.pipe_in[0]);
+		close(cgi.pipe_out[0]);
+		client.response.setCgiState(2);
+		client.response.setErrorResponse(500);
+		return ;
+	}
+	else
+	{
+		client.updateTimer();
+		client.response._responseContent.append(buffer, read_bytes);
+		memset(buffer, 0, sizeof(buffer));
+	}
 }
 
 void    ServerControler::addToSets(const int i, fd_set &set)

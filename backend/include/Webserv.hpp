@@ -1,15 +1,6 @@
+#pragma once
 #ifndef WEBSERV_HPP
-#define WEBSERV_HPP
-
-// 0: SUCCESS
-#define SUCCESS 0
-
-// -1: To Be Determined -> This status indicates that the
-// process has not yet to determine the result of the algorithm.
-#define TBD -1
-
-// 1: FAILURE
-#define FAILURE 1
+# define WEBSERV_HPP
 
 //CLIENT MAX BODY SIZE
 #define MAX_CONTENT_LENGTH 420000
@@ -23,23 +14,9 @@
 //Max Length of URI
 #define MAX_URI_LENGTH 4096
 
-#include "Parsing.hpp"
-#include "Configfile.hpp"
-#include "Location.hpp"
-#include "ParsingUtils.hpp"
-#include "ServerConfig.hpp"
-#include "ServerControler.hpp"
-#include "Response.hpp"
-#include "ConsoleLog.hpp"
-#include "HttpRequest.hpp"
-#include "CgiHandler.hpp"
-#include "ClientSide.hpp"
-#include "MimeType.hpp"
-#include "StatusCode.hpp"
-
+#include <iostream>
 #include <vector>
 #include <map>
-#include <iostream>
 #include <string>
 #include <iomanip>
 #include <cstring>
@@ -66,6 +43,19 @@
 #include <map>
 #include <string>
 
+#include "Configfile.hpp"
+#include "Location.hpp"
+#include "ParsingUtils.hpp"
+#include "ServerConfig.hpp"
+#include "ServerControler.hpp"
+#include "Response.hpp"
+#include "ConsoleLog.hpp"
+#include "HttpRequest.hpp"
+#include "CgiHandler.hpp"
+#include "ClientSide.hpp"
+#include "MimeType.hpp"
+#include "StatusCode.hpp"
+
 //Utils.cpp
 #include <dirent.h>
 int ft_stoi(std::string str);
@@ -81,10 +71,14 @@ const std::string BOLD = "\033[1m";
 //const std::string YELLOW = "\033[38;5;3m";
 //const std::string RESET = "\033[0m";
 
-static std::string serverParameter[] = { "listen ", "host ", "server_name ",
-"error_page ", "client_max_body_size ", "root " , "index ", "allow_methods "};
+//static std::string serverParameter[] = { "listen ", "host ", "server_name ",
+//"error_page ", "client_max_body_size ", "root " , "index ", "allow_methods "};
+<<<<<<< HEAD
+=======
 
-static std::string methods[] = { "GET", "POST", "DELETE", "PUT", "HEAD" };
+//static std::string methods[] = { "GET", "POST", "DELETE", "PUT", "HEAD" };
+>>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
+
 template <typename T>
 std::string toString(const T value)
 {
