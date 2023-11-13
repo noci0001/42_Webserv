@@ -1,23 +1,30 @@
 #include "../include/Webserv.hpp"
 
-ServerControler::ServerControler(){}
+ServerControler::ServerControler()
+{
+    
+}
 
 ServerControler::~ServerControler(){}
 
 // [**** ServerControler ****]
 // This will start all servers on ports specified
 // in the configuration file.
-void    ServerControler::startServers(std::vector<ServerConfig> serverconfig)
+void    ServerControler::startServer(std::vector<ServerConfig> serverconfig)
 {
     std::cout << std::endl;
-    ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Starting servers...");
+    ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Starting server...");
 	_servers = serverconfig;
     char   buffer[INET_ADDRSTRLEN];
     bool    serverStart;
-    for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
+	std::vector<ServerConfig>::iterator ito;
+	std::cout << "Size: " << serverconfig.size() << std::endl;
+    for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
+	std::cout << "fd_listen_startServer: " << ito->getFdListen() << std::endl;
         serverStart = false;
-        for (std::vector<ServerConfig>::iterator ito2 = _servers.begin(); ito2 != ito; ++ito2)
+		std::vector<ServerConfig>::iterator ito2;
+		for (ito2 = _servers.begin(); ito2 != ito; ++ito2)
         {
             if (ito2->getHost() == ito->getHost() && ito2->getPort() == ito->getPort())
             {
@@ -51,6 +58,7 @@ void    ServerControler::runServers()
 
     _max_fd = 0;
     initSets();
+	std::cout << "_fd_listen_runServer" << std::endl;
     struct timeval timeout;
     while (true)
     {
@@ -103,8 +111,10 @@ void    ServerControler::initSets()
     FD_ZERO(&_write_fd_pool);
 
     // adds server sockets to _receive_fd_pool
-    for (std::vector<ServerConfig>::iterator ito = _servers.begin(); ito != _servers.end(); ++ito)
+	std::vector<ServerConfig>::iterator ito;
+    for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
+		const ServerConfig &server = *ito;
         // calls on listen() and fcntl() to set server socket to non-blocking
         if (listen(ito->getFdListen(), 512) == -1)
         {
@@ -117,7 +127,7 @@ void    ServerControler::initSets()
             exit(EXIT_FAILURE);
         }
         addToSets(ito->getFdListen(), _receive_fd_pool);
-        _map_servers.insert(std::make_pair(ito->getFdListen(), *ito));
+        _map_servers.insert(std::make_pair(ito->getFdListen(), server));
     }
     _max_fd = _servers.back().getFdListen();
 }

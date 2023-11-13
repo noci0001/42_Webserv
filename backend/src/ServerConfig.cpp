@@ -18,7 +18,6 @@ ServerConfig::~ServerConfig()
 {}
 
 //[**** Copy Constructor ****]
-//Do not look
 ServerConfig::ServerConfig(const ServerConfig &other)
 {
     if (this != &other)
@@ -35,6 +34,7 @@ ServerConfig::ServerConfig(const ServerConfig &other)
         this->_autoindex = other._autoindex;
         this->_server_address = other._server_address;
     }
+	return ;
 }
 
 //[**** Assignment Operator ****]
@@ -349,11 +349,9 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 	this->_locations.push_back(location_new);
 }
 
-void    ServerConfig::setFdListen(int fd)
+void    ServerConfig::setFdListen(int fd_listen)
 {
-	std::cout << "in fd_listen" << std::endl;
-	std::cout << "fd_listen: " << fd << std::endl;
-    this->_fd_listen = fd;
+    this->_fd_listen = fd_listen;
 }
 
 bool    ServerConfig::validHost(std::string host) const
@@ -448,14 +446,27 @@ int 	ServerConfig::isValidLocation(Location &location) const
 	return (0);
 }
 
-
-
 void	ServerConfig::checkToken(std::string &parameter)
 {
 	size_t pos = parameter.rfind(";");
 	if (pos != parameter.size() - 1)
 		throw ErrorException("checkToken: invalid token");
 	parameter.erase(pos);
+}
+
+bool	ServerConfig::checkLocation() const
+{
+	if (this->_locations.size() < 2)
+		return (false);
+	std::vector<Location>::const_iterator cito1;
+	std::vector<Location>::const_iterator cito2;
+	for (cito1 = this->_locations.begin(); cito1 != this->_locations.end(); cito1++)
+		for (cito2 = cito1 + 1; cito2 != this->_locations.end(); cito2++)
+		{
+			if (cito1->getPath() == cito2->getPath())
+				return (true);
+		}
+	return (false);
 }
 
 //[**** Getter Functions ****]
@@ -505,9 +516,8 @@ const std::vector<Location> &ServerConfig::getLocations()
     return this->_locations;
 }
 
-const int &ServerConfig::getFdListen()
+int ServerConfig::getFdListen() const
 {
-	std::cout << "getFdListen: " << this->_fd_listen << std::endl;
     return this->_fd_listen;
 }
 

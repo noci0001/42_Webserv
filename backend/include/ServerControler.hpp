@@ -1,10 +1,12 @@
 #ifndef SERVERCONTROLER_HPP
 # define SERVERCONTROLER_HPP
 
+#include <sys/socket.h>
 #include "Webserv.hpp"
 #include "ClientSide.hpp"
 #include "HttpRequest.hpp"
 #include "Response.hpp"
+#include "CgiHandler.hpp"
 
 //       [**** ServerControler ****]
 // This class is used to control the server.
@@ -18,7 +20,8 @@ class ServerControler
     public:
         ServerControler();
         ~ServerControler();
-        void    startServers(std::vector<ServerConfig>);
+
+		void    startServer(std::vector<ServerConfig> serverconfig);
         void    runServers();
 
     private:

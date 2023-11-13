@@ -2,6 +2,8 @@
 #define CGIHANDLER_HPP
 
 #include "Webserv.hpp"
+#include "HttpRequest.hpp"
+
 
 class HttpRequest;
 

@@ -206,7 +206,7 @@ void ParsingUtils::createServer(std::string &config_file, ServerConfig &server_c
 				throw ErrorException("ParsingUtils: Error: createServer: Port already set");
 			server_config.setPorts(params[++i]);
 		}
-		else if (params[i] == "location" && (i + 1) < params.size() && location_flag)
+		else if (params[i] == "location" && (i + 1) < params.size())
 		{
 			std::string path;
 			i++;
@@ -289,7 +289,7 @@ void ParsingUtils::createServer(std::string &config_file, ServerConfig &server_c
 		server_config.setIndex("index.html;");
 	if (Configfile::isFileExistAndReadable(server_config.getRoot(), server_config.getIndex()))
 		throw ErrorException("ParsingUtils: Error: createServer: Index file not found in Configfile");
-	if (server_config.validLocation())
+	if (server_config.checkLocation())
 		throw ErrorException("ParsingUtils: Error: createServer: Location already set");
 	if (!server_config.getPort())
 		throw ErrorException("ParsingUtils: Error: createServer: Port not set");

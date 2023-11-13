@@ -31,7 +31,7 @@ HEADER	=	backend/include/CgiHandler.hpp \
 OBJS	=	$(SRCS:.cpp=.o)
 
 CC		=	g++
-CFLAGS	=	-Wall -Werror -Wextra -g -std=c++98
+CFLAGS	=	-Wall -Werror -Wextra -std=c++98
 RM		=	rm -rf
 
 all: $(NAME)
@@ -39,8 +39,6 @@ all: $(NAME)
 $(NAME): $(OBJS) $(HEADERS) $(MEMCHECK)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo Webserv has been successfully compiled
-	echo "Executing program by calling the executable..."
-	./webserv
 
 $(MEMCHECK):
 	@echo Checking for leaks...

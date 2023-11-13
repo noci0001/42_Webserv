@@ -2,6 +2,8 @@
 # define PARSINGUTILS_HPP
 
 #include "Webserv.hpp"
+#include "ServerConfig.hpp"
+#include "Configfile.hpp"
 
 class ServerConfig;
 

@@ -12,23 +12,22 @@ class Configfile
 {
 	private:
 		std::string					        _original_config_file;
-		std::map<std::string, std::string>	_serverData;
+		size_t						        _file_size;
 
 	protected:
 	public:
 		int							        _status;
 		Configfile();
-		Configfile(Parsing *parser, std::string& config_file);
-		std::string get_value_from_key(std::string keyword, int position);
-		// int add_serverData(std::string keyword, std::string value);
-		std::string obtain_serverdata(std::string keyword);
-		bool key_pairs_checking(std::map<std::string, std::string> serverData);
-		void get_values_serverData();
-		int find_all_server_keywords(std::string& config_file);
+		Configfile(std::string const path);
+		~Configfile();
+		
 		static int getTypePath(std::string const path);
 		static int checkFile(std::string const path, int mode);
+		std::string readFile(std::string path);
 		static int isFileExistAndReadable(std::string const path, std::string const index);
-		~Configfile();
+
+		std::string getOriginalConfigFile();
+		int getFileSize();
 };
 
 #endif

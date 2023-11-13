@@ -1,9 +1,10 @@
 #ifndef LOCATION_HPP
 #define LOCATION_HPP
 
+#include <vector>
+#include <map>
 #include "Webserv.hpp"
 #include "ServerConfig.hpp"
-#include <vector>
 
 class Location : public Configfile
 {
