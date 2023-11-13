@@ -276,7 +276,6 @@ p {
   }
 
   #insert_movie_show {
-<<<<<<< HEAD
 	font-size: 20px;
 	margin-left: 45vw;
 	position: absolute;
@@ -290,7 +289,29 @@ p {
 		top:auto;
 	}
 }
-=======
-	background-color: red;
-  }
->>>>>>> e6e62de6782064f0d7c638119ca5a19f12798a6e
+
+#uploadForm {
+	padding: 1rem;
+	width: 500px;
+}
+
+input[type="submit"] {
+    background: rebeccapurple; /* Button background color */
+    color: #fff; /* Button text color */
+    padding: 12px 20px; /* Padding around the button */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Change the cursor on hover */
+}
+
+input[type="submit"]:hover {
+	width: 140px;
+	font-weight: 900;
+}
+
+input[type="file"] {
+    background: rebeccapurple; /* Button background color */
+    color: #fff; /* Button text color */
+    padding: 10px 20px; /* Padding around the button */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Change the cursor on hover */
+}

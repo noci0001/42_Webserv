@@ -11,6 +11,8 @@ let fav_movie_input = false;
 
 let movie_has_been_posted = false;
 
+movie_delete.style.display = 'none';
+
 exit.innerHTML = 'MENU';
 exit.style.cursor = 'pointer';
 
@@ -23,17 +25,15 @@ overlay_exit.addEventListener('click', function(){
     overlay.style.display = 'none';
 });
 
-if (insert_movie_button) {
-    insert_movie_button.addEventListener('click', function(){
-        if (fav_movie_input == false) {
-            insert_movie_show.style.display = "block";
-            fav_movie_input = true;
-        } else {
-            insert_movie_show.style.display = "none";
-            fav_movie_input = false;
-        }
-    });
-}
+insert_movie_button.addEventListener('click', function(){
+    if (fav_movie_input == false) {
+        movie_delete.style.display = 'block';
+        fav_movie_input = true;
+    } else {
+        movie_delete.style.display = "none";
+        fav_movie_input = false;
+    }
+});
 
 //if ESC is pressed, close the menu. Do not use keyCode as it is deprecated
 document.addEventListener('keydown', function(event){
@@ -46,12 +46,14 @@ document.addEventListener('keydown', function(event){
 });
 
 function check_if_movie_has_been_posted() {
-    if (movie_has_been_posted == true) {
-        delete_movie.style.display = 'block';
-    } else {
-        delete_movie.style.display = 'none';
-    }
+    movie_delete.style.display = 'block';
 }
+
+// if (movie_has_been_posted == true) {
+//     delete_movie.style.display = 'block';
+// } else {
+//     delete_movie.style.display = 'none';
+// }
 
 function deleteMovie() {
     // Make an AJAX request to delete.php or another server-side script
@@ -62,15 +64,15 @@ function deleteMovie() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Handle the response from the server, e.g., show a success message
             alert("Movie deleted successfully.");
-            movie_has_been_posted = false;
             window.location.href = "./post_movie.html"; // Adjust the URL as needed
         }
+    movie_delete.style.display = 'none';
     };
 
     xhr.send();
 }
 
 function navigate_to_uploads() {
-    window.location.href = "./post_movie.html"; // Adjust the URL as needed
     movie_has_been_posted = true;
+    window.location.href = "./post_movie.html"; // Adjust the URL as needed
 }

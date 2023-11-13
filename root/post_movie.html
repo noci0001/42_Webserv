@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
     <title>42 WEBFLIX: POST YOUR FAVORITE MOVIE</title>
 </head>
-<body onload="check_if_movie_has_been_posted()">
+<body>
     <div onclick="clicky();"><h1 id="this"></h1></div>
     <div>
         <div id="show_menu_overlay" class="menu_overlay">
@@ -20,11 +20,12 @@
                     <li><h2><a href="./index.html">HOME</a></h2></li>
                     <li><h2><a href="./post_movie.html">POST YOUR FAVORITE MOVIE</a></h2></li>
                     <li><h2>GET YOUR FAVORITE MOVIE</h2></li>
-                    <li id="delete_movie"><h2 onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2></li>
+                    <li><h2 id="delete_movie" onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2></li>
                 </ul>
             </div>
         </div>
-        <h1>Upload Your Favorite Movie Poster</h1>
+        <!-- <h1>Upload Your Favorite Movie Poster</h1> -->
+        <h2>UPLOAD OR DELETE YOU NEW MOVIE POSTER</h2>;
 
         <?php
         $uploadDirectory = './uploads/';
@@ -34,18 +35,21 @@
         if (file_exists($uploadDirectory . $customFileName)) {
             echo '<h2></h2>';
             echo '<h2></h2>';
+            echo '<label for="fileInput">';
             echo '<img style="margin-left:50%; width:500px;" src="./uploads/custom_upload.png" onerror="this.src='./assets/poster_placeholder.png'"> alt="Movie Poster">';
+            echo '</label>';
         } else {
-            echo '<h2>UPLOAD NEW MOVIE POSTER</h2>';
-            echo'<form style="margin-left:50%;" action="/upload.php" method="post" enctype="multipart/form-data" onsubmit="setMoviePosted()">';
-                echo'<input type="file" name="poster" accept="image/*">';
-                echo'<input type="submit" value="Upload">';
-                echo'</form>';
-            }
+            <form id="uploadForm" style="margin-left:50%;" action="/upload.php" method="post" enctype="multipart/form-data" onsubmit="check_if_movie_has_been_posted()">
+            <input type="file" name="poster" accept="image/*">
+            <input type="submit" value="Upload">
+            <br>
+        </form>
+        <div style="display:flex;width:500px;">
+            <h2 id="delete_movie" onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2>
+        </div>    
+        }
             ?>
-            
         </div>
     </body>
     <script src="index.js"></script>
     </html>
-    <!-- echo '<img style="margin-left:50%; width:500px;" src="./assets/poster_placeholder.png" alt="Movie Poster">'; -->

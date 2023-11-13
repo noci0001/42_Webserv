@@ -1,4 +1,8 @@
 <?php
+ini_set('upload_max_filesize', '20M');
+ini_set('post_max_size', '25M');
+ini_set('memory_limit', '32M');
+// phpinfo();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uploadDirectory = './uploads/'; // Directory where you want to save the uploaded posters
 
@@ -33,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo 'File upload failed.';
     }
-    header("Location: ./post_movie.html");
+    // header("Location: ./post_movie.html");
     exit();
 }
 ?>
