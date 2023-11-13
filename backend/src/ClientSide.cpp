@@ -35,7 +35,7 @@ void    ClientSide::setClientSocket(int &client_socket)
     _client_socket = client_socket;
 }
 
-void    ClientSide::setClientAddr(struct sockaddr_in &client_addr)
+void    ClientSide::setClientAddr(sockaddr_in &client_addr)
 {
     _client_addr = client_addr;
 }
