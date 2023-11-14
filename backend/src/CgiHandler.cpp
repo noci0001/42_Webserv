@@ -16,7 +16,7 @@ CgiHandler::CgiHandler(std::string path)
 {
     this->_cgi_pid = -1;
     this->_exit_return = 0;
-    this->_cgi_path = "";
+    this->_cgi_path = path;
     this->_envi_vars_array = NULL;
     this->_argv = NULL;
 }
