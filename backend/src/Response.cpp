@@ -8,13 +8,13 @@ Response::Response()
 	_target_file = "";
 	_body.clear();
 	_body_length = 0;
-	_body_response = "";
 	_responseContent = "";
+	_body_response = "";
 	_location = "";
 	_status_code = 0;
 	_cgi_state = 0;
 	_cgi_bytes_read = 0;
-	_auto_index = 0;
+	_auto_index = false;
 }
 
 Response::~Response()	{}
@@ -47,6 +47,7 @@ void	Response::contentLength()
 {
 	std::stringstream ss;
 	ss << _body_response.length();
+	std::cout << "body_response_contentLength length: " << ss << std::endl;
 	_responseContent.append("Content-Length: ");
 	_responseContent.append(ss.str());
 	_responseContent.append("\r\n");
@@ -113,9 +114,9 @@ static bool		isAllowedMethod(HttpMethod &method, Location &location, short &stat
 		(method == HEAD && !methods[4]))
 	{
 		status_code = 405;
-		return false;
+		return 1;
 	}
-	return true;
+	return 0;
 }
 
 static bool		statusReturn(Location &locat, short &status_code, std::string &location)
@@ -126,9 +127,9 @@ static bool		statusReturn(Location &locat, short &status_code, std::string &loca
 		location = locat.getReturn();
 		if (location[0] != '/')
 			location.insert(location.begin(), '/');
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
 
 static std::string pairPaths(std::string path1, std::string path2, std::string path3)
@@ -245,7 +246,7 @@ static void	getLocationMatch(std::string &path, std::vector<Location> location, 
 	}
 }
 
-int Response::targetHandle()
+int	Response::targetHandle()
 {
 	std::string location_key;
 	getLocationMatch(httpRequest.getPath(), _server_config.getLocations(), location_key);
@@ -254,7 +255,7 @@ int Response::targetHandle()
 		Location target_location = *_server_config.getLocationKeys(location_key);
 		if (isAllowedMethod(httpRequest.getMethod(), target_location, _status_code))
 		{
-			std::cout << "Method is not allowed" << std::endl;
+			std::cout << "Error: handleTarget: Method not allowed" << std::endl;
 			return 1;
 		}
 		if (httpRequest.getBody().length() > target_location.getMaxBodySizeClient())
@@ -265,7 +266,7 @@ int Response::targetHandle()
 		if (statusReturn(target_location, _status_code, _location))
 			return 1;
 		if (target_location.getPath().find("cgi-bin") != std::string::npos)
-			return CgiHandling(location_key);
+			return (CgiHandling(location_key));
 		if (!target_location.getAlias().empty())
 			replaceAlias(target_location, httpRequest, _target_file);
 		else
@@ -273,9 +274,7 @@ int Response::targetHandle()
 		if (!target_location.getCgiExtension().empty())
 		{
 			if (_target_file.rfind(target_location.getCgiExtension()[0]) != std::string::npos)
-			{
-				return CgiHandlingTmp(location_key);
-			}
+				return (CgiHandlingTmp(location_key));
 		}
 		if (isDirectory(_target_file))
 		{
@@ -286,9 +285,9 @@ int Response::targetHandle()
 				return 1;
 			}
 			if (!target_location.getIndex().empty())
-				_target_file.append(target_location.getIndex());
+				_target_file += target_location.getIndex();
 			else
-				_target_file.append(_server_config.getIndex());
+				_target_file += _server_config.getIndex();
 			if (!fileExists(_target_file))
 			{
 				if (target_location.getAutoIndex())
@@ -303,32 +302,43 @@ int Response::targetHandle()
 					return 1;
 				}
 			}
-		}
-		else
-		{
-			_target_file = pairPaths(_server_config.getRoot(), httpRequest.getPath(), "");
 			if (isDirectory(_target_file))
 			{
-				if (_target_file[_target_file.length() - 1] != '/')
-				{
-					_status_code = 301;
-					_location = httpRequest.getPath() + "/";
-					return 1;
-				}
-				_target_file += _server_config.getIndex();
-				if (!fileExists(_target_file))
-				{
-					_status_code = 301;
-					return 1;
-				}
-				if (isDirectory(_target_file))
-				{
-					_status_code = 301;
-					_location = pairPaths(httpRequest.getPath(), _server_config.getIndex(), "/");
-					if (_location[_location.length() - 1] != '/')
-						_location.insert(_location.end(), '/');
-					return 1;
-				}
+				_status_code = 301;
+				if (!target_location.getIndex().empty())
+					_location = pairPaths(httpRequest.getPath(), target_location.getIndex(), "");
+				else
+					_location = pairPaths(httpRequest.getPath(), _server_config.getIndex(), "");
+				if (_location[_location.length() - 1] != '/')
+					_location.insert(_location.end(), '/');
+				return 1;
+			}
+		}
+	}
+	else
+	{
+		_target_file = pairPaths(_server_config.getRoot(), httpRequest.getPath(), "");
+		if (isDirectory(_target_file))
+		{
+			if (_target_file[_target_file.length() - 1] != '/')
+			{
+				_status_code = 301;
+				_location = httpRequest.getPath() + "/";
+				return 1;
+			}
+			_target_file += _server_config.getIndex();
+			if (!fileExists(_target_file))
+			{
+				_status_code = 403;
+				return 1;
+			}
+			if (isDirectory(_target_file))
+			{
+				_status_code = 301;
+				_location = pairPaths(httpRequest.getPath(), _server_config.getIndex(), "");
+				if (_location[_location.length() - 1] != '/')
+					_location.insert(_location.end(), '/');
+				return 1;
 			}
 		}
 	}
@@ -340,9 +350,9 @@ bool Response::requestError()
 	if (httpRequest.errorCode())
 	{
 		_status_code = httpRequest.errorCode();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 void	Response::setDefaultErrorPages()
@@ -398,6 +408,7 @@ void	Response::buildResponse()
 	setHeaders();
 	if (httpRequest.getMethod() != HEAD && (httpRequest.getMethod() == GET || _status_code != 200))
 		_responseContent.append(_body_response);
+	std::cout << "body_response_buildResponse: " << _body_response.length() << std::endl;
 }
 
 void	Response::setErrorResponse(short error_code)
@@ -496,6 +507,7 @@ int	Response::readFile()
 	std::ostringstream oss;
 	oss << file.rdbuf();
 	_body_response = oss.str();
+	std::cout << "file_content_readfile: " << file << std::endl;
 	return 0;
 }
 

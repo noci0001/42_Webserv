@@ -1,18 +1,6 @@
 NAME	=	webserv
 
-<<<<<<< HEAD
-SRCS	=	backend/src/Webserv.cpp \
-			backend/src/Parsing.cpp \
-			backend/src/Configfile.cpp \
-			backend/src/utils/ParsingUtils.cpp \
-			backend/src/utils/Utils.cpp \
-			backend/src/Location.cpp \
-			backend/src/ServerConfig.cpp \
-			backend/src/MimeType.cpp \
-			backend/src/Response.cpp \
-=======
 SRCS	=	backend/src/CgiHandler.cpp \
->>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
 			backend/src/ClientSide.cpp \
 			backend/src/Configfile.cpp \
 			backend/src/ConsoleLog.cpp \
@@ -43,7 +31,7 @@ HEADER	=	backend/include/CgiHandler.hpp \
 OBJS	=	$(SRCS:.cpp=.o)
 
 CC		=	g++
-CFLAGS	=	-Wall -Werror -Wextra -std=c++98
+CFLAGS	=	-Wall -Werror -Wextra -g -std=c++98
 RM		=	rm -rf
 
 all: $(NAME)

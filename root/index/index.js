@@ -64,7 +64,7 @@ function deleteMovie() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Handle the response from the server, e.g., show a success message
             alert("Movie deleted successfully.");
-            window.location.href = "./post_movie.html"; // Adjust the URL as needed
+            window.location.href = "post_movie.html"; // Adjust the URL as needed
         }
     movie_delete.style.display = 'none';
     };
@@ -74,5 +74,5 @@ function deleteMovie() {
 
 function navigate_to_uploads() {
     movie_has_been_posted = true;
-    window.location.href = "./post_movie.html"; // Adjust the URL as needed
+    window.location.href = "post_movie.html"; // Adjust the URL as needed
 }

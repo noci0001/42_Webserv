@@ -68,7 +68,7 @@ int ParsingUtils::createCluster(const std::string &config_file)
 	content = file.readFile(config_file);
 	if (content.empty())
 		throw ErrorException("createCluster: Error: File is empty");
-	std::cout << "Content: " << content << std::endl;
+	std::cout << "Content_createCluster: " << content << std::endl;
 	removeComments(content);
 	removeWhiteSpaces(content);
 	splitConfigFile(content);
@@ -80,7 +80,6 @@ int ParsingUtils::createCluster(const std::string &config_file)
 		createServer(this->_config_file[i], server_config);
 		this->_server_config.push_back(server_config);
 	}
-	std::cout << "Size_createCluster: " << this->_server_config.size() << std::endl;
 	if (this->_server_number > 1)
 		checkServers();
 	return 0;

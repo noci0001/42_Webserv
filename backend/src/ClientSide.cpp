@@ -15,10 +15,10 @@ ClientSide::ClientSide(const ClientSide &copy)
     {
         this->_client_socket = copy._client_socket;
         this->_client_addr = copy._client_addr;
-        this->_last_request_time = copy._last_request_time;
         this->httprequest = copy.httprequest;
         this->response = copy.response;
         this->serverconfig = copy.serverconfig;
+        this->_last_request_time = copy._last_request_time;
     }
     return ;
 }

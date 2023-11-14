@@ -76,7 +76,7 @@ void    ServerConfig::initErrorPages( void )
     _error_pages[501] = "";
     _error_pages[502] = "";
     _error_pages[503] = "";
-    _error_pages[505] = "";
+	_error_pages[504] = "";
     _error_pages[505] = "";
 }
 
@@ -462,11 +462,13 @@ bool	ServerConfig::checkLocation() const
 	std::vector<Location>::const_iterator cito1;
 	std::vector<Location>::const_iterator cito2;
 	for (cito1 = this->_locations.begin(); cito1 != this->_locations.end(); cito1++)
+	{
 		for (cito2 = cito1 + 1; cito2 != this->_locations.end(); cito2++)
 		{
 			if (cito1->getPath() == cito2->getPath())
 				return (true);
 		}
+	}
 	return (false);
 }
 

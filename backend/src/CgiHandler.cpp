@@ -1,8 +1,5 @@
 #include "../include/Webserv.hpp"
-<<<<<<< HEAD
-=======
 #include "../include/CgiHandler.hpp"
->>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
 
 // Default constructor
 CgiHandler::CgiHandler()
