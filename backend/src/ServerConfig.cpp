@@ -204,7 +204,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
 void    ServerConfig::setLocations(std::string path, std::vector<std::string> parameter)
 {
 	Location location_new;
-	//std::vector<std::string> methods;
+	std::vector<std::string> methods;
 	bool flag_methods = false;
 	bool flag_autoindex = false;
 	bool flag_max_size = false;
