@@ -2,3 +2,4 @@
 .idea
 *.o
 webserv
+webserv.dSYM
