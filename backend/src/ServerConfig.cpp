@@ -412,7 +412,7 @@ int 	ServerConfig::isValidLocation(Location &location) const
 				std::string temp_path = *cito_path;
 				if (temp == ".py" || temp == "*.py")
 				{
-					if (temp_path.find("python") != std::string::npos)
+					if (temp_path.find("python3") != std::string::npos)
 						location._extension_path.insert(std::make_pair(".py", temp_path));
 				}
 				else if (temp == ".sh" || temp == "*.sh")
@@ -543,7 +543,6 @@ void    ServerConfig::startServer(void)
         ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: socket() failed %s\t Closing Webserv", strerror(errno));
         exit(EXIT_FAILURE);
     }
-	std::cout << "fd_listen: " << _fd_listen << std::endl;
     int value_option = 1;
     setsockopt(_fd_listen, SOL_SOCKET, SO_REUSEADDR, &value_option, sizeof(int));
     memset(&_server_address, 0, sizeof(_server_address));

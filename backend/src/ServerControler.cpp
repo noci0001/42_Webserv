@@ -58,7 +58,6 @@ void    ServerControler::runServers()
 
     _max_fd = 0;
     initSets();
-	std::cout << "_fd_listen_runServer" << std::endl;
     struct timeval timeout;
     while (true)
     {

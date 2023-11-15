@@ -113,7 +113,7 @@ void CgiHandler::run(short &error_code)
 		return ;
 	}
 	this->_cgi_pid = fork();
-	if (_cgi_pid == 0)
+	if (this->_cgi_pid == 0)
 	{
 		dup2(pipe_in[0], STDIN_FILENO);
 		dup2(pipe_out[1], STDOUT_FILENO);
@@ -212,30 +212,28 @@ void	CgiHandler::createEnvi(HttpRequest &httprequest, const std::vector<Location
 	cgi_extension_path = ito_loca->_extension_path[cgi_extension];
 
 	this->_envi["AUTH_TYPE"]         = "Basic";
-	this->_envi["REDIRECT_STATUS"]   = "200";
+	this->_envi["CONTENT_LENGTH"]    = httprequest.getHeader("content-length");
+	this->_envi["CONTENT_TYPE"]      = httprequest.getHeader("content-type");
 	this->_envi["GATEWAY_INTERFACE"] = "CGI/1.1";
 	position = findStart(this->_cgi_path, "cgi-bin/");
 	this->_envi["SCRIPT_NAME"]       = this->_cgi_path;
 	this->_envi["SCRIPT_FILENAME"]   = ((position < 0 || (size_t)(position + 8) >
 	        this->_cgi_path.size()) ? "" : this->_cgi_path.substr(position + 8, this->_cgi_path.size()));
-	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr();
-	this->_envi["CONTENT_LENGTH"]    = httprequest.getHeader("content-length");
-	this->_envi["CONTENT_TYPE"]      = httprequest.getHeader("content-type");
 	this->_envi["PATH_INFO"]         = getPathInfo(httprequest.getPath(), ito_loca->getCgiExtension());
-	this->_envi["PATH_TRANSLATED"]   = ito_loca->getRoot() + (this->_envi["PATH_INFO"] == "" ? "/" :
-			this->_envi["PATH_INFO"]);
+	this->_envi["PATH_TRANSLATED"]   = ito_loca->getRoot() + (this->_envi["PATH_INFO"] == "" ? "/" : this->_envi["PATH_INFO"]);
 	this->_envi["QUERY_STRING"]      = decodeHttpRequest(httprequest.getQuery());
 	this->_envi["REMOTE_ADDR"]        = httprequest.getHeader("host");
 	position = findStart(httprequest.getHeader("host"), ":");
-	//tmp_env_vars["REMOTE_IDENT"]      = _cgi_request.authorization;
-	//tmp_env_vars["REMOTE_USER"]       = _cgi_request.authorization;
-	this->_envi["REQUEST_URI"]       = this->_cgi_path;
 	this->_envi["SERVER_NAME"]       = (position > 0 ? httprequest.getHeader("host").substr(0, position) : "");
 	this->_envi["SERVER_PORT"]       = (position > 0 ? httprequest.getHeader("host").substr(position + 1, httprequest.getHeader("host").size()) : "");
-	this->_envi["SERVER_PROTOCOL"]   = "HTTP/1.1";
-	this->_envi["SERVER_SOFTWARE"]   = "42 Webflix";
+	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr();
 	this->_envi["DOCUMENT_ROOT"]     = ito_loca->getRoot();
 	this->_envi["REQUEST_URI"]		 = httprequest.getPath() + httprequest.getQuery();
+	this->_envi["SERVER_PROTOCOL"]   = "HTTP/1.1";
+	this->_envi["REDIRECT_STATUS"]   = "200";
+	this->_envi["SERVER_SOFTWARE"]   = "42 Webflix";
+	//tmp_env_vars["REMOTE_IDENT"]      = _cgi_request.authorization;
+	//tmp_env_vars["REMOTE_USER"]       = _cgi_request.authorization;
 
 	this->_envi_vars_array = (char **) calloc(sizeof (char*), this->_envi.size() + 1);
 	std::map<std::string, std::string>::const_iterator cito = this->_envi.begin();

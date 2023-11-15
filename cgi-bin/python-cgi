@@ -1,0 +1,39 @@
+# simple CGI-Script that generates an HTML page with details about the script's
+# environment. The set_params function prints an HTML page that includes the 
+# name of the script and additional path information provided by the server 
+# environment. The exec function attempts to retrieve these values from the 
+# environment and provides default values if they're not available. The last 
+# conditional checks if the script is the main module and not imported, then 
+# calls the exec function to start the process.
+
+#!/usr/bin/python3  # run with Python 3.
+
+import os  # Import the os module to interact with the operating system.
+
+# Define a function named 'set_params' that takes two string arguments.
+def set_params(script_name: str, path_info: str):
+	# Print HTML content as a response to a web request. The function is formatting HTML string with script_name and path_info.
+	print(f"""\
+<html>
+<head>
+<title>CGI Script</title>
+</head>
+<body>
+<h1>CGI Script</h1>
+<p>SCRIPT_NAME: " + {script_name} + "</p>
+<p>PATH_INFO: " + {path_info} + "</p>
+</body>
+</html>""")
+
+# Define a function named 'exec' that encapsulates the execution logic.
+def exec():
+	try:
+		# Try to call 'set_params' with 'SCRIPT_NAME' and 'PATH_INFO' environment variables.
+		set_params(os.environ["SCRIPT_NAME"], os.environ["PATH_INFO"])
+	except KeyError:  # If the environment variables are not found, catch the KeyError exception.
+		# Call 'set_params' with default values if the expected environment variables are not set.
+		set_params("basic.py", "no path info")
+
+# Check if the script is being run directly (as a main program) rather than being imported as a module.
+if __name__ == "__main__":
+	exec()  # Execute the 'exec' function to run the script.

@@ -2,7 +2,7 @@ NAME				=	webserv
 
 CC					=	c++
 
-CPPFLAGS			=	-Wall -Wextra  -std=c++98 -g -O3 #-fsanitize=address -Werror
+CPPFLAGS			=	-Wall -Wextra -Werror -std=c++98 -g -O3 #-fsanitize=address
 
 HPP_DIR				=	./backend/include
 

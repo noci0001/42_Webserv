@@ -47,7 +47,6 @@ void	Response::contentLength()
 {
 	std::stringstream ss;
 	ss << _body_response.length();
-	std::cout << "body_response_contentLength length: " << ss << std::endl;
 	_responseContent.append("Content-Length: ");
 	_responseContent.append(ss.str());
 	_responseContent.append("\r\n");
@@ -230,7 +229,7 @@ int 	Response::CgiHandling(std::string &location_key)
 	return 0;
 }
 
-static void	getLocationMatch(std::string &path, std::vector<Location> location, std::string location_key)
+static void	getLocationMatch(std::string &path, std::vector<Location> location, std::string &location_key)
 {
 	size_t	max_match;
 	for (std::vector<Location>::const_iterator cito = location.begin(); cito != location.end(); ++cito)
@@ -408,7 +407,6 @@ void	Response::buildResponse()
 	setHeaders();
 	if (httpRequest.getMethod() != HEAD && (httpRequest.getMethod() == GET || _status_code != 200))
 		_responseContent.append(_body_response);
-	std::cout << "body_response_buildResponse: " << _body_response.length() << std::endl;
 }
 
 void	Response::setErrorResponse(short error_code)
@@ -507,7 +505,6 @@ int	Response::readFile()
 	std::ostringstream oss;
 	oss << file.rdbuf();
 	_body_response = oss.str();
-	std::cout << "file_content_readfile: " << file << std::endl;
 	return 0;
 }
 
