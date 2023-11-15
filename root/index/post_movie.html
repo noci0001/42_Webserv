@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
     <title>42 WEBFLIX: POST YOUR FAVORITE MOVIE</title>
-=======
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
-	<title>42 WEBFLIX: POST YOUR FAVORITE MOVIE</title>
->>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
 </head>
 <body>
     <div onclick="clicky();"><h1 id="this"></h1></div>
@@ -32,22 +24,12 @@
                 </ul>
             </div>
         </div>
-        <!-- <h1>Upload Your Favorite Movie Poster</h1> -->
-        <h2>UPLOAD OR DELETE YOU NEW MOVIE POSTER</h2>;
-
-        <?php
-        $uploadDirectory = './uploads/';
-        $customFileName = 'custom_upload.png';
-        $placeholderImage = './assets/poster_placeholder.png';
-
-        if (file_exists($uploadDirectory . $customFileName)) {
-            echo '<h2></h2>';
-            echo '<h2></h2>';
-            echo '<label for="fileInput">';
-            echo '<img style="margin-left:50%; width:500px;" src="./uploads/custom_upload.png" onerror="this.src='./assets/poster_placeholder.png'"> alt="Movie Poster">';
-            echo '</label>';
-        } else {
-            <form id="uploadForm" style="margin-left:50%;" action="/upload.php" method="post" enctype="multipart/form-data" onsubmit="check_if_movie_has_been_posted()">
+        <h2>UPLOAD OR DELETE YOU NEW MOVIE POSTER</h2>
+        <h2></h2>
+        <h2></h2>
+        <label for="fileInput">
+            <img style="margin-left:50%; width:500px;" src="./uploads/burning_ship_general.png" onerror="this.src='./assets/poster_placeholder.png'" alt="Movie Poster"></label>
+        <form id="uploadForm" style="margin-left:50%;" action="./upload.php" method="post" enctype="multipart/form-data" onsubmit="check_if_movie_has_been_posted()">
             <input type="file" name="poster" accept="image/*">
             <input type="submit" value="Upload">
             <br>
@@ -55,14 +37,7 @@
         <div style="display:flex;width:500px;">
             <h2 id="delete_movie" onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2>
         </div>    
-        }
-            ?>
         </div>
     </body>
-<<<<<<< HEAD
-    <script src="index.js"></script>
-    </html>
-=======
     <script src="index.js"></script>
 </html>
->>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6

@@ -328,7 +328,7 @@ void    ServerConfig::setLocations(std::string path, std::vector<std::string> pa
 			if (flag_max_size)
 				throw ErrorException("setLocation: client_max_body_size already set");
 			checkToken(parameter[++i]);
-			location_new.setMaxBodySizeClient(parameter[i]);
+			//location_new.setMaxBodySizeClient(parameter[i]);
 			flag_max_size = true;
 		}
 		else if (i < parameter.size())
