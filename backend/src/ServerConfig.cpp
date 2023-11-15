@@ -76,7 +76,7 @@ void    ServerConfig::initErrorPages( void )
     _error_pages[501] = "";
     _error_pages[502] = "";
     _error_pages[503] = "";
-    _error_pages[505] = "";
+	_error_pages[504] = "";
     _error_pages[505] = "";
 }
 
@@ -204,7 +204,7 @@ void    ServerConfig::setErrorPages(std::vector<std::string> &parameter)
 void    ServerConfig::setLocations(std::string path, std::vector<std::string> parameter)
 {
 	Location location_new;
-	//std::vector<std::string> methods;
+	std::vector<std::string> methods;
 	bool flag_methods = false;
 	bool flag_autoindex = false;
 	bool flag_max_size = false;
@@ -407,12 +407,12 @@ int 	ServerConfig::isValidLocation(Location &location) const
 			std::string temp = *cito;
 			if (temp != ".py" && temp != ".sh" && temp != "*.py" && temp != "*.sh")
 				return (1);
-			for (cito_path = location.getCgiPath().begin(); cito != location.getCgiPath().end(); ++cito_path)
+			for (cito_path = location.getCgiPath().begin(); cito_path != location.getCgiPath().end(); ++cito_path)
 			{
 				std::string temp_path = *cito_path;
 				if (temp == ".py" || temp == "*.py")
 				{
-					if (temp_path.find("python") != std::string::npos)
+					if (temp_path.find("python3") != std::string::npos)
 						location._extension_path.insert(std::make_pair(".py", temp_path));
 				}
 				else if (temp == ".sh" || temp == "*.sh")
@@ -462,11 +462,13 @@ bool	ServerConfig::checkLocation() const
 	std::vector<Location>::const_iterator cito1;
 	std::vector<Location>::const_iterator cito2;
 	for (cito1 = this->_locations.begin(); cito1 != this->_locations.end(); cito1++)
+	{
 		for (cito2 = cito1 + 1; cito2 != this->_locations.end(); cito2++)
 		{
 			if (cito1->getPath() == cito2->getPath())
 				return (true);
 		}
+	}
 	return (false);
 }
 
@@ -541,7 +543,6 @@ void    ServerConfig::startServer(void)
         ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "webserv: socket() failed %s\t Closing Webserv", strerror(errno));
         exit(EXIT_FAILURE);
     }
-	std::cout << "fd_listen: " << _fd_listen << std::endl;
     int value_option = 1;
     setsockopt(_fd_listen, SOL_SOCKET, SO_REUSEADDR, &value_option, sizeof(int));
     memset(&_server_address, 0, sizeof(_server_address));

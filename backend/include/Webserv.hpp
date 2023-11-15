@@ -73,11 +73,7 @@ const std::string BOLD = "\033[1m";
 
 //static std::string serverParameter[] = { "listen ", "host ", "server_name ",
 //"error_page ", "client_max_body_size ", "root " , "index ", "allow_methods "};
-<<<<<<< HEAD
-=======
-
 //static std::string methods[] = { "GET", "POST", "DELETE", "PUT", "HEAD" };
->>>>>>> de50599ac616b265271b3ce6b0c1ed598d2728c6
 
 template <typename T>
 std::string toString(const T value)

@@ -1,4 +1,5 @@
 #include "../include/Webserv.hpp"
+#include <signal.h>
 
 void	sigpipeHandle(int sig){	if (sig) {}}
 

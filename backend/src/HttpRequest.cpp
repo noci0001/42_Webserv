@@ -37,7 +37,7 @@ bool    checkUriPosition(std::string path)
     int position = 0;
     while (rest != NULL)
     {
-        if (!strcmp(rest, "..."))
+        if (!strcmp(rest, ".."))
             position--;
         else
             position++;
@@ -713,7 +713,7 @@ void    HttpRequest::printRequest()
     for (std::map<std::string, std::string>::iterator ito = _headers.begin();
         ito != _headers.end(); ++ito)
     {
-        std::cout << ito->first << ": " << ito->second << std::endl;
+        std::cout << ito->first << ":" << ito->second << std::endl;
     }
     for (std::vector<u_int8_t>::iterator ito = _body.begin(); ito != _body.end(); ++ito)
     {
@@ -765,24 +765,24 @@ void    HttpRequest::clear()
     _error_code = 0;
     _query.clear();
     _fragment.clear();
-    _headers.clear();
-    _body.clear();
-    _body_str = "";
-    _boundary.clear();
     _method = NONE;
     _method_index = 1;
     _state = Request_Line;
+    _body_size = 0;
+    _chunked_length = 0x0;
+    _storage_buffer.clear();
+    _body_str = "";
+    _storage_key.clear();
+    _headers.clear();
+    _server_name.clear();
+    _body.clear();
+    _boundary.clear();
     _fields_done_f = false;
     _body_f = false;
     _body_done_f = false;
+    _completed_f = false;
     _chunked_f = false;
     _multiform_f = false;
-    _completed_f = false;
-    _body_size = 0;
-    _storage_buffer.clear();
-    _storage_key.clear();
-    _chunked_length = 0x0;
-    _server_name.clear();
 }
 
 bool    HttpRequest::keepAlive()

@@ -68,7 +68,6 @@ int ParsingUtils::createCluster(const std::string &config_file)
 	content = file.readFile(config_file);
 	if (content.empty())
 		throw ErrorException("createCluster: Error: File is empty");
-	std::cout << "Content: " << content << std::endl;
 	removeComments(content);
 	removeWhiteSpaces(content);
 	splitConfigFile(content);
@@ -80,7 +79,6 @@ int ParsingUtils::createCluster(const std::string &config_file)
 		createServer(this->_config_file[i], server_config);
 		this->_server_config.push_back(server_config);
 	}
-	std::cout << "Size_createCluster: " << this->_server_config.size() << std::endl;
 	if (this->_server_number > 1)
 		checkServers();
 	return 0;
@@ -300,7 +298,6 @@ void ParsingUtils::createServer(std::string &config_file, ServerConfig &server_c
 	server_config.setErrorPages(error_codes);
 	if (!server_config.validErrorPages())
 		throw ErrorException("ParsingUtils: Error: createServer: Error page not found or Error Code wrong");
-	std::cout << "Size_createServer: " << server_config.getFdListen() << std::endl;
 }
 
 void ParsingUtils::checkServers()

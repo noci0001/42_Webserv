@@ -1,5 +1,6 @@
 #include "../include/Webserv.hpp"
 #include "../include/ServerControler.hpp"
+#include <sys/wait.h>
 
 ServerControler::ServerControler()
 {
@@ -19,10 +20,8 @@ void    ServerControler::startServer(std::vector<ServerConfig> serverconfig)
     char   buffer[INET_ADDRSTRLEN];
     bool    serverStart;
 	std::vector<ServerConfig>::iterator ito;
-	std::cout << "Size_startServer: " << serverconfig.size() << std::endl;
     for (ito = _servers.begin(); ito != _servers.end(); ++ito)
     {
-	std::cout << "fd_listen_startServer: " << ito->getFdListen() << std::endl;
         serverStart = false;
 		std::vector<ServerConfig>::iterator ito2;
 		for (ito2 = _servers.begin(); ito2 != ito; ++ito2)
@@ -59,7 +58,6 @@ void    ServerControler::runServers()
 
     _max_fd = 0;
     initSets();
-	std::cout << "_fd_listen_runServer" << std::endl;
     struct timeval timeout;
     while (true)
     {
@@ -80,10 +78,16 @@ void    ServerControler::runServers()
                 acceptConnection(_map_servers.find(i)->second);
             else if (FD_ISSET(i, &receive_fd_pool) && _map_clients.count(i))
                 readRequest(i, _map_clients[i]);
-            /* else if (FD_ISSET(i, &write_fd_pool) && _map_clients.count(i))
+             else if (FD_ISSET(i, &write_fd_pool) && _map_clients.count(i))
             {
-                // implementation of CGI
-            } */
+                int cgi_state = _map_clients[i].response.getCgiState();
+				if (cgi_state == 1 && FD_ISSET(_map_clients[i].response._cgiHandler.pipe_in[1], &write_fd_pool))
+					sendBodyCgi(_map_clients[i], _map_clients[i].response._cgiHandler);
+				else if (cgi_state == 1 && FD_ISSET(_map_clients[i].response._cgiHandler.pipe_out[0], &receive_fd_pool))
+					readCgiResponse(_map_clients[i], _map_clients[i].response._cgiHandler);
+				else if ((cgi_state == 0 || cgi_state == 2) && FD_ISSET(i, &write_fd_pool))
+					sendResponse(i, _map_clients[i]);
+            }
         }
         checkTimeout();
     }
@@ -198,7 +202,7 @@ void    ServerControler::sendResponse(const int &i, ClientSide &client)
     {
         ConsoleLog::logMessage(ORANGE, CONSOLE_OUTPUT, "Response sent to socket %d, Status=[%d]",
             i, client.response.getStatusCode());
-        if (client.httprequest.keepAlive() == false || client.httprequest.errorCode() || client.response.getCgiState())
+        if (!client.httprequest.keepAlive() || client.httprequest.errorCode() || client.response.getCgiState())
         {
             ConsoleLog::logMessage(YELLOW, CONSOLE_OUTPUT, "Client %d: Closing connection", i);
             closeConnection(i);

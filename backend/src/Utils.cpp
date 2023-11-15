@@ -1,4 +1,4 @@
-#include "../../include/Webserv.hpp"
+#include "../include/Webserv.hpp"
 
 int ft_stoi(std::string str)
 {
@@ -42,7 +42,7 @@ std::string statusCodeString(short statusCode)
         case 301:
             return "Moved Permanently";
         case 302:
-            return "Found";
+            return "Moved Temporarily";
         case 303:
             return "See Other";
         case 304:
@@ -201,6 +201,7 @@ int	buildHtmlIndex(std::string &dir_name, std::vector<uint8_t> &body, size_t &bo
 	html.append("</html>\n");
 
 	body.insert(body.begin(), html.begin(), html.end());
+    std::cout << "body_size_buildHtml: " << body.size() << std::endl;
 	body_length = body.size();
 	return 0;
 }
