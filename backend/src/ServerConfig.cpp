@@ -407,7 +407,7 @@ int 	ServerConfig::isValidLocation(Location &location) const
 			std::string temp = *cito;
 			if (temp != ".py" && temp != ".sh" && temp != "*.py" && temp != "*.sh")
 				return (1);
-			for (cito_path = location.getCgiPath().begin(); cito != location.getCgiPath().end(); ++cito_path)
+			for (cito_path = location.getCgiPath().begin(); cito_path != location.getCgiPath().end(); ++cito_path)
 			{
 				std::string temp_path = *cito_path;
 				if (temp == ".py" || temp == "*.py")

@@ -2,7 +2,7 @@ NAME				=	webserv
 
 CC					=	c++
 
-CPPFLAGS			=	-Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
+CPPFLAGS			=	-Wall -Wextra  -std=c++98 -g -O3 #-fsanitize=address -Werror
 
 HPP_DIR				=	./backend/include
 
@@ -82,6 +82,6 @@ ascii-art:
 					@echo "$(BASE)195m    |_||_____|    \_/\_/ \___|_.__/|_| |_|_/_/\_\\"
 					@echo "$(BASE)195m                                                 "
 					@echo "$(BASE)159m [$(ITALIC)This webserv brought to you by 🤯 @ydimitro & @snocita & @tstrassb$(RESET)$(BASE)159m]$(RESET)"; echo; echo; echo;
-					@read -p "Press [Enter] to continue"
+#					@read -p "Press [Enter] to continue"
 
 .PHONY:				all clean fclean re

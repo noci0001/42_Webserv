@@ -1,5 +1,6 @@
 #include "../include/Webserv.hpp"
 #include "../include/ServerControler.hpp"
+#include <sys/wait.h>
 
 ServerControler::ServerControler()
 {

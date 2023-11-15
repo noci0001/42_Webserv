@@ -232,7 +232,7 @@ int 	Response::CgiHandling(std::string &location_key)
 
 static void	getLocationMatch(std::string &path, std::vector<Location> location, std::string location_key)
 {
-	size_t	max_match = 0;
+	size_t	max_match;
 	for (std::vector<Location>::const_iterator cito = location.begin(); cito != location.end(); ++cito)
 	{
 		if (path.find(cito->getPath()) == 0)
