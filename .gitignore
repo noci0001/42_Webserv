@@ -3,3 +3,4 @@
 *.o
 webserv
 webserv.dSYM
+.DS_store
