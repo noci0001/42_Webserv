@@ -3,9 +3,7 @@
 #include <sys/wait.h>
 
 ServerControler::ServerControler()
-{
-    
-}
+{}
 
 ServerControler::~ServerControler(){}
 

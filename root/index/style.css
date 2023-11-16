@@ -54,7 +54,7 @@ button {
 	background-color: white;
 	align-items: center;
 	text-align: center;
-	width: 150px;
+	width: max-content;
 	height: 50px;
 	padding: 1.5rem;
 	border-width: 0;
@@ -301,28 +301,3 @@ p {
 	}
 }
 
-#uploadForm {
-	padding: 1rem;
-	width: 500px;
-}
-
-input[type="submit"] {
-    background: rebeccapurple; /* Button background color */
-    color: #fff; /* Button text color */
-    padding: 12px 20px; /* Padding around the button */
-    border: none; /* Remove the border */
-    cursor: pointer; /* Change the cursor on hover */
-}
-
-input[type="submit"]:hover {
-	width: 140px;
-	font-weight: 900;
-}
-
-input[type="file"] {
-    background: rebeccapurple; /* Button background color */
-    color: #fff; /* Button text color */
-    padding: 10px 20px; /* Padding around the button */
-    border: none; /* Remove the border */
-    cursor: pointer; /* Change the cursor on hover */
-}
