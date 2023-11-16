@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>42 WEBFLIX</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
+    </head>
+
+    <body>
+        <div class="cookies">
+            <h1> Set Popcorn: </h1><br />
+            <form action="../cgi-bin/set_cookies.py" method="get">
+                Name of the Popcorn: <input type="text" name="key"> <br />
+                <br>
+                Flavor of the Popcorn: <input type="text" name="value"> <br />
+                <br>
+                <input type="submit" value="Submit" /> <br />
+            </form>
+
+            <br />
+            <br />
+            <br />
+            <h1> Get Popcorn: </h1> <br />
+            <form action="../cgi-bin/get_cookies.py" method="get">
+                Name of the Popcorn: <input type="text" name="key"> <br />
+                <br>
+                <input type="submit" value="Submit" /> <br />
+            </form>
+        </div>
+    </body>
+</html>

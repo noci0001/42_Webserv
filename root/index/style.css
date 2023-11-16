@@ -230,6 +230,17 @@ p {
 	top: 100px;
 }
 
+.cookies {
+
+	position: center;
+	color: #fff;
+	font-size: 20px;
+	max-width: 1000px;
+	height: 500px;
+	left: 250px;
+	top: 250px;
+}
+
 #this {
 	background: white;
 	opacity: 1;

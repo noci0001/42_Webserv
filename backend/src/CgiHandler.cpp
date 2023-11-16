@@ -227,6 +227,7 @@ void	CgiHandler::createEnvi(HttpRequest &httprequest, const std::vector<Location
 	this->_envi["SERVER_NAME"]       = (position > 0 ? httprequest.getHeader("host").substr(0, position) : "");
 	this->_envi["SERVER_PORT"]       = (position > 0 ? httprequest.getHeader("host").substr(position + 1, httprequest.getHeader("host").size()) : "");
 	this->_envi["REQUEST_METHOD"]    = httprequest.getMethodStr();
+	this->_envi["HTTP_COOKIE"]	 	 = httprequest.getHeader("cookie");
 	this->_envi["DOCUMENT_ROOT"]     = ito_loca->getRoot();
 	this->_envi["REQUEST_URI"]		 = httprequest.getPath() + httprequest.getQuery();
 	this->_envi["SERVER_PROTOCOL"]   = "HTTP/1.1";
