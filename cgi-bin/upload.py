@@ -15,3 +15,4 @@ else:
 print("Content-Type: text/html; charset=utf-8")
 print("Content-Type: text/html\r\n")
 print("<h1> " + message + " </h1>")
+print("<img src=\"./blue_ship.png\"> alt=\"uploaded image\"") 
