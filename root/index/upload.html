@@ -7,8 +7,49 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap">
     <title>42 WEBFLIX</title>
 </head>
-<form enctype="multipart/form-data" action="../../cgi-bin/upload.py" method="post">
-    File: <input type="file" name="filename" id="fileid"><br>
-    <input type="submit" value="Send">
-</form>
+<body>
+    <div onclick="clicky();"><h1 id="this"><h1></div>
+    <div>
+        <div id="show_menu_overlay" class="menu_overlay">
+        <div style="display:flex;" onclick="clicky();">
+            <h1 id="that">BACK<h1>
+        </div>
+        <div class="menu_actions">
+            <h1>ACTION MENU</h1>
+            <ul>
+                <li><h2><a href="./index.html">BACK TO HOME</a></h2></li>
+                <li><h2><a href="./login.html">LOGIN</a></h2></li>
+                <li><h2><a href="./upload.html">UPLOAD YOUR FAVORITE MOVIE</a></h2></li>
+                <li><h2>GET YOUR FAVORITE MOVIE</h2></li>
+                <li><h2 id="delete_movie" onclick="deleteMovie()">DELETE YOUR FAVORITE MOVIE</h2></li>
+                <li><h2><a href="./cookies.html">MAKE SOME POPCORN</a></h2></li>
+            </ul>
+        </div>
+    </div>
+    <form style="margin-left: 100%; display:flex; min-width:500px;" enctype="multipart/form-data" action="../../cgi-bin/upload.py" method="post">
+        <input type="file" name="filename" id="fileid"><input type="submit" value="Send">
+    </form>
+    <div style="display:inline-flex;">
+        <section style="display:flex; width:95vw; height:500px;background-color:black;">
+            <div class="cards_container">
+                <img class="card" src="./assets/uploads/1_poster_example.jpg" onerror="this.src='./assets/horror/card_horror1.jpg';">
+                <img class="card" src="./assets/uploads/2_poster_example.jpg" onerror="this.src='./assets/horror/card_horror2.jpg';">
+                <img class="card" src="./assets/uploads/3_poster_example.jpg" onerror="this.src='./assets/horror/card_horror3.jpg';">
+                <img class="card" src="./assets/uploads/4_poster_example.jpg" onerror="this.src='./assets/horror/card_horror4.jpg';">
+                <img class="card" src="./assets/uploads/5_poster_example.jpg" onerror="this.src='./assets/horror/card_horror5.jpg';">
+                <img class="card" src="./assets/uploads/6_poster_example.jpg" onerror="this.src='./assets/horror/card_horror6.jpg';">
+            </div>
+            <section>
+                <section style="width:640px; position:relative; font-size:900; top:10rem; left:10rem;">
+                    <p style="font-size:40px; color:white; padding:2rem; margin:0;"> <bold class="b"> THE WORLD </bold> <br> IS YOUR OYSTER</p>
+                    <p></p>
+                    <a href ="/index.html" ><button style="margin-left: 2rem;"> Let's eat some oysters </button></a>
+                    <br><br>
+                    <form action="../../cgi-bin/delete.py" method="get" enctype="multipart/form-data">
+                        <button style="margin-left: 2rem;"> Delete your movies </button>
+                    </form>
+                </section>
+    </div>
+</body>
+<script src="./index.js"></script>
 </html>

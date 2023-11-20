@@ -293,6 +293,26 @@ p {
 	background-color: black;
   }
 
+  input[type=file] {
+	border-radius: 5px;
+	background-color: rebeccaPurple;
+	padding:1rem;
+  }
+
+  input[type=submit] {
+	border-radius: 5px;
+	background-color: white;
+	padding:1rem;
+	border: none;
+  }
+
+  input[type=submit]:hover {
+	border-radius: 5px;
+	background-color: rebeccapurple;
+	padding:1rem;
+	border: none;
+  }
+
 
 @media only screen and (max-width: 1300px) {
 	#this {

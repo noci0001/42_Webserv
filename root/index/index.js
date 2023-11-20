@@ -78,3 +78,4 @@ function navigate_to_uploads() {
     movie_has_been_posted = true;
     window.location.href = "post_movie.html"; // Adjust the URL as needed
 }
+
