@@ -14,7 +14,7 @@ int main (int argc, char **argv)
 			signal(SIGPIPE, sigpipeHandle);
 			config_file_name = (argc == 1 ? "configs/webserv.conf" : argv[1]);
 			configfile.createCluster(config_file_name);
-			configfile.printConfigFile();
+			//configfile.printConfigFile();
 			servercontroler.startServer(configfile.getServers());
 			servercontroler.runServers();
 		}
