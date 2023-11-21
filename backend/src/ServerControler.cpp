@@ -119,7 +119,7 @@ void    ServerControler::initSets()
     {
 		const ServerConfig &server = *ito;
         // calls on listen() and fcntl() to set server socket to non-blocking
-        if (listen(ito->getFdListen(), 512) == -1)
+        if (listen(ito->getFdListen(), 1024) == -1)
         {
             ConsoleLog::logMessage(RED, CONSOLE_OUTPUT, "Webserv: listen failed: %s\t Closing Webserv", strerror(errno));
             exit(EXIT_FAILURE);
