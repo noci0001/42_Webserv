@@ -60,7 +60,7 @@ function check_if_movie_has_been_posted() {
 function deleteMovie() {
     // Make an AJAX request to delete.php or another server-side script
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "./delete.php", true);
+    xhr.open("GET", "/cig-bin/delete.py", true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
